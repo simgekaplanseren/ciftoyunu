@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#2d1b4e">
+  <title>SEVGİLİNİ KURTAR ❤️</title>
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/menu.css">
+  <link rel="stylesheet" href="css/controls.css">
+</head>
+<body>
+  <div id="app">
+    <div id="game-container">
+      <canvas id="game-canvas"></canvas>
+
+      <!-- HUD -->
+      <div id="hud" class="hidden">
+        <div class="hud-left">
+          <div id="hearts-display"></div>
+          <div id="score-display">💎 0</div>
+        </div>
+        <div class="hud-right">
+          <div id="level-display">Bölüm 1</div>
+          <div id="keys-display" class="hidden">🔑 0</div>
+        </div>
+      </div>
+
+      <!-- Touch Controls -->
+      <div id="touch-controls" class="hidden">
+        <div class="controls-left">
+          <button class="ctrl-btn" id="btn-left" aria-label="Sol">◀</button>
+          <button class="ctrl-btn" id="btn-right" aria-label="Sağ">▶</button>
+        </div>
+        <div class="controls-right">
+          <button class="ctrl-btn attack" id="btn-attack" aria-label="Saldır">⚔</button>
+          <button class="ctrl-btn jump" id="btn-jump" aria-label="Zıpla">▲</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Screens -->
+    <div id="screen-overlay">
+      <!-- Main Menu -->
+      <div id="screen-menu" class="screen active">
+        <div class="menu-bg-hearts"></div>
+        <div class="menu-content">
+          <h1 class="game-title">SEVGİLİNİ KURTAR <span class="heart">❤️</span></h1>
+          <p class="game-subtitle">Bir aşk macerası</p>
+          <div class="menu-buttons">
+            <button class="menu-btn primary" data-action="start">OYUNA BAŞLA</button>
+            <button class="menu-btn" data-action="levels">BÖLÜMLER</button>
+            <button class="menu-btn" data-action="settings">AYARLAR</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Character Select -->
+      <div id="screen-character" class="screen">
+        <div class="screen-panel character-select">
+          <h2>KARAKTER SEÇ</h2>
+          <p class="char-subtitle">Maceraya kim olarak devam etmek istersin?</p>
+          <div class="character-grid">
+            <button class="char-card" data-action="pick-character" data-character="girl">
+              <canvas class="char-preview" id="preview-girl" width="80" height="100"></canvas>
+              <span class="char-name">👩 Kız</span>
+            </button>
+            <button class="char-card" data-action="pick-character" data-character="fadil">
+              <canvas class="char-preview" id="preview-fadil" width="80" height="100"></canvas>
+              <span class="char-name">👨 Fadil</span>
+            </button>
+          </div>
+          <button class="menu-btn primary" data-action="confirm-start" id="btn-confirm-start" disabled>MACERAYA BAŞLA ❤️</button>
+          <button class="menu-btn back" data-action="back-menu">← GERİ</button>
+        </div>
+      </div>
+
+      <!-- Level Select -->
+      <div id="screen-levels" class="screen">
+        <div class="screen-panel">
+          <h2>BÖLÜMLER</h2>
+          <div class="level-grid" id="level-grid"></div>
+          <button class="menu-btn back" data-action="back-menu">← GERİ</button>
+        </div>
+      </div>
+
+      <!-- Settings -->
+      <div id="screen-settings" class="screen">
+        <div class="screen-panel">
+          <h2>AYARLAR</h2>
+          <div class="settings-list">
+            <label class="setting-row">
+              <span>Müzik</span>
+              <input type="range" id="music-volume" min="0" max="100" value="70">
+            </label>
+            <label class="setting-row">
+              <span>Ses Efektleri</span>
+              <input type="range" id="sfx-volume" min="0" max="100" value="80">
+            </label>
+            <label class="setting-row toggle">
+              <span>Titreşim</span>
+              <input type="checkbox" id="vibration-toggle" checked>
+            </label>
+          </div>
+          <button class="menu-btn back" data-action="back-menu">← GERİ</button>
+        </div>
+      </div>
+
+      <!-- Level Complete -->
+      <div id="screen-level-complete" class="screen">
+        <div class="screen-panel celebration">
+          <h2 id="level-complete-title">Bölüm Tamamlandı!</h2>
+          <p id="level-complete-msg" class="reunion-msg">Sevgiline kavuştun! 💕</p>
+          <canvas id="reunion-canvas" width="320" height="140"></canvas>
+          <p id="level-complete-score">Puan: 0</p>
+          <button class="menu-btn primary" data-action="next-level">DEVAM ET →</button>
+        </div>
+      </div>
+
+      <!-- Game Over -->
+      <div id="screen-game-over" class="screen">
+        <div class="screen-panel">
+          <h2>Oyun Bitti 💔</h2>
+          <p>Tekrar dene, sevgilin seni bekliyor!</p>
+          <button class="menu-btn primary" data-action="retry">TEKRAR DENE</button>
+          <button class="menu-btn" data-action="back-menu">MENÜ</button>
+        </div>
+      </div>
+
+      <!-- Boss Victory -->
+      <div id="screen-victory" class="screen">
+        <div class="screen-panel victory">
+          <h2 class="victory-title">SEVGİLİNİ KURTARDIN! ❤️</h2>
+          <canvas id="victory-canvas" width="480" height="120"></canvas>
+          <button class="menu-btn primary" data-action="final-screen">DEVAM ET →</button>
+        </div>
+      </div>
+
+      <!-- Final Birthday Screen -->
+      <div id="screen-final" class="screen">
+        <div class="screen-panel final">
+          <div class="final-hearts-bg"></div>
+          <h2>İyi ki doğdun sevgilim. ❤️</h2>
+          <p class="final-message">Bu maceranın en güzel kısmı sensin.</p>
+
+          <!-- Fotoğraf alanı — kendi fotoğraflarını buraya ekleyebilirsin -->
+          <div id="photo-gallery" class="photo-gallery">
+            <div class="photo-slot" data-slot="1">
+              <span class="photo-placeholder">📷 Fotoğraf 1</span>
+              <!-- <img src="assets/images/photo1.jpg" alt="Anı 1"> -->
+            </div>
+            <div class="photo-slot" data-slot="2">
+              <span class="photo-placeholder">📷 Fotoğraf 2</span>
+            </div>
+            <div class="photo-slot" data-slot="3">
+              <span class="photo-placeholder">📷 Fotoğraf 3</span>
+            </div>
+          </div>
+
+          <!-- Kişisel mesaj alanı -->
+          <div id="birthday-message" class="birthday-message">
+            <p class="message-placeholder">Buraya özel doğum günü mesajını yazabilirsin...</p>
+          </div>
+
+          <button class="menu-btn" data-action="back-menu">MENÜYE DÖN</button>
+        </div>
+      </div>
+
+      <!-- Pause -->
+      <div id="screen-pause" class="screen">
+        <div class="screen-panel">
+          <h2>DURAKLATILDI</h2>
+          <button class="menu-btn primary" data-action="resume">DEVAM ET</button>
+          <button class="menu-btn" data-action="back-menu">MENÜ</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Level transition -->
+    <div id="level-transition" class="hidden">
+      <span id="transition-text"></span>
+    </div>
+  </div>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
