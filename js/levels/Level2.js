@@ -6,7 +6,7 @@ import { LoverNPC } from '../entities/LoverNPC.js';
 import { spawnPoint, enemyY, platformY, loverPoint, trapPoint } from './levelUtils.js';
 
 export const LEVEL2 = {
-  id: 2,
+  id: 5,
   name: 'KARANLIK MAĞARA',
   emoji: '🌑',
   subtitle: 'Mağarada sevgilini bul',

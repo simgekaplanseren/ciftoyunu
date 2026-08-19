@@ -156,11 +156,37 @@
   margin-bottom: 1.5rem;
 }
 
+.sections-subtitle {
+  font-size: 0.85rem;
+  color: #c4b5fd;
+  margin: -0.75rem 0 1rem;
+  font-style: italic;
+}
+
 .level-grid {
   display: grid;
   grid-template-columns: 1fr;
   gap: 0.75rem;
   margin-bottom: 0.5rem;
+}
+
+.level-section-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.25rem;
+  padding: 0.35rem 0.25rem 0;
+  grid-column: 1 / -1;
+}
+
+.level-section-header span {
+  font-size: 1.25rem;
+}
+
+.level-section-header h2 {
+  font-size: 0.9rem;
+  color: #ff6b9d;
+  letter-spacing: 0.02em;
 }
 
 .level-card {
@@ -390,9 +416,10 @@
 }
 
 .char-name {
-  font-weight: 700;
-  font-size: 0.95rem;
+  font-weight: 800;
+  font-size: 1.05rem;
   color: #e9d5ff;
+  letter-spacing: 0.12em;
 }
 
 #reunion-canvas,

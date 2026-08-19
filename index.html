@@ -6,7 +6,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="theme-color" content="#2d1b4e">
-  <title>SEVGİLİNİ KURTAR ❤️</title>
+  <title>SEVGİLİNE KAVUŞ ❤️</title>
   <link rel="stylesheet" href="css/main.css">
   <link rel="stylesheet" href="css/menu.css">
   <link rel="stylesheet" href="css/controls.css">
@@ -23,6 +23,7 @@
           <div id="score-display">💎 0</div>
         </div>
         <div class="hud-right">
+          <button id="btn-pause" class="hud-pause-btn" aria-label="Duraklat">⏸</button>
           <div id="level-display">Bölüm 1</div>
           <div id="keys-display" class="hidden">🔑 0</div>
         </div>
@@ -47,13 +48,23 @@
       <div id="screen-menu" class="screen active">
         <div class="menu-bg-hearts"></div>
         <div class="menu-content">
-          <h1 class="game-title">SEVGİLİNİ KURTAR <span class="heart">❤️</span></h1>
+          <h1 class="game-title">SEVGİLİNE KAVUŞ <span class="heart">❤️</span></h1>
           <p class="game-subtitle">Bir aşk macerası</p>
           <div class="menu-buttons">
             <button class="menu-btn primary" data-action="start">OYUNA BAŞLA</button>
             <button class="menu-btn" data-action="levels">BÖLÜMLER</button>
             <button class="menu-btn" data-action="settings">AYARLAR</button>
           </div>
+        </div>
+      </div>
+
+      <!-- Sections (üst bölümler) -->
+      <div id="screen-sections" class="screen">
+        <div class="screen-panel">
+          <h2>BÖLÜMLER</h2>
+          <p class="sections-subtitle">Nerede biz?</p>
+          <div class="level-grid" id="section-grid"></div>
+          <button class="menu-btn back" data-action="back-menu">← MENÜ</button>
         </div>
       </div>
 
@@ -65,24 +76,24 @@
           <div class="character-grid">
             <button class="char-card" data-action="pick-character" data-character="girl">
               <canvas class="char-preview" id="preview-girl" width="80" height="100"></canvas>
-              <span class="char-name">👩 Kız</span>
+              <span class="char-name">SİMGE</span>
             </button>
             <button class="char-card" data-action="pick-character" data-character="fadil">
               <canvas class="char-preview" id="preview-fadil" width="80" height="100"></canvas>
-              <span class="char-name">👨 Fadil</span>
+              <span class="char-name">FADİL</span>
             </button>
           </div>
           <button class="menu-btn primary" data-action="confirm-start" id="btn-confirm-start" disabled>MACERAYA BAŞLA ❤️</button>
-          <button class="menu-btn back" data-action="back-menu">← GERİ</button>
+          <button class="menu-btn back" data-action="back-nav">← GERİ</button>
         </div>
       </div>
 
-      <!-- Level Select -->
+      <!-- Level Select (region) -->
       <div id="screen-levels" class="screen">
         <div class="screen-panel">
-          <h2>BÖLÜMLER</h2>
+          <h2 id="level-select-title">BÖLÜMLER</h2>
           <div class="level-grid" id="level-grid"></div>
-          <button class="menu-btn back" data-action="back-menu">← GERİ</button>
+          <button class="menu-btn back" data-action="back-sections">← BÖLÜMLER</button>
         </div>
       </div>
 
@@ -104,7 +115,7 @@
               <input type="checkbox" id="vibration-toggle" checked>
             </label>
           </div>
-          <button class="menu-btn back" data-action="back-menu">← GERİ</button>
+          <button class="menu-btn back" data-action="settings-back">← GERİ</button>
         </div>
       </div>
 
@@ -132,7 +143,7 @@
       <!-- Boss Victory -->
       <div id="screen-victory" class="screen">
         <div class="screen-panel victory">
-          <h2 class="victory-title">SEVGİLİNİ KURTARDIN! ❤️</h2>
+          <h2 class="victory-title">SEVGİLİNE KAVUŞTUN! ❤️</h2>
           <canvas id="victory-canvas" width="480" height="120"></canvas>
           <button class="menu-btn primary" data-action="final-screen">DEVAM ET →</button>
         </div>
@@ -172,8 +183,11 @@
       <div id="screen-pause" class="screen">
         <div class="screen-panel">
           <h2>DURAKLATILDI</h2>
-          <button class="menu-btn primary" data-action="resume">DEVAM ET</button>
-          <button class="menu-btn" data-action="back-menu">MENÜ</button>
+          <div class="menu-buttons pause-buttons">
+            <button class="menu-btn primary" data-action="resume">DEVAM ET</button>
+            <button class="menu-btn" data-action="pause-settings">AYARLAR</button>
+            <button class="menu-btn" data-action="pause-menu">ANA MENÜ</button>
+          </div>
         </div>
       </div>
     </div>

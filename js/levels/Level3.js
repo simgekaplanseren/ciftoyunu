@@ -6,7 +6,7 @@ import { LoverNPC } from '../entities/LoverNPC.js';
 import { spawnPoint, enemyY, platformY, loverPoint, trapPoint } from './levelUtils.js';
 
 export const LEVEL3 = {
-  id: 3,
+  id: 6,
   name: 'KALBİN KALESİ',
   emoji: '🏰❤️',
   subtitle: 'Sevgilinin seni beklediği son durak',

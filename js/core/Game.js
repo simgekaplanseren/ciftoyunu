@@ -11,6 +11,8 @@ import { HUD } from '../ui/HUD.js';
 import { ScreenManager } from '../ui/ScreenManager.js';
 import { MenuManager } from '../ui/MenuManager.js';
 import { aabbOverlap } from '../utils/Collision.js';
+import { drawZoneBackground } from '../levels/CyprusAtmosphere.js';
+import { getSectionById } from '../config/GameSections.js';
 
 export class Game {
   constructor(canvas) {
@@ -38,7 +40,7 @@ export class Game {
 
     this.scale = 1;
     this.lastTime = 0;
-    this.reunionPhase = 'none'; // none | running | kissing
+    this.reunionPhase = 'none'; // none | running | hugging
     this.reunionAnim = 0;
     this.reunionNext = null;
     this.victoryAnim = 0;
@@ -186,7 +188,20 @@ export class Game {
       return;
     }
 
+    const crossingSection = this.levelManager.willCrossSectionBoundary();
+    const nextSectionId = crossingSection
+      ? this.levelManager.getNextSectionId(this.levelDef.sectionId)
+      : null;
+    const nextSection = nextSectionId ? getSectionById(nextSectionId) : null;
+
     const next = this.levelManager.nextLevel();
+
+    if (crossingSection && nextSection) {
+      await this.screens.playTransition(
+        `${nextSection.emoji} ${nextSection.name}`,
+        2400
+      );
+    }
 
     await this.screens.playTransition(
       `${next.def.emoji} ${next.def.name}`,
@@ -216,7 +231,7 @@ export class Game {
   }
 
   pause() {
-    if (this.state !== 'playing') return;
+    if (this.state !== 'playing' || this.reunionPhase !== 'none') return;
     this.state = 'paused';
     this.audio.pauseMusic();
     this.screens.showPause();
@@ -224,10 +239,22 @@ export class Game {
   }
 
   resume() {
+    if (this.state !== 'paused') return;
     this.state = 'playing';
     this.audio.resumeMusic();
     this.screens.hideAll();
     this._showTouchControls();
+  }
+
+  returnToMainMenu() {
+    this.state = 'menu';
+    this.reunionPhase = 'none';
+    this.reunionAnim = 0;
+    this.reunionNext = null;
+    this.hud.hide();
+    this._hideTouchControls();
+    this.screens.show('menu');
+    this.audio.playMusic('musicMenu');
   }
 
   showVictory() {
@@ -301,14 +328,14 @@ export class Game {
       } else {
         this.player.x = stopX;
         this.player.y = py;
-        this.reunionPhase = 'kissing';
+        this.reunionPhase = 'hugging';
         this.reunionAnim = 0;
         lover.waiting = false;
         this.particles.emitHearts(lover.x, py, 10);
         this.audio.playSfx('sfxVictory');
       }
       this.camera.follow(this.player, dt);
-    } else if (this.reunionPhase === 'kissing') {
+    } else if (this.reunionPhase === 'hugging') {
       this.player.state = 'idle';
       this.player.animFrame += dt;
       if (Math.floor(this.reunionAnim * 3) % 2 === 0) {
@@ -350,13 +377,28 @@ export class Game {
     if (next === 'victory') {
       this.showVictory();
     } else {
+      let completeMsg = null;
+      if (this.levelManager.isLastLevelInSection(this.levelDef)) {
+        const nextSectionId = this.levelManager.getNextSectionId(this.levelDef.sectionId);
+        const nextSection = nextSectionId ? getSectionById(nextSectionId) : null;
+        if (nextSection) {
+          completeMsg = `Sırada ${nextSection.name}! Devam Et'e bas. ${nextSection.emoji}`;
+        }
+      }
+
       this.state = 'levelComplete';
       this.screens.showLevelComplete(
         this.player.score,
         this.levelDef.name,
-        this.levelManager.currentIndex
+        this.levelManager.currentIndex,
+        completeMsg
       );
     }
+  }
+
+  getLevelDisplayName() {
+    if (!this.levelDef) return '';
+    return `${this.levelDef.emoji} ${this.levelDef.name}`;
   }
 
   _updateGameplay(dt) {
@@ -441,7 +483,7 @@ export class Game {
 
     this.camera.follow(this.player, dt);
     this.particles.update(dt);
-    this.hud.update(this.player, `${this.levelDef.emoji} ${this.levelDef.name}`);
+    this.hud.update(this.player, this.getLevelDisplayName());
   }
 
   _completeLevel() {
@@ -485,6 +527,16 @@ export class Game {
   }
 
   _drawBackground(ctx, theme) {
+    if (this.levelDef?.atmosphere && this.levelDef?.sectionId) {
+      drawZoneBackground(
+        ctx,
+        this.levelDef.atmosphere,
+        this.levelDef.width,
+        this.config.height,
+      );
+      return;
+    }
+
     const colors = {
       forest: COLORS.skyForest,
       cave: COLORS.skyCave,
@@ -529,10 +581,10 @@ export class Game {
   _renderLevel(ctx) {
     if (!this.levelDef || !this.levelData) return;
 
-    this._drawBackground(ctx, this.levelDef.background);
-
     ctx.save();
     this.camera.apply(ctx);
+
+    this._drawBackground(ctx, this.levelDef.background);
 
     drawPlatforms(ctx, this.levelData.platforms, this.sprites);
 
@@ -553,7 +605,7 @@ export class Game {
     const lover = this.levelData.lover;
     const char = this.selectedCharacter || 'girl';
 
-    if (this.reunionPhase === 'running' || this.reunionPhase === 'kissing') {
+    if (this.reunionPhase === 'running' || this.reunionPhase === 'hugging') {
       this.sprites.drawReunionScene(
         ctx,
         this.player.x,
@@ -561,7 +613,7 @@ export class Game {
         lover.y,
         this.reunionAnim,
         char,
-        this.reunionPhase === 'running' ? 'running' : 'kissing'
+        this.reunionPhase === 'running' ? 'running' : 'hugging'
       );
     } else {
       if (lover && lover.visible) {
@@ -582,7 +634,7 @@ export class Game {
       ctx.textAlign = 'center';
       const msg = this.reunionPhase === 'running'
         ? `${loverName}'e koş! 💨`
-        : `${loverName}'i öpüyorsun! 💋`;
+        : `Kavuştunuz, sarılıyorsunuz! 🤗`;
       ctx.fillText(msg, this.config.width / 2, 22);
     }
   }

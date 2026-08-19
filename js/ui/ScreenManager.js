@@ -4,6 +4,7 @@ export class ScreenManager {
   constructor() {
     this.screens = {
       menu: document.getElementById('screen-menu'),
+      sections: document.getElementById('screen-sections'),
       character: document.getElementById('screen-character'),
       levels: document.getElementById('screen-levels'),
       settings: document.getElementById('screen-settings'),
@@ -32,13 +33,16 @@ export class ScreenManager {
     this.current = null;
   }
 
-  showLevelComplete(score, levelName, levelIndex) {
+  showLevelComplete(score, levelName, levelIndex, customMsg = null) {
     const title = document.getElementById('level-complete-title');
     const scoreEl = document.getElementById('level-complete-score');
     const msgEl = document.getElementById('level-complete-msg');
     if (title) title.textContent = `${levelName} Tamamlandı! 🎉`;
     if (scoreEl) scoreEl.textContent = `Puan: ${score}`;
-    if (msgEl) msgEl.textContent = REUNION_MESSAGES[levelIndex % REUNION_MESSAGES.length];
+    if (msgEl) {
+      msgEl.textContent = customMsg
+        ?? REUNION_MESSAGES[levelIndex % REUNION_MESSAGES.length];
+    }
     this.show('levelComplete');
   }
 
@@ -56,6 +60,10 @@ export class ScreenManager {
 
   showPause() {
     this.show('pause');
+  }
+
+  showSections() {
+    this.show('sections');
   }
 
   showCharacterSelect() {

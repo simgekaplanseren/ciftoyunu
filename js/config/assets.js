@@ -43,15 +43,15 @@ export const ASSETS = {
 };
 
 export const CHARACTERS = {
-  girl: { id: 'girl', name: 'Kız', loverName: 'Fadil', emoji: '👩' },
-  fadil: { id: 'fadil', name: 'Fadil', loverName: 'Kız', emoji: '👨' },
+  girl: { id: 'girl', name: 'Simge', loverName: 'Fadil', emoji: '' },
+  fadil: { id: 'fadil', name: 'Fadil', loverName: 'Simge', emoji: '' },
 };
 
 export const REUNION_MESSAGES = [
   'Sevgiline kavuştun! 💕',
-  'Bir öpücük almayı hak ettin! 💋',
+  'Sarılmayı hak ettin! 🤗',
   'Aşk her engeli aşar! ❤️',
-  'Seninle her an güzel! 🥰',
+  'Sonunda birliktesiniz! 🥰',
 ];
 
 export const GAME_CONFIG = {

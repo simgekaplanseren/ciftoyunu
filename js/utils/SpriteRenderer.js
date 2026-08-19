@@ -123,7 +123,7 @@ export class SpriteRenderer {
     ctx.restore();
   }
 
-  /** Dünya koordinatlarında koşup öpüşen çift */
+  /** Dünya koordinatlarında koşup kucaklaşan çift */
   drawReunionScene(ctx, playerX, loverX, y, animFrame, playerType, phase) {
     const w = 22;
     const h = 30;
@@ -135,37 +135,50 @@ export class SpriteRenderer {
       this.drawCharacter(ctx, loverX, py, w, h, loverChar, -1, 'idle', animFrame);
     } else {
       const cx = (playerX + loverX + w) / 2;
-      const kissT = Math.max(0, animFrame - 0.1);
-      this.drawKissingCouple(ctx, cx, py + h / 2, 1.1, kissT, playerType);
+      const hugT = Math.max(0, animFrame - 0.1);
+      this.drawHuggingCouple(ctx, cx, py + h / 2, 1.1, hugT, playerType);
     }
   }
 
-  /** Öpüşen çift — UI / yakın plan animasyonu */
-  drawKissingCouple(ctx, cx, cy, scale, animFrame, playerType = 'girl') {
+  /** Kucaklaşan çift — sarılma animasyonu */
+  drawHuggingCouple(ctx, cx, cy, scale, animFrame, playerType = 'girl') {
     const w = 22 * scale;
     const h = 30 * scale;
-    const approach = Math.min(1, animFrame / 1.2);
-    const kiss = Math.min(1, Math.max(0, (animFrame - 1.2) / 0.8));
-    const lean = approach * 4 + kiss * 3;
-    const bob = Math.sin(animFrame * 3) * 1.5;
+    const embrace = Math.min(1, animFrame / 1.0);
+    const squeeze = embrace * 8;
+    const bob = Math.sin(animFrame * 2.5) * 2;
 
     const leftChar = playerType === 'girl' ? 'girl' : 'fadil';
     const rightChar = playerType === 'girl' ? 'fadil' : 'girl';
 
-    this.drawCharacter(ctx, cx - w - 4 + lean, cy + bob, w, h, leftChar, 1, 'idle', animFrame);
-    this.drawCharacter(ctx, cx + 4 - lean, cy + bob, w, h, rightChar, -1, 'idle', animFrame);
+    const baseY = cy - h / 2 + bob;
 
-    if (kiss > 0.3) {
-      ctx.font = `${14 * scale}px sans-serif`;
+    this.drawCharacter(ctx, cx - w - 2 + squeeze, baseY, w, h, leftChar, 1, 'idle', animFrame);
+    this.drawCharacter(ctx, cx + 2 - squeeze, baseY, w, h, rightChar, -1, 'idle', animFrame);
+
+    if (embrace > 0.35) {
+      ctx.fillStyle = COLORS.playerSkin;
+      ctx.fillRect(cx - 10 * scale, cy - 2 + bob, 20 * scale, 5 * scale);
+      ctx.fillRect(cx - 14 * scale, cy + 2 + bob, 6 * scale, 4 * scale);
+      ctx.fillRect(cx + 8 * scale, cy + 2 + bob, 6 * scale, 4 * scale);
+    }
+
+    if (embrace > 0.5) {
+      ctx.font = `${16 * scale}px sans-serif`;
       ctx.textAlign = 'center';
-      ctx.fillText('💋', cx, cy - 4 + bob);
-      for (let i = 0; i < 3; i++) {
-        const hx = cx + (Math.sin(animFrame * 4 + i * 2) * 20);
-        const hy = cy - 20 + (Math.cos(animFrame * 3 + i) * 8);
-        ctx.font = `${(8 + i * 2) * scale}px sans-serif`;
+      ctx.fillText('🤗', cx, baseY - 6);
+      for (let i = 0; i < 4; i++) {
+        const hx = cx + Math.sin(animFrame * 3 + i * 1.5) * (18 + i * 4);
+        const hy = baseY - 18 + Math.cos(animFrame * 2.5 + i) * 6;
+        ctx.font = `${(9 + i * 2) * scale}px sans-serif`;
         ctx.fillText('❤', hx, hy);
       }
     }
+  }
+
+  /** UI önizlemesi — sarılma */
+  drawKissingCouple(ctx, cx, cy, scale, animFrame, playerType = 'girl') {
+    this.drawHuggingCouple(ctx, cx, cy, scale, animFrame, playerType);
   }
 
   drawLover(ctx, x, y, w, h, facing, animFrame, playerType = 'girl') {
@@ -311,6 +324,21 @@ export class SpriteRenderer {
       forest: { top: '#4ade80', body: '#166534', detail: '#22c55e' },
       cave: { top: '#78716c', body: '#44403c', detail: '#a8a29e' },
       castle: { top: '#a78bfa', body: '#5b21b6', detail: '#8b5cf6' },
+      lefkosa: { top: '#d4a574', body: '#6b5344', detail: '#c9a66b' },
+      girne: { top: '#67e8f9', body: '#0e7490', detail: '#22d3ee' },
+      magusa: { top: '#fbbf24', body: '#78350f', detail: '#d97706' },
+      dipkarpaz: { top: '#fb923c', body: '#9a3412', detail: '#fdba74' },
+      hayvanat: { top: '#86efac', body: '#166534', detail: '#4ade80' },
+      iconova: { top: '#c4b5fd', body: '#5b21b6', detail: '#a78bfa' },
+      petpark: { top: '#fde047', body: '#a16207', detail: '#facc15' },
+      sehitkamil: { top: '#fb923c', body: '#7c2d12', detail: '#fdba74' },
+      alsancak: { top: '#7dd3fc', body: '#0369a1', detail: '#38bdf8' },
+      goztepe: { top: '#93c5fd', body: '#1d4ed8', detail: '#60a5fa' },
+      gaziemir: { top: '#cbd5e1', body: '#475569', detail: '#94a3b8' },
+      kusadasi: { top: '#67e8f9', body: '#0e7490', detail: '#22d3ee' },
+      sirince: { top: '#fcd34d', body: '#92400e', detail: '#fbbf24' },
+      selcuk: { top: '#e7e5e4', body: '#57534e', detail: '#a8a29e' },
+      dogumgunu: { top: '#fda4af', body: '#9d174d', detail: '#fb7185' },
     };
     const c = colors[theme] || colors.forest;
 
