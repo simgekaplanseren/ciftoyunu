@@ -6,6 +6,7 @@
   for = "/*"
   [headers.values]
     X-Content-Type-Options = "nosniff"
+    X-Robots-Tag = "noindex, nofollow"
 
 [[headers]]
   for = "/sw.js"

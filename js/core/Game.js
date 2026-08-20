@@ -16,8 +16,9 @@ import { getSectionById } from '../config/GameSections.js';
 import { LEVEL } from '../levels/levelUtils.js';
 
 export class Game {
-  constructor(canvas) {
+  constructor(canvas, orientation = null) {
     this.canvas = canvas;
+    this.orientation = orientation;
     this.ctx = canvas.getContext('2d');
     this.config = GAME_CONFIG;
 
@@ -136,6 +137,12 @@ export class Game {
     let cw = rect.width;
     let ch = rect.height;
 
+    if (cw < 2 || ch < 2) {
+      const vv = window.visualViewport;
+      cw = vv?.width ?? window.innerWidth;
+      ch = vv?.height ?? window.innerHeight;
+    }
+
     const touchUi = this._isTouchDevice();
     const controlsVisible = !document.getElementById('touch-controls')?.classList.contains('hidden');
     if (touchUi && controlsVisible && (this.state === 'playing' || this.reunionPhase !== 'none')) {
@@ -190,6 +197,8 @@ export class Game {
     this.hud.show();
     this._showTouchControls();
     this.state = 'playing';
+    this.orientation?.lockLandscape();
+    this.resize();
     this.audio.playMusic(this.levelDef.music);
   }
 
@@ -285,6 +294,7 @@ export class Game {
 
   returnToMainMenu() {
     this.state = 'menu';
+    this.orientation?.unlock();
     this.reunionPhase = 'none';
     this.reunionAnim = 0;
     this.reunionNext = null;
@@ -293,6 +303,7 @@ export class Game {
     this.screens.hideAll();
     this.screens.show('menu');
     this.audio.playMusic('musicMenu');
+    this.resize();
   }
 
   _completeGame() {

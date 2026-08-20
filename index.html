@@ -7,6 +7,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="format-detection" content="telephone=no">
+  <meta name="robots" content="noindex, nofollow">
   <meta name="theme-color" content="#2d1b4e">
   <meta name="apple-mobile-web-app-title" content="Kavuş">
   <title>SEVGİLİNE KAVUŞ ❤️</title>
@@ -49,8 +50,27 @@
 
     <!-- Screens -->
     <div id="screen-overlay">
+      <!-- Davetiye -->
+      <div id="screen-access" class="screen">
+        <div class="screen-panel access-panel">
+          <h2>💌 Davetiye Gerekli</h2>
+          <p class="access-subtitle">Bu oyun sadece davet edilen kişiler içindir.</p>
+          <input
+            id="access-code-input"
+            class="access-input"
+            type="password"
+            inputmode="text"
+            autocomplete="off"
+            placeholder="Davetiye kodu"
+            maxlength="32"
+          >
+          <p id="access-error" class="access-error" aria-live="polite"></p>
+          <button class="menu-btn primary" id="btn-access-enter">GİR ❤️</button>
+        </div>
+      </div>
+
       <!-- Main Menu -->
-      <div id="screen-menu" class="screen active">
+      <div id="screen-menu" class="screen">
         <div class="menu-bg-hearts"></div>
         <div class="menu-content">
           <h1 class="game-title">SEVGİLİNE KAVUŞ <span class="heart">❤️</span></h1>
@@ -163,6 +183,8 @@
     <div id="level-transition" class="hidden">
       <span id="transition-text"></span>
     </div>
+
+    <div id="rotate-hint">📱 Yana çevir — daha iyi oynanır</div>
   </div>
 
   <script type="module" src="js/main.js"></script>

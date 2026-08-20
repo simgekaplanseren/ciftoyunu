@@ -470,3 +470,43 @@
   opacity: 0.4;
   cursor: not-allowed;
 }
+
+#screen-access {
+  background: linear-gradient(160deg, #2d1b4e 0%, #1a0f2e 100%);
+}
+
+.access-panel {
+  text-align: center;
+  max-width: 22rem;
+}
+
+.access-subtitle {
+  color: rgba(255, 255, 255, 0.75);
+  margin-bottom: 1.25rem;
+  font-size: 0.95rem;
+}
+
+.access-input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.85rem 1rem;
+  margin-bottom: 0.5rem;
+  border: 2px solid rgba(255, 107, 157, 0.35);
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.25);
+  color: #fff;
+  font-size: 1rem;
+  text-align: center;
+}
+
+.access-input:focus {
+  outline: none;
+  border-color: #ff6b9d;
+}
+
+.access-error {
+  min-height: 1.25rem;
+  color: #ff8fab;
+  font-size: 0.85rem;
+  margin-bottom: 0.75rem;
+}
