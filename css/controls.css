@@ -90,10 +90,10 @@
   left: 0;
   right: 0;
   padding:
-    10px
-    max(12px, env(safe-area-inset-right, 0))
-    max(14px, env(safe-area-inset-bottom, 0))
-    max(12px, env(safe-area-inset-left, 0));
+    8px
+    max(16px, env(safe-area-inset-right, 0))
+    max(10px, env(safe-area-inset-bottom, 0))
+    max(16px, env(safe-area-inset-left, 0));
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
@@ -134,13 +134,8 @@
 .ctrl-btn.jump {
   background: rgba(255, 107, 157, 0.92);
   border-color: rgba(255, 107, 157, 0.55);
-  width: clamp(70px, 18vw, 84px);
-  height: clamp(70px, 18vw, 84px);
-}
-
-.ctrl-btn.attack {
-  background: rgba(192, 132, 252, 0.92);
-  border-color: rgba(192, 132, 252, 0.55);
+  width: clamp(72px, 18vw, 88px);
+  height: clamp(72px, 18vw, 88px);
 }
 
 .ctrl-btn:active,
@@ -148,11 +143,6 @@
   transform: scale(0.88);
   background: rgba(255, 107, 157, 0.98);
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
-}
-
-.ctrl-btn.attack:active,
-.ctrl-btn.attack.pressed {
-  background: rgba(192, 132, 252, 0.98);
 }
 
 @media (orientation: landscape) and (max-height: 500px) {

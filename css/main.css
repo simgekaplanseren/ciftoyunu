@@ -142,10 +142,15 @@ body.is-standalone #screen-install {
   display: none !important;
 }
 
+body.is-playing #app {
+  padding: 0;
+}
+
 body.is-playing #game-container {
   position: fixed;
   inset: 0;
   z-index: 1;
+  overflow: hidden;
 }
 
 body.is-playing #game-canvas {

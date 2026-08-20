@@ -133,31 +133,22 @@ export class Game {
   }
 
   resize() {
-    const container = document.getElementById('game-container');
-    if (!container) return;
-
     const vv = window.visualViewport;
     let cw = vv?.width ?? window.innerWidth;
     let ch = vv?.height ?? window.innerHeight;
 
-    const rect = container.getBoundingClientRect();
-    if (rect.width > 2 && rect.height > 2 && !document.body.classList.contains('portrait-blocked')) {
-      cw = rect.width;
-      ch = rect.height;
-    }
-
-    const touchUi = this._isTouchDevice();
-    const controlsVisible = !document.getElementById('touch-controls')?.classList.contains('hidden');
-    const controlBar = touchUi && controlsVisible && (this.state === 'playing' || this.reunionPhase !== 'none')
-      ? 120
-      : 0;
-
-    if (controlBar) ch -= controlBar;
-
     const aspect = this.config.width / this.config.height;
+    const landscape = cw > ch;
 
     let w, h;
-    if (cw / ch > aspect) {
+    if (landscape) {
+      w = cw;
+      h = w / aspect;
+      if (h > ch) {
+        h = ch;
+        w = h * aspect;
+      }
+    } else if (cw / ch > aspect) {
       h = ch;
       w = h * aspect;
     } else {
@@ -170,6 +161,11 @@ export class Game {
     this.canvas.height = this.config.height;
     this.canvas.style.width = `${Math.floor(w)}px`;
     this.canvas.style.height = `${Math.floor(h)}px`;
+    this.canvas.style.position = 'absolute';
+    this.canvas.style.left = `${Math.floor((cw - w) / 2)}px`;
+    this.canvas.style.top = `${Math.floor((ch - h) / 2)}px`;
+    this.canvas.style.maxWidth = 'none';
+    this.canvas.style.maxHeight = 'none';
   }
 
   _createPlayer(x, y, carryStats = null) {

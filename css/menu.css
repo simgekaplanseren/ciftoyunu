@@ -461,12 +461,75 @@
 #reunion-canvas,
 #victory-canvas {
   width: 100%;
-  max-width: 320px;
-  margin: 0.5rem auto 1rem;
+  max-width: 280px;
+  max-height: 110px;
+  margin: 0.35rem auto 0.5rem;
   image-rendering: pixelated;
   border-radius: 12px;
   border: 2px solid rgba(255, 107, 157, 0.3);
   display: block;
+}
+
+#screen-level-complete.active {
+  overflow: hidden;
+  align-items: center;
+  justify-content: center;
+}
+
+#screen-level-complete .screen-panel {
+  overflow: hidden;
+  max-height: calc(100svh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 1rem);
+  padding: clamp(0.75rem, 2.5vw, 1.25rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.35rem;
+}
+
+#screen-level-complete .screen-panel h2 {
+  font-size: clamp(0.9rem, 3.2vw, 1.25rem);
+  margin-bottom: 0.25rem;
+  line-height: 1.25;
+}
+
+#screen-level-complete .reunion-msg {
+  margin-bottom: 0.25rem !important;
+  font-size: clamp(0.8rem, 2.8vw, 0.95rem);
+}
+
+#screen-level-complete #level-complete-score {
+  margin-bottom: 0.35rem;
+  font-size: 0.9rem;
+}
+
+#screen-level-complete .menu-btn {
+  min-height: 44px;
+  padding: 0.6rem 1rem;
+  min-width: min(260px, 88vw);
+}
+
+@media (orientation: landscape) and (max-height: 500px) {
+  #screen-level-complete #reunion-canvas {
+    max-width: 200px;
+    max-height: 72px;
+    margin: 0.2rem auto 0.35rem;
+  }
+
+  #screen-level-complete .screen-panel {
+    padding: 0.6rem 0.85rem;
+    max-width: min(520px, 94vw);
+  }
+
+  #screen-level-complete .screen-panel h2 {
+    font-size: clamp(0.85rem, 2.8vh, 1.05rem);
+    margin-bottom: 0.15rem;
+  }
+
+  #screen-level-complete .menu-btn {
+    min-height: 40px;
+    padding: 0.5rem 0.85rem;
+    font-size: 0.82rem;
+  }
 }
 
 .reunion-msg {

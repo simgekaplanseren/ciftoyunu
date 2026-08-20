@@ -68,7 +68,6 @@ export class InputManager {
       ['btn-left', 'left'],
       ['btn-right', 'right'],
       ['btn-jump', 'jump'],
-      ['btn-attack', 'attack'],
     ];
 
     for (const [id, action] of bindings) {
