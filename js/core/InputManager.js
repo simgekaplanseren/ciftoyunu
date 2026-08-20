@@ -64,15 +64,29 @@ export class InputManager {
       btn.addEventListener('touchstart', press, { passive: false });
       btn.addEventListener('touchend', release, { passive: false });
       btn.addEventListener('touchcancel', release, { passive: false });
-      btn.addEventListener('mousedown', press);
-      btn.addEventListener('mouseup', release);
-      btn.addEventListener('mouseleave', release);
+      btn.addEventListener('pointerdown', (e) => {
+        if (e.pointerType === 'mouse') press(e);
+      });
+      btn.addEventListener('pointerup', (e) => {
+        if (e.pointerType === 'mouse') release(e);
+      });
+      btn.addEventListener('pointerleave', (e) => {
+        if (e.pointerType === 'mouse') release(e);
+      });
     }
+
+    const pauseBtn = document.getElementById('btn-pause');
+    pauseBtn?.addEventListener('touchstart', (e) => e.stopPropagation(), { passive: true });
   }
 
   _preventScroll() {
+    const allowScroll = (target) => target?.closest?.(
+      '#screen-overlay .screen.active, .screen-panel, .level-grid, .menu-content'
+    );
+
     document.addEventListener('touchmove', (e) => {
-      if (e.target.closest('#touch-controls') || e.target.closest('.menu-btn')) return;
+      if (allowScroll(e.target)) return;
+      if (e.target.closest('#touch-controls, .menu-btn, .char-card, .level-card, .hud-pause-btn')) return;
       e.preventDefault();
     }, { passive: false });
 

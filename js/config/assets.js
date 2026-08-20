@@ -48,7 +48,7 @@ export const CHARACTERS = {
 };
 
 export const REUNION_MESSAGES = [
-  'Sevgiline kavuştun',
+  'Sevgiline kavuştun ❤️',
 ];
 
 export const GAME_CONFIG = {

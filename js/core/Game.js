@@ -13,6 +13,7 @@ import { MenuManager } from '../ui/MenuManager.js';
 import { aabbOverlap } from '../utils/Collision.js';
 import { drawZoneBackground } from '../levels/CyprusAtmosphere.js';
 import { getSectionById } from '../config/GameSections.js';
+import { LEVEL } from '../levels/levelUtils.js';
 
 export class Game {
   constructor(canvas) {
@@ -43,6 +44,7 @@ export class Game {
     this.reunionPhase = 'none'; // none | running | hugging
     this.reunionAnim = 0;
     this.reunionNext = null;
+    this.charPreviewAnim = 0;
     this.victoryAnim = 0;
 
     this._resizeHandler = () => this.resize();
@@ -59,6 +61,11 @@ export class Game {
     this.input.init();
     this.resize();
     window.addEventListener('resize', this._resizeHandler);
+    window.addEventListener('orientationchange', this._resizeHandler);
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener('resize', this._resizeHandler);
+      window.visualViewport.addEventListener('scroll', this._resizeHandler);
+    }
 
     this._drawCharacterPreviews();
     this.audio.playMusic('musicMenu');
@@ -71,13 +78,27 @@ export class Game {
       ['preview-girl', 'girl'],
       ['preview-fadil', 'fadil'],
     ];
+    const scale = 3;
+    const charW = LEVEL.PLAYER_W;
+    const charH = LEVEL.PLAYER_H;
+
     for (const [id, char] of previews) {
       const c = document.getElementById(id);
       if (!c) continue;
       const ctx = c.getContext('2d');
-      ctx.clearRect(0, 0, 80, 100);
+      ctx.clearRect(0, 0, c.width, c.height);
+      ctx.fillStyle = 'rgba(45, 27, 78, 0.5)';
+      ctx.fillRect(0, 0, c.width, c.height);
+
       ctx.imageSmoothingEnabled = false;
-      this.sprites?.drawCharacter(ctx, 20, 30, 40, 56, char, 1, 'idle', 0);
+      ctx.save();
+      ctx.translate(
+        (c.width - charW * scale) / 2,
+        (c.height - charH * scale) / 2
+      );
+      ctx.scale(scale, scale);
+      this.sprites?.drawCharacter(ctx, 0, 0, charW, charH, char, 1, 'idle', this.charPreviewAnim);
+      ctx.restore();
     }
   }
 
@@ -103,10 +124,24 @@ export class Game {
     if (btn) btn.disabled = !this.selectedCharacter;
   }
 
+  _isTouchDevice() {
+    return window.matchMedia('(pointer: coarse)').matches || 'ontouchstart' in window;
+  }
+
   resize() {
     const container = document.getElementById('game-container');
-    const cw = container.clientWidth;
-    const ch = container.clientHeight;
+    if (!container) return;
+
+    const rect = container.getBoundingClientRect();
+    let cw = rect.width;
+    let ch = rect.height;
+
+    const touchUi = this._isTouchDevice();
+    const controlsVisible = !document.getElementById('touch-controls')?.classList.contains('hidden');
+    if (touchUi && controlsVisible && (this.state === 'playing' || this.reunionPhase !== 'none')) {
+      ch -= Math.min(100, ch * 0.2);
+    }
+
     const aspect = this.config.width / this.config.height;
     const isPortrait = cw < ch;
 
@@ -175,7 +210,7 @@ export class Game {
   }
 
   async nextLevel() {
-    if (this.state !== 'levelComplete' && this.state !== 'victory') return;
+    if (this.state !== 'levelComplete') return;
 
     const savedStats = {
       score: this.player?.score ?? 0,
@@ -184,7 +219,7 @@ export class Game {
     this.screens.hideAll();
 
     if (!this.levelManager.hasNextLevel()) {
-      this.showVictory();
+      this.returnToMainMenu();
       return;
     }
 
@@ -255,27 +290,25 @@ export class Game {
     this.reunionNext = null;
     this.hud.hide();
     this._hideTouchControls();
+    this.screens.hideAll();
     this.screens.show('menu');
     this.audio.playMusic('musicMenu');
   }
 
-  showVictory() {
-    this.state = 'victory';
-    this.hud.hide();
-    this._hideTouchControls();
-    this.audio.playMusic('musicMenu');
+  _completeGame() {
     this.audio.playSfx('sfxVictory');
-    this.victoryAnim = 0;
-    this.screens.showVictory();
-  }
-
-  showFinalScreen() {
-    this.state = 'final';
-    this.screens.showFinal();
+    this.returnToMainMenu();
   }
 
   _showTouchControls() {
-    document.getElementById('touch-controls')?.classList.remove('hidden');
+    const el = document.getElementById('touch-controls');
+    if (!el) return;
+    if (this._isTouchDevice()) {
+      el.classList.remove('hidden');
+    } else {
+      el.classList.add('hidden');
+    }
+    this.resize();
   }
 
   _hideTouchControls() {
@@ -299,12 +332,12 @@ export class Game {
       } else {
         this._updateReunion(dt);
       }
-    } else if (this.state === 'victory' || this.state === 'levelComplete') {
+    } else if (this.state === 'characterSelect') {
+      this.charPreviewAnim += dt;
+      this._drawCharacterPreviews();
+    } else if (this.state === 'levelComplete') {
       this.victoryAnim += dt;
       this._drawReunionCanvas('reunion-canvas', 160, 70, 1.4);
-      if (this.state === 'victory') {
-        this._drawReunionCanvas('victory-canvas', 240, 60, 1.6);
-      }
     }
   }
 
@@ -358,7 +391,7 @@ export class Game {
   _startReunionRun() {
     if (this.reunionPhase !== 'none') return;
     if (!this.reunionNext) {
-      this.reunionNext = this.levelManager.hasNextLevel() ? 'levelComplete' : 'victory';
+      this.reunionNext = this.levelManager.hasNextLevel() ? 'levelComplete' : 'gameComplete';
     }
     this.reunionPhase = 'running';
     this.reunionAnim = 0;
@@ -376,8 +409,8 @@ export class Game {
     const next = this.reunionNext;
     this.reunionNext = null;
 
-    if (next === 'victory') {
-      this.showVictory();
+    if (next === 'gameComplete') {
+      this._completeGame();
     } else {
       let completeMsg = null;
       if (this.levelManager.isLastLevelInSection(this.levelDef)) {
@@ -516,14 +549,14 @@ export class Game {
     ctx.imageSmoothingEnabled = false;
     this.camera.reset(ctx);
 
-    if (this.state === 'menu' || this.state === 'final' || this.state === 'characterSelect') {
+    if (this.state === 'menu' || this.state === 'characterSelect') {
       this._drawMenuBackground(ctx);
       return;
     }
 
     if (this.state === 'playing' || this.state === 'paused' || this.state === 'gameover') {
       this._renderLevel(ctx);
-    } else if (this.state === 'levelComplete' || this.state === 'victory') {
+    } else if (this.state === 'levelComplete') {
       this._drawMenuBackground(ctx);
     }
   }
@@ -636,7 +669,7 @@ export class Game {
       ctx.textAlign = 'center';
       const msg = this.reunionPhase === 'running'
         ? `${loverName}'e koş`
-        : 'Sevgiline kavuştun';
+        : 'Sevgiline kavuştun ❤️';
       ctx.fillText(msg, this.config.width / 2, 22);
     }
   }

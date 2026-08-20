@@ -2,11 +2,19 @@
   position: fixed;
   inset: 0;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   background: rgba(26, 15, 46, 0.88);
   backdrop-filter: blur(8px);
-  padding: 1rem;
+  -webkit-backdrop-filter: blur(8px);
+  padding:
+    max(1rem, env(safe-area-inset-top, 0))
+    max(1rem, env(safe-area-inset-right, 0))
+    max(1rem, env(safe-area-inset-bottom, 0))
+    max(1rem, env(safe-area-inset-left, 0));
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
 }
 
 #screen-menu {
@@ -86,6 +94,7 @@
 
 .menu-btn {
   min-width: min(280px, 85vw);
+  min-height: 48px;
   padding: 0.85rem 2rem;
   font-size: clamp(0.85rem, 3.5vw, 1rem);
   font-weight: 700;
@@ -98,6 +107,8 @@
   transition: all 0.2s ease;
   position: relative;
   overflow: hidden;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .menu-btn::before {
@@ -142,12 +153,17 @@
   background: rgba(45, 27, 78, 0.95);
   border: 2px solid rgba(192, 132, 252, 0.3);
   border-radius: 20px;
-  padding: clamp(1.5rem, 5vw, 2.5rem);
+  padding: clamp(1.25rem, 4vw, 2.5rem);
   max-width: min(420px, 92vw);
   width: 100%;
+  max-height: min(92dvh, calc(100dvh - env(safe-area-inset-top, 0) - env(safe-area-inset-bottom, 0) - 2rem));
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
   text-align: center;
   box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5);
   animation: menuFadeIn 0.5s ease;
+  margin: auto;
+  touch-action: manipulation;
 }
 
 .screen-panel h2 {
@@ -193,6 +209,7 @@
   display: flex;
   align-items: center;
   gap: 1rem;
+  min-height: 52px;
   padding: 1rem;
   background: rgba(26, 15, 46, 0.6);
   border: 2px solid rgba(192, 132, 252, 0.25);
@@ -200,6 +217,8 @@
   cursor: pointer;
   transition: all 0.2s;
   text-align: left;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .level-card:hover:not(.locked) {
@@ -401,6 +420,9 @@
   gap: 0.5rem;
   color: inherit;
   font-family: inherit;
+  min-height: 140px;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .char-card:hover {

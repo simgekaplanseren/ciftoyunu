@@ -95,9 +95,6 @@ export class MenuManager {
       case 'resume':
         this.game.resume();
         break;
-      case 'final-screen':
-        this.game.showFinalScreen();
-        break;
     }
   }
 
@@ -120,7 +117,6 @@ export class MenuManager {
         <span class="level-icon">${locked ? '🔒' : section.emoji}</span>
         <div class="level-info">
           <h3>${section.name}</h3>
-          <p>${locked ? 'Henüz kilitli' : section.subtitle}</p>
         </div>
       `;
 
@@ -164,7 +160,6 @@ export class MenuManager {
       <span class="level-icon">${level.emoji}</span>
       <div class="level-info">
         <h3>${level.name}</h3>
-        <p>${locked ? '🔒 Kilitli' : level.subtitle}</p>
       </div>
     `;
 

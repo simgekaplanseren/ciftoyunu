@@ -4,9 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="mobile-web-app-capable" content="yes">
+  <meta name="format-detection" content="telephone=no">
   <meta name="theme-color" content="#2d1b4e">
   <title>SEVGİLİNE KAVUŞ ❤️</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="assets/images/icon-192.png">
   <link rel="stylesheet" href="css/main.css">
   <link rel="stylesheet" href="css/menu.css">
   <link rel="stylesheet" href="css/controls.css">
@@ -123,7 +127,7 @@
       <div id="screen-level-complete" class="screen">
         <div class="screen-panel celebration">
           <h2 id="level-complete-title">Bölüm Tamamlandı!</h2>
-          <p id="level-complete-msg" class="reunion-msg">Sevgiline kavuştun</p>
+          <p id="level-complete-msg" class="reunion-msg">Sevgiline kavuştun ❤️</p>
           <canvas id="reunion-canvas" width="320" height="140"></canvas>
           <p id="level-complete-score">Puan: 0</p>
           <button class="menu-btn primary" data-action="next-level">DEVAM ET →</button>
@@ -138,45 +142,6 @@
           <p>Tekrar dene, sevgilin seni bekliyor!</p>
           <button class="menu-btn primary" data-action="retry">TEKRAR DENE</button>
           <button class="menu-btn" data-action="back-menu">MENÜ</button>
-        </div>
-      </div>
-
-      <!-- Boss Victory -->
-      <div id="screen-victory" class="screen">
-        <div class="screen-panel victory">
-          <h2 class="victory-title">SEVGİLİNE KAVUŞTUN! ❤️</h2>
-          <canvas id="victory-canvas" width="480" height="120"></canvas>
-          <button class="menu-btn primary" data-action="final-screen">DEVAM ET →</button>
-        </div>
-      </div>
-
-      <!-- Final Birthday Screen -->
-      <div id="screen-final" class="screen">
-        <div class="screen-panel final">
-          <div class="final-hearts-bg"></div>
-          <h2>İyi ki doğdun sevgilim. ❤️</h2>
-          <p class="final-message">Bu maceranın en güzel kısmı sensin.</p>
-
-          <!-- Fotoğraf alanı — kendi fotoğraflarını buraya ekleyebilirsin -->
-          <div id="photo-gallery" class="photo-gallery">
-            <div class="photo-slot" data-slot="1">
-              <span class="photo-placeholder">📷 Fotoğraf 1</span>
-              <!-- <img src="assets/images/photo1.jpg" alt="Anı 1"> -->
-            </div>
-            <div class="photo-slot" data-slot="2">
-              <span class="photo-placeholder">📷 Fotoğraf 2</span>
-            </div>
-            <div class="photo-slot" data-slot="3">
-              <span class="photo-placeholder">📷 Fotoğraf 3</span>
-            </div>
-          </div>
-
-          <!-- Kişisel mesaj alanı -->
-          <div id="birthday-message" class="birthday-message">
-            <p class="message-placeholder">Buraya özel doğum günü mesajını yazabilirsin...</p>
-          </div>
-
-          <button class="menu-btn" data-action="back-menu">MENÜYE DÖN</button>
         </div>
       </div>
 

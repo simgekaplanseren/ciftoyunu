@@ -25,7 +25,6 @@ export class Collectible {
 
     switch (this.type) {
       case 'heart':
-        player.heal(1);
         player.addScore(this.value);
         return 'heart';
       case 'key':

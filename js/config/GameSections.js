@@ -21,13 +21,6 @@ export const GAME_SECTIONS = [
     subtitle: 'Alsancak\'tan Kuşadası\'na, Selçuk\'a 6 durak',
     defaultUnlocked: false,
   },
-  {
-    id: 'istanbul',
-    name: "İSTANBUL'DA BİZ",
-    emoji: '🌉',
-    subtitle: 'Doğum gününde — en özel gün',
-    defaultUnlocked: false,
-  },
 ];
 
 export function getDefaultUnlockedSections() {

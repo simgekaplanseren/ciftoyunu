@@ -18,13 +18,11 @@ import {
   LEVEL_SIRINCE,
   LEVEL_SELCUK,
 } from './IzmirLevels.js';
-import { LEVEL_DOGUMGUNU } from './IstanbulLevels.js';
 import { getDefaultUnlockedSections } from '../config/GameSections.js';
 
 const SECTION_UNLOCK_CHAIN = {
   cyprus: 'gaziantep',
   gaziantep: 'izmir',
-  izmir: 'istanbul',
 };
 
 function defaultSectionProgress() {
@@ -32,7 +30,6 @@ function defaultSectionProgress() {
     cyprus: 1,
     gaziantep: 0,
     izmir: 0,
-    istanbul: 0,
   };
 }
 
@@ -53,7 +50,6 @@ export class LevelManager {
       LEVEL_KUSADASI,
       LEVEL_SIRINCE,
       LEVEL_SELCUK,
-      LEVEL_DOGUMGUNU,
     ];
     this.currentIndex = 0;
     this.completedLevels = new Set();
