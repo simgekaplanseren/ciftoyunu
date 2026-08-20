@@ -48,10 +48,7 @@ export const CHARACTERS = {
 };
 
 export const REUNION_MESSAGES = [
-  'Sevgiline kavuştun! 💕',
-  'Sarılmayı hak ettin! 🤗',
-  'Aşk her engeli aşar! ❤️',
-  'Sonunda birliktesiniz! 🥰',
+  'Sevgiline kavuştun',
 ];
 
 export const GAME_CONFIG = {
@@ -59,7 +56,7 @@ export const GAME_CONFIG = {
   height: 270,
   gravity: 900,
   tileSize: 16,
-  maxHearts: 5,
+  maxHearts: 3,
   invincibilityTime: 1.5,
   attackDuration: 0.25,
   attackCooldown: 0.4,

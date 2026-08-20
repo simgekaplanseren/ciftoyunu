@@ -33,7 +33,7 @@ export function loverPoint(x) {
   return {
     x,
     y: playerY(),
-    triggerX: x - 100,
+    triggerX: x - 32,
     visible: true,
     active: true,
   };

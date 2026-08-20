@@ -164,14 +164,13 @@ export class SpriteRenderer {
     }
 
     if (embrace > 0.5) {
-      ctx.font = `${16 * scale}px sans-serif`;
-      ctx.textAlign = 'center';
-      ctx.fillText('🤗', cx, baseY - 6);
       for (let i = 0; i < 4; i++) {
         const hx = cx + Math.sin(animFrame * 3 + i * 1.5) * (18 + i * 4);
         const hy = baseY - 18 + Math.cos(animFrame * 2.5 + i) * 6;
-        ctx.font = `${(9 + i * 2) * scale}px sans-serif`;
-        ctx.fillText('❤', hx, hy);
+        ctx.fillStyle = '#ff6b9d';
+        ctx.beginPath();
+        ctx.arc(hx, hy, (3 + i) * scale, 0, Math.PI * 2);
+        ctx.fill();
       }
     }
   }
@@ -186,9 +185,9 @@ export class SpriteRenderer {
     this.drawCharacter(ctx, x, y, w, h, loverChar, facing, 'idle', animFrame);
   }
 
-  drawEnemy(ctx, x, y, w, h, type, animFrame) {
+  drawEnemy(ctx, x, y, w, h, type, animFrame, extra = {}) {
     const img = this.assets?.get('enemy');
-    if (img) {
+    if (img && (type === 'walker' || type === 'slime')) {
       ctx.drawImage(img, x, y, w, h);
       return;
     }
@@ -196,33 +195,109 @@ export class SpriteRenderer {
     ctx.save();
     ctx.translate(x, y);
     const bounce = Math.abs(Math.sin(animFrame * 8)) * 2;
+    const { health = 1, maxHealth = 1, chargeState } = extra;
 
     ctx.fillStyle = 'rgba(0,0,0,0.25)';
     ctx.beginPath();
     ctx.ellipse(w / 2, h - 1, w / 2, 2, 0, 0, Math.PI * 2);
     ctx.fill();
 
-    const bodyColor = type === 'slime' ? '#6ee7b7' : type === 'bat' ? '#4c1d95' : COLORS.enemyBody;
-    ctx.fillStyle = bodyColor;
-
     if (type === 'slime') {
+      ctx.fillStyle = '#6ee7b7';
       ctx.beginPath();
       ctx.moveTo(2, h);
       ctx.quadraticCurveTo(w / 2, h - 10 - bounce, w - 2, h);
       ctx.fill();
+      ctx.fillStyle = '#064e3b';
+      ctx.fillRect(w / 2 - 2, h - 8 - bounce, 4, 4);
+      ctx.fillRect(w / 2 + 4, h - 6 - bounce, 3, 3);
     } else if (type === 'bat') {
-      const wingFlap = Math.sin(animFrame * 15) * 4;
+      const wing = Math.sin(animFrame * 15) * 5;
       ctx.fillStyle = '#4c1d95';
       ctx.beginPath();
       ctx.moveTo(w / 2, 6);
-      ctx.lineTo(0, 4 + wingFlap);
-      ctx.lineTo(w / 2, 10);
-      ctx.lineTo(w, 4 - wingFlap);
+      ctx.lineTo(0, 4 + wing);
+      ctx.lineTo(w / 2, 11);
+      ctx.lineTo(w, 4 - wing);
       ctx.closePath();
       ctx.fill();
-      ctx.fillStyle = '#7c3aed';
-      ctx.fillRect(w / 2 - 4, 6, 8, 6);
+      ctx.fillStyle = '#a78bfa';
+      ctx.fillRect(w / 2 - 4, 7, 8, 6);
+      ctx.fillStyle = '#ef4444';
+      ctx.fillRect(w / 2 - 2, 9, 2, 2);
+      ctx.fillRect(w / 2 + 1, 9, 2, 2);
+    } else if (type === 'bee') {
+      ctx.fillStyle = '#fbbf24';
+      ctx.beginPath();
+      ctx.ellipse(w / 2, h / 2, w / 2 - 1, h / 2 - 1, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = '#1c1917';
+      ctx.fillRect(3, h / 2 - 2, w - 6, 3);
+      ctx.fillStyle = 'rgba(255,255,255,0.7)';
+      ctx.beginPath();
+      ctx.ellipse(w / 2 + 4, h / 2 - 4, 5, 3, 0.5, 0, Math.PI * 2);
+      ctx.fill();
+    } else if (type === 'ghost') {
+      ctx.fillStyle = '#c4b5fd';
+      ctx.beginPath();
+      ctx.arc(w / 2, h / 2 - 2, w / 2 - 2, Math.PI, 0);
+      ctx.lineTo(w - 2, h);
+      ctx.lineTo(w / 2 + 4, h - 4);
+      ctx.lineTo(w / 2, h);
+      ctx.lineTo(w / 2 - 4, h - 4);
+      ctx.lineTo(2, h);
+      ctx.closePath();
+      ctx.fill();
+      ctx.fillStyle = '#312e81';
+      ctx.fillRect(w / 2 - 5, h / 2 - 4, 3, 4);
+      ctx.fillRect(w / 2 + 2, h / 2 - 4, 3, 4);
+    } else if (type === 'crab') {
+      ctx.fillStyle = '#ef4444';
+      ctx.fillRect(2, h - 10, w - 4, 8);
+      ctx.fillStyle = '#b91c1c';
+      ctx.fillRect(0, h - 8, 5, 4);
+      ctx.fillRect(w - 5, h - 8, 5, 4);
+      ctx.fillStyle = '#1c1917';
+      ctx.fillRect(6, h - 9, 3, 3);
+      ctx.fillRect(w - 9, h - 9, 3, 3);
+    } else if (type === 'jumper') {
+      ctx.fillStyle = '#f97316';
+      ctx.fillRect(3, 5 + bounce, w - 6, h - 7);
+      ctx.fillStyle = '#ea580c';
+      ctx.fillRect(2, h - 4, 5, 4);
+      ctx.fillRect(w - 7, h - 4, 5, 4);
+      ctx.fillStyle = '#fff';
+      ctx.fillRect(6, 8 + bounce, 4, 4);
+      ctx.fillRect(w - 10, 8 + bounce, 4, 4);
+    } else if (type === 'charger') {
+      const windup = chargeState === 'windup';
+      const charging = chargeState === 'charge';
+      ctx.fillStyle = charging ? '#dc2626' : windup ? '#fbbf24' : '#64748b';
+      ctx.fillRect(2, 4, w - 4, h - 5);
+      ctx.fillStyle = '#1e293b';
+      ctx.fillRect(4, 2, w - 8, 6);
+      if (charging) {
+        ctx.fillStyle = '#fef08a';
+        ctx.fillRect(w - 6, h / 2, 4, 2);
+        ctx.fillRect(2, h / 2, 4, 2);
+      }
+      ctx.fillStyle = '#ef4444';
+      ctx.fillRect(6, 9, 4, 4);
+      ctx.fillRect(w - 10, 9, 4, 4);
+    } else if (type === 'turtle') {
+      const shell = health < maxHealth;
+      ctx.fillStyle = shell ? '#78716c' : '#65a30d';
+      ctx.beginPath();
+      ctx.ellipse(w / 2, h / 2, w / 2 - 1, h / 2 - 2, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = '#3f6212';
+      ctx.fillRect(4, h / 2 - 2, w - 8, 2);
+      ctx.fillRect(w / 2 - 1, h / 2 - 5, 2, 8);
+      ctx.fillStyle = '#fef08a';
+      ctx.fillRect(2, h - 6, 5, 4);
+      ctx.fillRect(w - 7, h - 6, 5, 4);
     } else {
+      ctx.fillStyle = COLORS.enemyBody;
       ctx.fillRect(2, 4 + bounce, w - 4, h - 6);
       ctx.fillStyle = COLORS.enemyEye;
       ctx.fillRect(5, 8 + bounce, 3, 3);

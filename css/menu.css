@@ -365,6 +365,11 @@
   margin-bottom: 1rem;
 }
 
+#screen-level-complete .menu-btn + .menu-btn,
+#screen-game-over .menu-btn + .menu-btn {
+  margin-top: 0.65rem;
+}
+
 /* Character Select */
 .character-select h2 {
   margin-bottom: 0.5rem;

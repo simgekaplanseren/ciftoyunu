@@ -135,9 +135,9 @@ export class Game {
 
   _createPlayer(x, y, carryStats = null) {
     const p = new Player(x, y, this.sprites, this.selectedCharacter || 'girl');
-    if (carryStats) {
+    p.hearts = p.maxHearts;
+    if (carryStats?.score != null) {
       p.score = carryStats.score;
-      p.hearts = carryStats.hearts;
     }
     return p;
   }
@@ -160,14 +160,15 @@ export class Game {
 
   async _loadCurrentLevel(carryStats = null) {
     const { def, data } = this.levelManager.loadLevel(this.levelManager.currentIndex);
-    this.levelDef = def;
     this.levelData = data;
     this.reunionPhase = 'none';
     this.reunionAnim = 0;
     this.reunionNext = null;
 
     this.player = this._createPlayer(def.spawn.x, def.spawn.y, carryStats);
-    this.camera.setLevelBounds(def.width, def.height);
+    const levelWidth = data.actualWidth ?? def.width;
+    this.levelDef = { ...def, width: levelWidth };
+    this.camera.setLevelBounds(levelWidth, def.height);
     this.camera.x = 0;
     this.camera.y = 0;
     this.particles.clear();
@@ -178,7 +179,6 @@ export class Game {
 
     const savedStats = {
       score: this.player?.score ?? 0,
-      hearts: this.player?.hearts ?? 3,
     };
 
     this.screens.hideAll();
@@ -210,8 +210,10 @@ export class Game {
 
     this.levelDef = next.def;
     this.levelData = next.data;
+    const levelWidth = next.data.actualWidth ?? next.def.width;
+    this.levelDef = { ...next.def, width: levelWidth };
     this.player = this._createPlayer(next.def.spawn.x, next.def.spawn.y, savedStats);
-    this.camera.setLevelBounds(next.def.width, next.def.height);
+    this.camera.setLevelBounds(levelWidth, next.def.height);
     this.camera.x = 0;
     this.reunionPhase = 'none';
     this.particles.clear();
@@ -223,7 +225,7 @@ export class Game {
 
   async retryLevel() {
     const savedScore = this.player?.score ?? 0;
-    await this._loadCurrentLevel({ score: savedScore, hearts: 3 });
+    await this._loadCurrentLevel({ score: savedScore });
     this.screens.hideAll();
     this.hud.show();
     this._showTouchControls();
@@ -633,8 +635,8 @@ export class Game {
       ctx.font = 'bold 12px sans-serif';
       ctx.textAlign = 'center';
       const msg = this.reunionPhase === 'running'
-        ? `${loverName}'e koş! 💨`
-        : `Kavuştunuz, sarılıyorsunuz! 🤗`;
+        ? `${loverName}'e koş`
+        : 'Sevgiline kavuştun';
       ctx.fillText(msg, this.config.width / 2, 22);
     }
   }

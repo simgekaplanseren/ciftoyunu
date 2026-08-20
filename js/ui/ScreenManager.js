@@ -37,7 +37,7 @@ export class ScreenManager {
     const title = document.getElementById('level-complete-title');
     const scoreEl = document.getElementById('level-complete-score');
     const msgEl = document.getElementById('level-complete-msg');
-    if (title) title.textContent = `${levelName} Tamamlandı! 🎉`;
+    if (title) title.textContent = `${levelName} Tamamlandı!`;
     if (scoreEl) scoreEl.textContent = `Puan: ${score}`;
     if (msgEl) {
       msgEl.textContent = customMsg
