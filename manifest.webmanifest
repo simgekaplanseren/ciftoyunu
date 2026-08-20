@@ -2,7 +2,9 @@
   "name": "Sevgiline Kavuş",
   "short_name": "Kavuş",
   "description": "Romantik platform macerası",
-  "start_url": "./index.html",
+  "id": "/",
+  "start_url": "./",
+  "scope": "./",
   "display": "standalone",
   "orientation": "any",
   "background_color": "#1a0f2e",
@@ -20,6 +22,12 @@
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
+    },
+    {
+      "src": "assets/images/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ]
 }

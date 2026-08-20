@@ -1,0 +1,12 @@
+{
+  "appId": "com.simge.ciftoyunu",
+  "appName": "Sevgiline Kavuş",
+  "webDir": "www",
+  "server": {
+    "androidScheme": "https"
+  },
+  "android": {
+    "backgroundColor": "#1a0f2e",
+    "allowMixedContent": false
+  }
+}

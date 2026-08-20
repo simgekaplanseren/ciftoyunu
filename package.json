@@ -1,0 +1,22 @@
+{
+  "name": "ciftoyunu",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Sevgiline Kavuş - romantik platform oyunu",
+  "scripts": {
+    "build:web": "node scripts/sync-www.js",
+    "cap:sync": "npm run build:web && npx cap sync android",
+    "cap:open": "npx cap open android",
+    "cap:run": "npx cap run android",
+    "cap:apk": "npm run cap:sync && cd android && .\\gradlew.bat assembleDebug"
+  },
+  "dependencies": {
+    "@capacitor/android": "^8.5.0",
+    "@capacitor/core": "^8.5.0"
+  },
+  "devDependencies": {
+    "@capacitor/assets": "^3.0.5",
+    "@capacitor/cli": "^8.5.0"
+  }
+}
