@@ -59,6 +59,8 @@ export class Game {
     this.sprites = new SpriteRenderer(this.assetLoader);
     this.menu = new MenuManager(this);
 
+    document.body.classList.add('in-menu');
+
     this.input.init();
     this.resize();
     window.addEventListener('resize', this._resizeHandler);
@@ -197,7 +199,10 @@ export class Game {
     this.hud.show();
     this._showTouchControls();
     this.state = 'playing';
+    document.body.classList.add('is-playing');
+    document.body.classList.remove('in-menu');
     this.orientation?.lockLandscape();
+    this.orientation?.update();
     this.resize();
     this.audio.playMusic(this.levelDef.music);
   }
@@ -294,7 +299,10 @@ export class Game {
 
   returnToMainMenu() {
     this.state = 'menu';
+    document.body.classList.remove('is-playing');
+    document.body.classList.add('in-menu');
     this.orientation?.unlock();
+    this.orientation?.update();
     this.reunionPhase = 'none';
     this.reunionAnim = 0;
     this.reunionNext = null;

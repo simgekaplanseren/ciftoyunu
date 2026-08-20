@@ -9,7 +9,8 @@
     "cap:sync": "npm run build:web && npx cap sync android",
     "cap:open": "npx cap open android",
     "cap:run": "npx cap run android",
-    "cap:apk": "npm run cap:sync && cd android && .\\gradlew.bat assembleDebug"
+    "cap:apk": "npm run cap:sync && cd android && .\\gradlew.bat assembleDebug",
+    "cap:apk:release": "npm run cap:sync && cd android && .\\gradlew.bat assembleRelease"
   },
   "dependencies": {
     "@capacitor/android": "^8.5.0",

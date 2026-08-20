@@ -2,7 +2,7 @@
   position: fixed;
   inset: 0;
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: center;
   background: rgba(26, 15, 46, 0.88);
   backdrop-filter: blur(8px);
@@ -15,10 +15,25 @@
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   overscroll-behavior: contain;
+  min-height: 100svh;
+  min-height: -webkit-fill-available;
 }
 
 #screen-menu {
   background: linear-gradient(160deg, #2d1b4e 0%, #1a0f2e 50%, #0f1a3d 100%);
+}
+
+#screen-menu.active {
+  align-items: center;
+  justify-content: center;
+}
+
+.menu-content {
+  text-align: center;
+  z-index: 1;
+  animation: menuFadeIn 0.8s ease;
+  width: min(100%, 24rem);
+  padding: 0.5rem;
 }
 
 .menu-bg-hearts {
@@ -48,12 +63,6 @@
   right: 15%;
   color: #c084fc;
   animation-delay: 2s;
-}
-
-.menu-content {
-  text-align: center;
-  z-index: 1;
-  animation: menuFadeIn 0.8s ease;
 }
 
 @keyframes menuFadeIn {
@@ -509,4 +518,77 @@
   color: #ff8fab;
   font-size: 0.85rem;
   margin-bottom: 0.75rem;
+}
+
+#screen-install {
+  background: linear-gradient(160deg, #2d1b4e 0%, #1a0f2e 100%);
+}
+
+.install-panel {
+  text-align: center;
+  max-width: 22rem;
+}
+
+.install-lead {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.95rem;
+  line-height: 1.45;
+  margin-bottom: 1.25rem;
+}
+
+.install-steps {
+  text-align: left;
+  margin-bottom: 1.25rem;
+}
+
+.install-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-bottom: 0.85rem;
+  color: #e9d5ff;
+  font-size: 0.92rem;
+  line-height: 1.35;
+}
+
+.install-step span {
+  flex-shrink: 0;
+  width: 1.6rem;
+  height: 1.6rem;
+  border-radius: 50%;
+  background: rgba(255, 107, 157, 0.25);
+  border: 1px solid rgba(255, 107, 157, 0.5);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.menu-btn.text-link {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 0.82rem;
+  font-weight: 500;
+  letter-spacing: 0;
+  min-width: auto;
+  min-height: auto;
+  padding: 0.5rem;
+}
+
+@media (max-width: 768px) and (orientation: portrait) {
+  .game-title {
+    font-size: clamp(1.75rem, 9vw, 2.4rem);
+  }
+
+  .game-subtitle {
+    margin-bottom: 2rem;
+  }
+
+  .menu-btn {
+    min-width: min(300px, 88vw);
+    min-height: 52px;
+    font-size: 1rem;
+  }
 }

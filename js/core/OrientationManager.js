@@ -24,7 +24,12 @@ export class OrientationManager {
   }
 
   shouldForceLandscape() {
-    return this.isTouchDevice() && this.isPortrait() && window.innerWidth < 900;
+    return (
+      this.isTouchDevice()
+      && this.isPortrait()
+      && window.innerWidth < 900
+      && document.body.classList.contains('is-playing')
+    );
   }
 
   update() {
