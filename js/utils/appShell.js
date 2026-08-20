@@ -8,8 +8,12 @@ export function lockScroll() {
   document.addEventListener(
     'touchmove',
     (event) => {
-      const scrollable = event.target.closest('.screen-panel, .screen, .access-input');
-      if (!scrollable) event.preventDefault();
+      if (event.target.closest(
+        '#touch-controls, .ctrl-btn, .hud-pause-btn, .screen-panel, .screen.active, .access-input, .menu-btn'
+      )) {
+        return;
+      }
+      event.preventDefault();
     },
     { passive: false }
   );
@@ -17,4 +21,10 @@ export function lockScroll() {
 
 export function isNativeApp() {
   return window.Capacitor?.isNativePlatform?.() === true;
+}
+
+export function isMobileDevice() {
+  return /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
+    || window.matchMedia('(pointer: coarse)').matches
+    || 'ontouchstart' in window;
 }

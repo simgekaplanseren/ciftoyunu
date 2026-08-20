@@ -1,5 +1,5 @@
 #hud {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   right: 0;
@@ -12,7 +12,7 @@
   justify-content: space-between;
   align-items: flex-start;
   pointer-events: none;
-  z-index: 10;
+  z-index: 500;
 }
 
 .hud-left, .hud-right {
@@ -24,11 +24,11 @@
 
 .hud-pause-btn {
   pointer-events: auto;
-  width: clamp(32px, 8vw, 38px);
-  height: clamp(32px, 8vw, 38px);
+  width: clamp(36px, 9vw, 44px);
+  height: clamp(36px, 9vw, 44px);
   border-radius: 10px;
   border: 2px solid rgba(192, 132, 252, 0.45);
-  background: rgba(45, 27, 78, 0.75);
+  background: rgba(45, 27, 78, 0.9);
   color: #e9d5ff;
   font-size: clamp(14px, 3.5vw, 16px);
   cursor: pointer;
@@ -79,26 +79,27 @@
   font-weight: 700;
   color: #fff;
   text-shadow: 0 1px 3px rgba(0,0,0,0.7);
-  background: rgba(26, 15, 46, 0.5);
+  background: rgba(26, 15, 46, 0.7);
   padding: 2px 8px;
   border-radius: 8px;
 }
 
 #touch-controls {
-  position: absolute;
+  position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
   padding:
-    12px
-    max(16px, env(safe-area-inset-right, 0))
-    max(20px, env(safe-area-inset-bottom, 0))
-    max(16px, env(safe-area-inset-left, 0));
+    10px
+    max(12px, env(safe-area-inset-right, 0))
+    max(14px, env(safe-area-inset-bottom, 0))
+    max(12px, env(safe-area-inset-left, 0));
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
   pointer-events: none;
-  z-index: 10;
+  z-index: 500;
+  gap: 8px;
 }
 
 .controls-left,
@@ -106,63 +107,63 @@
   display: flex;
   gap: 10px;
   pointer-events: auto;
+  touch-action: manipulation;
 }
 
 .ctrl-btn {
-  width: clamp(56px, 15vw, 68px);
-  height: clamp(56px, 15vw, 68px);
+  width: clamp(62px, 16vw, 76px);
+  height: clamp(62px, 16vw, 76px);
   border-radius: 50%;
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  background: rgba(45, 27, 78, 0.75);
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  background: rgba(45, 27, 78, 0.92);
   color: #fff;
-  font-size: clamp(18px, 5vw, 24px);
+  font-size: clamp(20px, 5.5vw, 26px);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   touch-action: manipulation;
-  transition: all 0.1s ease;
+  -webkit-user-select: none;
+  user-select: none;
+  transition: transform 0.1s ease, background 0.1s ease;
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
 }
 
 .ctrl-btn.jump {
-  background: rgba(255, 107, 157, 0.75);
-  border-color: rgba(255, 107, 157, 0.5);
-  width: clamp(64px, 16vw, 76px);
-  height: clamp(64px, 16vw, 76px);
+  background: rgba(255, 107, 157, 0.92);
+  border-color: rgba(255, 107, 157, 0.55);
+  width: clamp(70px, 18vw, 84px);
+  height: clamp(70px, 18vw, 84px);
 }
 
 .ctrl-btn.attack {
-  background: rgba(192, 132, 252, 0.75);
-  border-color: rgba(192, 132, 252, 0.5);
+  background: rgba(192, 132, 252, 0.92);
+  border-color: rgba(192, 132, 252, 0.55);
 }
 
 .ctrl-btn:active,
 .ctrl-btn.pressed {
   transform: scale(0.88);
-  background: rgba(255, 107, 157, 0.95);
+  background: rgba(255, 107, 157, 0.98);
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
 }
 
 .ctrl-btn.attack:active,
 .ctrl-btn.attack.pressed {
-  background: rgba(192, 132, 252, 0.95);
+  background: rgba(192, 132, 252, 0.98);
 }
 
-@media (pointer: coarse), (max-width: 768px) {
-  #touch-controls {
-    opacity: 1;
-  }
-}
-
-@media (pointer: fine) and (min-width: 769px) and (hover: hover) {
-  #touch-controls {
-    opacity: 0.4;
+@media (orientation: landscape) and (max-height: 500px) {
+  .ctrl-btn {
+    width: clamp(54px, 14vh, 68px);
+    height: clamp(54px, 14vh, 68px);
+    font-size: clamp(18px, 4.5vh, 22px);
   }
 
-  #touch-controls:hover {
-    opacity: 0.85;
+  .ctrl-btn.jump {
+    width: clamp(60px, 15vh, 74px);
+    height: clamp(60px, 15vh, 74px);
   }
 }

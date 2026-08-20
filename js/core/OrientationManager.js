@@ -20,34 +20,39 @@ export class OrientationManager {
   }
 
   isPortrait() {
-    return window.matchMedia('(orientation: portrait)').matches;
+    const vv = window.visualViewport;
+    const w = vv?.width ?? window.innerWidth;
+    const h = vv?.height ?? window.innerHeight;
+    return w < h;
   }
 
-  shouldForceLandscape() {
+  isPlayingPortrait() {
     return (
-      this.isTouchDevice()
+      document.body.classList.contains('is-playing')
+      && this.isTouchDevice()
       && this.isPortrait()
-      && window.innerWidth < 900
-      && document.body.classList.contains('is-playing')
     );
   }
 
   update() {
-    const forceLandscape = this.shouldForceLandscape();
-    document.body.classList.toggle('mobile-portrait', forceLandscape);
-
-    const hint = document.getElementById('rotate-hint');
-    if (hint) {
-      hint.classList.toggle('visible', forceLandscape);
-    }
+    const block = document.getElementById('portrait-block');
+    const playingPortrait = this.isPlayingPortrait();
+    block?.classList.toggle('hidden', !playingPortrait);
+    document.body.classList.toggle('portrait-blocked', playingPortrait);
   }
 
   async lockLandscape() {
     try {
       if (screen.orientation?.lock) {
-        await screen.orientation.lock('landscape');
+        await screen.orientation.lock('landscape-primary');
       }
-    } catch (_) {}
+    } catch (_) {
+      try {
+        if (screen.orientation?.lock) {
+          await screen.orientation.lock('landscape');
+        }
+      } catch (_) {}
+    }
   }
 
   unlock() {

@@ -35,6 +35,34 @@ export class InputManager {
     this._preventScroll();
   }
 
+  _bindButton(btn, action) {
+    const press = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      btn.classList.add('pressed');
+      this.touch[action] = true;
+      if (action === 'jump') this.touch.jumpPressed = true;
+      if (action === 'attack') this.touch.attackPressed = true;
+    };
+
+    const release = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      btn.classList.remove('pressed');
+      this.touch[action] = false;
+    };
+
+    btn.addEventListener('touchstart', press, { passive: false });
+    btn.addEventListener('touchend', release, { passive: false });
+    btn.addEventListener('touchcancel', release, { passive: false });
+    btn.addEventListener('pointerdown', press);
+    btn.addEventListener('pointerup', release);
+    btn.addEventListener('pointercancel', release);
+    btn.addEventListener('pointerleave', (e) => {
+      if (e.buttons === 0) release(e);
+    });
+  }
+
   _setupTouchButtons() {
     const bindings = [
       ['btn-left', 'left'],
@@ -46,50 +74,15 @@ export class InputManager {
     for (const [id, action] of bindings) {
       const btn = document.getElementById(id);
       if (!btn) continue;
-
-      const press = (e) => {
-        e.preventDefault();
-        btn.classList.add('pressed');
-        this.touch[action] = true;
-        if (action === 'jump') this.touch.jumpPressed = true;
-        if (action === 'attack') this.touch.attackPressed = true;
-      };
-
-      const release = (e) => {
-        e.preventDefault();
-        btn.classList.remove('pressed');
-        this.touch[action] = false;
-      };
-
-      btn.addEventListener('touchstart', press, { passive: false });
-      btn.addEventListener('touchend', release, { passive: false });
-      btn.addEventListener('touchcancel', release, { passive: false });
-      btn.addEventListener('pointerdown', (e) => {
-        if (e.pointerType === 'mouse') press(e);
-      });
-      btn.addEventListener('pointerup', (e) => {
-        if (e.pointerType === 'mouse') release(e);
-      });
-      btn.addEventListener('pointerleave', (e) => {
-        if (e.pointerType === 'mouse') release(e);
-      });
+      this._bindButton(btn, action);
     }
 
     const pauseBtn = document.getElementById('btn-pause');
     pauseBtn?.addEventListener('touchstart', (e) => e.stopPropagation(), { passive: true });
+    pauseBtn?.addEventListener('pointerdown', (e) => e.stopPropagation());
   }
 
   _preventScroll() {
-    const allowScroll = (target) => target?.closest?.(
-      '#screen-overlay .screen.active, .screen-panel, .level-grid, .menu-content'
-    );
-
-    document.addEventListener('touchmove', (e) => {
-      if (allowScroll(e.target)) return;
-      if (e.target.closest('#touch-controls, .menu-btn, .char-card, .level-card, .hud-pause-btn')) return;
-      e.preventDefault();
-    }, { passive: false });
-
     document.addEventListener('gesturestart', (e) => e.preventDefault());
   }
 

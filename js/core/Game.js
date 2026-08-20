@@ -14,6 +14,7 @@ import { aabbOverlap } from '../utils/Collision.js';
 import { drawZoneBackground } from '../levels/CyprusAtmosphere.js';
 import { getSectionById } from '../config/GameSections.js';
 import { LEVEL } from '../levels/levelUtils.js';
+import { isMobileDevice } from '../utils/appShell.js';
 
 export class Game {
   constructor(canvas, orientation = null) {
@@ -128,41 +129,35 @@ export class Game {
   }
 
   _isTouchDevice() {
-    return window.matchMedia('(pointer: coarse)').matches || 'ontouchstart' in window;
+    return isMobileDevice();
   }
 
   resize() {
     const container = document.getElementById('game-container');
     if (!container) return;
 
-    const rect = container.getBoundingClientRect();
-    let cw = rect.width;
-    let ch = rect.height;
+    const vv = window.visualViewport;
+    let cw = vv?.width ?? window.innerWidth;
+    let ch = vv?.height ?? window.innerHeight;
 
-    if (cw < 2 || ch < 2) {
-      const vv = window.visualViewport;
-      cw = vv?.width ?? window.innerWidth;
-      ch = vv?.height ?? window.innerHeight;
+    const rect = container.getBoundingClientRect();
+    if (rect.width > 2 && rect.height > 2 && !document.body.classList.contains('portrait-blocked')) {
+      cw = rect.width;
+      ch = rect.height;
     }
 
     const touchUi = this._isTouchDevice();
     const controlsVisible = !document.getElementById('touch-controls')?.classList.contains('hidden');
-    if (touchUi && controlsVisible && (this.state === 'playing' || this.reunionPhase !== 'none')) {
-      ch -= Math.min(100, ch * 0.2);
-    }
+    const controlBar = touchUi && controlsVisible && (this.state === 'playing' || this.reunionPhase !== 'none')
+      ? 120
+      : 0;
+
+    if (controlBar) ch -= controlBar;
 
     const aspect = this.config.width / this.config.height;
-    const isPortrait = cw < ch;
 
     let w, h;
-    if (isPortrait) {
-      w = cw;
-      h = w / aspect;
-      if (h > ch) {
-        h = ch;
-        w = h * aspect;
-      }
-    } else if (cw / ch > aspect) {
+    if (cw / ch > aspect) {
       h = ch;
       w = h * aspect;
     } else {
@@ -327,6 +322,7 @@ export class Game {
     } else {
       el.classList.add('hidden');
     }
+    this.orientation?.update();
     this.resize();
   }
 
