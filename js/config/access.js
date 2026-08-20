@@ -4,6 +4,6 @@
  */
 export const ACCESS = {
   enabled: true,
-  code: 'ask2024',
+  code: '260226',
   storageKey: 'ciftoyunu_access_v1',
 };
