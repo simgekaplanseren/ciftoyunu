@@ -133,22 +133,21 @@ export class Game {
   }
 
   resize() {
-    const vv = window.visualViewport;
-    let cw = vv?.width ?? window.innerWidth;
-    let ch = vv?.height ?? window.innerHeight;
+    const container = document.getElementById('game-container');
+    if (!container) return;
+
+    let cw = container.clientWidth;
+    let ch = container.clientHeight;
+
+    if (cw < 2 || ch < 2) {
+      cw = window.visualViewport?.width ?? window.innerWidth;
+      ch = window.visualViewport?.height ?? window.innerHeight;
+    }
 
     const aspect = this.config.width / this.config.height;
-    const landscape = cw > ch;
 
     let w, h;
-    if (landscape) {
-      w = cw;
-      h = w / aspect;
-      if (h > ch) {
-        h = ch;
-        w = h * aspect;
-      }
-    } else if (cw / ch > aspect) {
+    if (cw / ch > aspect) {
       h = ch;
       w = h * aspect;
     } else {
@@ -161,11 +160,11 @@ export class Game {
     this.canvas.height = this.config.height;
     this.canvas.style.width = `${Math.floor(w)}px`;
     this.canvas.style.height = `${Math.floor(h)}px`;
-    this.canvas.style.position = 'absolute';
-    this.canvas.style.left = `${Math.floor((cw - w) / 2)}px`;
-    this.canvas.style.top = `${Math.floor((ch - h) / 2)}px`;
-    this.canvas.style.maxWidth = 'none';
-    this.canvas.style.maxHeight = 'none';
+    this.canvas.style.position = '';
+    this.canvas.style.left = '';
+    this.canvas.style.top = '';
+    this.canvas.style.maxWidth = '';
+    this.canvas.style.maxHeight = '';
   }
 
   _createPlayer(x, y, carryStats = null) {

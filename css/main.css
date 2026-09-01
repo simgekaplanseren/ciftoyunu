@@ -151,6 +151,9 @@ body.is-playing #game-container {
   inset: 0;
   z-index: 1;
   overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 body.is-playing #game-canvas {
