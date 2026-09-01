@@ -90,8 +90,63 @@
 .game-subtitle {
   font-size: clamp(0.9rem, 3vw, 1.2rem);
   color: #c4b5fd;
-  margin-bottom: 2.5rem;
+  margin-bottom: 1.25rem;
   font-style: italic;
+}
+
+.secret-lock-panel {
+  width: min(100%, 20rem);
+  margin: 0 auto 1.5rem;
+  padding: 0.85rem 1rem;
+  border-radius: 14px;
+  border: 2px solid rgba(251, 191, 36, 0.35);
+  background: rgba(45, 27, 78, 0.55);
+}
+
+.lock-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #fde68a;
+  margin-bottom: 0.35rem;
+}
+
+.lock-icon {
+  font-size: 1.25rem;
+}
+
+.lock-hint {
+  font-size: 0.8rem;
+  color: #c4b5fd;
+  margin-bottom: 0.65rem;
+  opacity: 0.9;
+}
+
+.menu-btn.lock-btn {
+  min-width: 100%;
+  border-color: rgba(251, 191, 36, 0.45);
+  color: #fde68a;
+}
+
+.menu-btn.lock-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.secret-panel {
+  text-align: center;
+  max-width: 26rem;
+}
+
+.secret-message {
+  font-size: clamp(1rem, 3.5vw, 1.15rem);
+  line-height: 1.6;
+  color: #fde68a;
+  margin: 1.25rem 0 1.75rem;
+  white-space: pre-wrap;
 }
 
 .menu-buttons {

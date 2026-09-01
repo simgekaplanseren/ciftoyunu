@@ -1,3 +1,6 @@
+import { KeyProgress } from '../core/KeyProgress.js';
+import { SECRET_LOCK } from '../config/SecretLock.js';
+
 export class HUD {
   constructor() {
     this.el = document.getElementById('hud');
@@ -29,9 +32,10 @@ export class HUD {
     this.scoreEl.textContent = `💎 ${player.score}`;
     this.levelEl.textContent = levelName;
 
-    if (player.keys > 0) {
+    const totalKeys = KeyProgress.count();
+    if (totalKeys > 0) {
       this.keysEl.classList.remove('hidden');
-      this.keysEl.textContent = `🔑 ${player.keys}`;
+      this.keysEl.textContent = `🔑 ${totalKeys}/${SECRET_LOCK.totalKeys}`;
     } else {
       this.keysEl.classList.add('hidden');
     }

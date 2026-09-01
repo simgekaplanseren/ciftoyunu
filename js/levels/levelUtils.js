@@ -39,6 +39,12 @@ export function loverPoint(x) {
   };
 }
 
-export function trapPoint(x, width) {
+export function trapPoint(x, width, type = 'spike') {
+  if (type === 'water') {
+    return { x, y: LEVEL.GROUND_Y + 4, width, height: 80 };
+  }
+  if (type === 'pit') {
+    return { x, y: LEVEL.GROUND_Y + 4, width, height: 180 };
+  }
   return { x, y: LEVEL.GROUND_Y - 12, width, height: 12 };
 }

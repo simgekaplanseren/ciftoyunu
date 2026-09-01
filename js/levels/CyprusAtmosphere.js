@@ -10,17 +10,17 @@ export const ZONE_THEMES = {
   girne: {
     id: 'girne',
     platformTheme: 'girne',
-    sky: ['#0c2340', '#1e4d7b', '#3b82c4'],
+    sky: ['#1a2430', '#2e4050', '#4a6070'],
   },
   magusa: {
     id: 'magusa',
     platformTheme: 'magusa',
-    sky: ['#2a1810', '#5c3d2e', '#8b5a2b'],
+    sky: ['#1f2430', '#4a5568', '#c9a882'],
   },
   dipkarpaz: {
     id: 'dipkarpaz',
     platformTheme: 'dipkarpaz',
-    sky: ['#4a1942', '#c2410c', '#fb923c'],
+    sky: ['#1e2836', '#3d5060', '#c4a882'],
   },
   hayvanat: {
     id: 'hayvanat',
@@ -35,7 +35,7 @@ export const ZONE_THEMES = {
   petpark: {
     id: 'petpark',
     platformTheme: 'petpark',
-    sky: ['#713f12', '#a16207', '#fde047'],
+    sky: ['#7dd3fc', '#86efac', '#ecfccb'],
   },
   sehitkamil: {
     id: 'sehitkamil',
@@ -51,11 +51,6 @@ export const ZONE_THEMES = {
     id: 'goztepe',
     platformTheme: 'goztepe',
     sky: ['#1e3a5f', '#2563eb', '#60a5fa'],
-  },
-  gaziemir: {
-    id: 'gaziemir',
-    platformTheme: 'gaziemir',
-    sky: ['#334155', '#475569', '#94a3b8'],
   },
   kusadasi: {
     id: 'kusadasi',
@@ -128,24 +123,8 @@ function drawLefkosaDecor(ctx, startX, width) {
   ctx.fillRect(startX, GROUND_Y - 4, width, 4);
 }
 
-/** Girne — deniz, liman, Beşparmak silüeti */
+/** Girne — liman, Beşparmak silüeti (deniz sadece boşluk tuzaklarında) */
 function drawGirneDecor(ctx, startX, width) {
-  const seaY = GROUND_Y + 8;
-  ctx.fillStyle = '#0e7490';
-  ctx.fillRect(startX, seaY, width, 32);
-  ctx.fillStyle = 'rgba(103, 232, 249, 0.35)';
-  for (let i = 0; i < width; i += 28) {
-    const wx = startX + i;
-    ctx.beginPath();
-    ctx.moveTo(wx, seaY + 6);
-    ctx.quadraticCurveTo(wx + 7, seaY + 2, wx + 14, seaY + 6);
-    ctx.quadraticCurveTo(wx + 21, seaY + 10, wx + 28, seaY + 6);
-    ctx.lineTo(wx + 28, seaY + 14);
-    ctx.lineTo(wx, seaY + 14);
-    ctx.closePath();
-    ctx.fill();
-  }
-
   ctx.fillStyle = 'rgba(30, 77, 123, 0.6)';
   ctx.beginPath();
   ctx.moveTo(startX + width * 0.15, GROUND_Y);
@@ -176,109 +155,81 @@ function drawGirneDecor(ctx, startX, width) {
   ctx.stroke();
 }
 
-/** Gazimağusa — sur duvarları, kule, palmiye */
+/** Gazimağusa — uzak sur silüetleri, gökyüzü ışığı (zemin/boşluk üstüne çizilmez) */
 function drawMagusaDecor(ctx, startX, width) {
-  ctx.fillStyle = 'rgba(92, 61, 46, 0.75)';
-  for (let i = 0; i < 4; i++) {
-    const tx = startX + 30 + i * 120;
-    ctx.fillRect(tx, GROUND_Y - 65, 28, 65);
-    ctx.fillRect(tx - 6, GROUND_Y - 72, 40, 10);
-    for (let j = 0; j < 4; j++) {
-      ctx.fillRect(tx + j * 8, GROUND_Y - 55 + j * 14, 6, 10);
-    }
-  }
+  const cx = startX + width * 0.5;
+  const glow = ctx.createRadialGradient(cx, 60, 8, cx, 80, Math.min(width * 0.42, 480));
+  glow.addColorStop(0, 'rgba(251, 191, 36, 0.12)');
+  glow.addColorStop(1, 'rgba(251, 191, 36, 0)');
+  ctx.fillStyle = glow;
+  ctx.fillRect(startX, 0, width, GROUND_Y - 70);
 
-  ctx.fillStyle = 'rgba(60, 40, 25, 0.85)';
-  ctx.fillRect(startX, GROUND_Y - 28, width, 28);
-  for (let i = 0; i < width; i += 24) {
-    ctx.fillStyle = 'rgba(251, 191, 36, 0.25)';
-    ctx.fillRect(startX + i, GROUND_Y - 28, 12, 6);
+  ctx.fillStyle = 'rgba(92, 61, 46, 0.28)';
+  for (let i = 0; i < Math.min(6, Math.ceil(width / 380)); i++) {
+    const tx = startX + 70 + i * 380;
+    ctx.fillRect(tx, GROUND_Y - 125, 22, 42);
+    ctx.fillRect(tx - 4, GROUND_Y - 132, 30, 7);
   }
-
-  for (let i = 0; i < 2; i++) {
-    const px = startX + 100 + i * 280;
-    ctx.fillStyle = '#166534';
-    ctx.beginPath();
-    ctx.moveTo(px, GROUND_Y);
-    ctx.lineTo(px - 14, GROUND_Y - 38);
-    ctx.lineTo(px + 14, GROUND_Y - 38);
-    ctx.closePath();
-    ctx.fill();
-    ctx.fillStyle = '#854d0e';
-    ctx.fillRect(px - 2, GROUND_Y - 38, 4, 38);
-  }
-
-  ctx.fillStyle = 'rgba(251, 191, 36, 0.12)';
-  ctx.fillRect(startX + width * 0.3, 20, width * 0.4, GROUND_Y - 20);
 }
 
-/** Dipkarpaz — gün batımı, deniz feneri, doğu ucu */
+/** Dipkarpaz — sakin gün batımı, deniz feneri, doğu ucu */
 function drawDipkarpazDecor(ctx, startX, width) {
   const sunX = startX + width * 0.72;
-  const sunY = 52;
-  const sunGrad = ctx.createRadialGradient(sunX, sunY, 4, sunX, sunY, 48);
-  sunGrad.addColorStop(0, 'rgba(253, 186, 116, 0.9)');
-  sunGrad.addColorStop(0.4, 'rgba(251, 146, 60, 0.4)');
-  sunGrad.addColorStop(1, 'rgba(251, 146, 60, 0)');
+  const sunY = 58;
+  const sunGrad = ctx.createRadialGradient(sunX, sunY, 4, sunX, sunY, 42);
+  sunGrad.addColorStop(0, 'rgba(232, 196, 160, 0.55)');
+  sunGrad.addColorStop(0.45, 'rgba(196, 168, 130, 0.2)');
+  sunGrad.addColorStop(1, 'rgba(196, 168, 130, 0)');
   ctx.fillStyle = sunGrad;
   ctx.fillRect(startX, 0, width, GROUND_Y);
 
-  ctx.strokeStyle = 'rgba(254, 205, 211, 0.25)';
-  ctx.lineWidth = 1;
-  for (let i = 0; i < 6; i++) {
-    ctx.beginPath();
-    ctx.moveTo(sunX, sunY);
-    ctx.lineTo(sunX + Math.cos(i * 0.9) * 80, sunY + Math.sin(i * 0.9) * 50);
-    ctx.stroke();
-  }
-
-  ctx.fillStyle = 'rgba(74, 25, 66, 0.5)';
+  ctx.fillStyle = 'rgba(40, 52, 68, 0.45)';
   ctx.beginPath();
   ctx.moveTo(startX, GROUND_Y);
-  ctx.lineTo(startX + width * 0.2, GROUND_Y - 45);
-  ctx.lineTo(startX + width * 0.5, GROUND_Y - 60);
-  ctx.lineTo(startX + width * 0.85, GROUND_Y - 35);
+  ctx.lineTo(startX + width * 0.18, GROUND_Y - 42);
+  ctx.lineTo(startX + width * 0.48, GROUND_Y - 55);
+  ctx.lineTo(startX + width * 0.82, GROUND_Y - 32);
   ctx.lineTo(startX + width, GROUND_Y);
   ctx.closePath();
   ctx.fill();
 
   const lx = startX + width * 0.38;
-  ctx.fillStyle = '#fef3c7';
-  ctx.fillRect(lx, GROUND_Y - 72, 14, 72);
-  ctx.fillStyle = '#dc2626';
+  ctx.fillStyle = '#e8e0d4';
+  ctx.fillRect(lx, GROUND_Y - 72, 12, 72);
+  ctx.fillStyle = '#b4534a';
   ctx.beginPath();
-  ctx.moveTo(lx - 4, GROUND_Y - 72);
-  ctx.lineTo(lx + 7, GROUND_Y - 88);
-  ctx.lineTo(lx + 18, GROUND_Y - 72);
+  ctx.moveTo(lx - 3, GROUND_Y - 72);
+  ctx.lineTo(lx + 6, GROUND_Y - 86);
+  ctx.lineTo(lx + 15, GROUND_Y - 72);
   ctx.closePath();
   ctx.fill();
-  ctx.fillStyle = '#fbbf24';
+  ctx.fillStyle = 'rgba(232, 196, 140, 0.85)';
   ctx.beginPath();
-  ctx.arc(lx + 7, GROUND_Y - 78, 5, 0, Math.PI * 2);
+  ctx.arc(lx + 6, GROUND_Y - 76, 4, 0, Math.PI * 2);
   ctx.fill();
 
-  ctx.fillStyle = '#ea580c';
-  ctx.fillRect(startX, GROUND_Y + 6, width, 18);
-  ctx.fillStyle = 'rgba(253, 186, 116, 0.3)';
-  for (let i = 0; i < width; i += 20) {
-    ctx.fillRect(startX + i, GROUND_Y + 10, 10, 3);
-  }
+  ctx.fillStyle = 'rgba(58, 88, 108, 0.25)';
+  ctx.fillRect(startX, GROUND_Y + 10, width, 14);
 }
 
 function drawHayvanatDecor(ctx, startX, width) {
-  ctx.fillStyle = 'rgba(22, 101, 52, 0.5)';
-  for (let i = 0; i < 6; i++) {
-    const tx = startX + 30 + i * 140;
-    ctx.beginPath();
-    ctx.moveTo(tx, GROUND_Y);
-    ctx.lineTo(tx - 12, GROUND_Y - 45 - (i % 2) * 15);
-    ctx.lineTo(tx + 12, GROUND_Y - 45 - (i % 2) * 15);
-    ctx.closePath();
-    ctx.fill();
-  }
   ctx.font = '16px sans-serif';
   ctx.fillText('🦁', startX + width * 0.3, GROUND_Y - 60);
   ctx.fillText('🦒', startX + width * 0.6, GROUND_Y - 55);
+  ctx.fillText('🦜', startX + width * 0.45, 52);
+
+  ctx.fillStyle = 'rgba(56, 189, 248, 0.35)';
+  for (let i = 0; i < 5; i++) {
+    const bx = startX + 60 + i * (width / 5);
+    const by = 72 + (i % 3) * 22;
+    ctx.beginPath();
+    ctx.ellipse(bx, by, 5, 3, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = 'rgba(14, 165, 233, 0.45)';
+    ctx.fillRect(bx - 8, by - 1, 6, 2);
+    ctx.fillRect(bx + 4, by - 1, 6, 2);
+    ctx.fillStyle = 'rgba(56, 189, 248, 0.35)';
+  }
 }
 
 function drawIconovaDecor(ctx, startX, width) {
@@ -294,15 +245,26 @@ function drawIconovaDecor(ctx, startX, width) {
 }
 
 function drawPetParkDecor(ctx, startX, width) {
-  ctx.fillStyle = 'rgba(161, 98, 7, 0.4)';
-  ctx.fillRect(startX, GROUND_Y - 20, width, 20);
-  ctx.font = '14px sans-serif';
-  for (let i = 0; i < 5; i++) {
-    ctx.fillText('🐾', startX + 60 + i * 160, GROUND_Y - 35);
+  ctx.fillStyle = 'rgba(22, 101, 52, 0.35)';
+  ctx.fillRect(startX, GROUND_Y - 14, width, 14);
+
+  const trees = [0.15, 0.42, 0.72];
+  for (const t of trees) {
+    const tx = startX + width * t;
+    ctx.fillStyle = '#78350f';
+    ctx.fillRect(tx, GROUND_Y - 52, 6, 52);
+    ctx.fillStyle = 'rgba(34, 197, 94, 0.65)';
+    ctx.beginPath();
+    ctx.arc(tx + 3, GROUND_Y - 58, 18, 0, Math.PI * 2);
+    ctx.fill();
   }
-  ctx.fillStyle = '#854d0e';
-  ctx.fillRect(startX + 80, GROUND_Y - 48, 4, 48);
-  ctx.fillRect(startX + width - 120, GROUND_Y - 42, 4, 42);
+
+  ctx.fillStyle = 'rgba(120, 53, 15, 0.55)';
+  for (let i = 0; i < 4; i++) {
+    const fx = startX + 40 + i * (width / 4);
+    ctx.fillRect(fx, GROUND_Y - 36, 4, 36);
+    ctx.fillRect(fx - 8, GROUND_Y - 40, 20, 4);
+  }
 }
 
 function drawSehitkamilDecor(ctx, startX, width) {
@@ -333,15 +295,6 @@ function drawGoztepeDecor(ctx, startX, width) {
   ctx.fillStyle = 'rgba(37, 99, 235, 0.35)';
   ctx.fillRect(startX + width * 0.3, GROUND_Y - 60, 100, 60);
   ctx.fillRect(startX + width * 0.55, GROUND_Y - 45, 70, 45);
-}
-
-function drawGaziemirDecor(ctx, startX, width) {
-  ctx.fillStyle = '#64748b';
-  ctx.fillRect(startX + 60, GROUND_Y - 8, width - 120, 8);
-  ctx.fillStyle = '#475569';
-  for (let i = 0; i < 4; i++) {
-    ctx.fillRect(startX + 100 + i * 180, GROUND_Y - 28, 6, 28);
-  }
 }
 
 function drawKusadasiDecor(ctx, startX, width) {
@@ -432,7 +385,6 @@ const DECORATORS = {
   sehitkamil: drawSehitkamilDecor,
   alsancak: drawAlsancakDecor,
   goztepe: drawGoztepeDecor,
-  gaziemir: drawGaziemirDecor,
   kusadasi: drawKusadasiDecor,
   sirince: drawSirinceDecor,
   selcuk: drawSelcukDecor,

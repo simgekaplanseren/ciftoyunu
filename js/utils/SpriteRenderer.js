@@ -237,6 +237,26 @@ export class SpriteRenderer {
       ctx.beginPath();
       ctx.ellipse(w / 2 + 4, h / 2 - 4, 5, 3, 0.5, 0, Math.PI * 2);
       ctx.fill();
+    } else if (type === 'bird') {
+      const wing = Math.sin(animFrame * 10) * 5;
+      ctx.fillStyle = '#38bdf8';
+      ctx.beginPath();
+      ctx.ellipse(w / 2, h / 2 + 1, w / 2 - 2, h / 2 - 3, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = '#0284c7';
+      ctx.beginPath();
+      ctx.moveTo(w / 2, h / 2);
+      ctx.lineTo(0, h / 2 - 3 + wing);
+      ctx.lineTo(w / 2 - 2, h / 2 + 3);
+      ctx.lineTo(w / 2 + 2, h / 2 + 3);
+      ctx.lineTo(w, h / 2 - 3 - wing);
+      ctx.closePath();
+      ctx.fill();
+      ctx.fillStyle = '#fbbf24';
+      ctx.fillRect(w - 4, h / 2 - 1, 4, 3);
+      ctx.fillStyle = '#1e293b';
+      ctx.fillRect(w / 2 - 4, h / 2 - 2, 2, 2);
+      ctx.fillRect(w / 2 + 1, h / 2 - 2, 2, 2);
     } else if (type === 'ghost') {
       ctx.fillStyle = '#c4b5fd';
       ctx.beginPath();
@@ -394,28 +414,33 @@ export class SpriteRenderer {
     ctx.restore();
   }
 
-  drawPlatform(ctx, x, y, w, h, theme = 'forest') {
+  drawPlatform(ctx, x, y, w, h, theme = 'forest', cliffs = {}) {
     const colors = {
       forest: { top: '#4ade80', body: '#166534', detail: '#22c55e' },
       cave: { top: '#78716c', body: '#44403c', detail: '#a8a29e' },
       castle: { top: '#a78bfa', body: '#5b21b6', detail: '#8b5cf6' },
       lefkosa: { top: '#d4a574', body: '#6b5344', detail: '#c9a66b' },
-      girne: { top: '#67e8f9', body: '#0e7490', detail: '#22d3ee' },
-      magusa: { top: '#fbbf24', body: '#78350f', detail: '#d97706' },
-      dipkarpaz: { top: '#fb923c', body: '#9a3412', detail: '#fdba74' },
+      girne: { top: '#c9b896', body: '#7a6348', detail: '#a89470' },
+      magusa: { top: '#e8dcc8', body: '#9a8470', detail: '#b8a088' },
+      dipkarpaz: { top: '#c4b49a', body: '#6b5d52', detail: '#a89478' },
       hayvanat: { top: '#86efac', body: '#166534', detail: '#4ade80' },
       iconova: { top: '#c4b5fd', body: '#5b21b6', detail: '#a78bfa' },
-      petpark: { top: '#fde047', body: '#a16207', detail: '#facc15' },
+      petpark: { top: '#4ade80', body: '#166534', detail: '#22c55e' },
+      petpark_wood: { top: '#d4a574', body: '#78350f', detail: '#92400e' },
       sehitkamil: { top: '#fb923c', body: '#7c2d12', detail: '#fdba74' },
-      alsancak: { top: '#7dd3fc', body: '#0369a1', detail: '#38bdf8' },
-      goztepe: { top: '#93c5fd', body: '#1d4ed8', detail: '#60a5fa' },
-      gaziemir: { top: '#cbd5e1', body: '#475569', detail: '#94a3b8' },
-      kusadasi: { top: '#67e8f9', body: '#0e7490', detail: '#22d3ee' },
+      alsancak: { top: '#b8c9d4', body: '#6b7d8a', detail: '#94a8b5' },
+      goztepe: { top: '#b0bdd0', body: '#5a6578', detail: '#8899aa' },
+      kusadasi: { top: '#c4b896', body: '#7a6b52', detail: '#a89878' },
       sirince: { top: '#fcd34d', body: '#92400e', detail: '#fbbf24' },
       selcuk: { top: '#e7e5e4', body: '#57534e', detail: '#a8a29e' },
       dogumgunu: { top: '#fda4af', body: '#9d174d', detail: '#fb7185' },
     };
     const c = colors[theme] || colors.forest;
+
+    ctx.save();
+    ctx.beginPath();
+    ctx.rect(x, y, w, h);
+    ctx.clip();
 
     ctx.fillStyle = c.body;
     ctx.fillRect(x, y + 2, w, h - 2);
@@ -423,10 +448,128 @@ export class SpriteRenderer {
     ctx.fillStyle = c.top;
     ctx.fillRect(x, y, w, 4);
 
-    ctx.fillStyle = c.detail;
-    for (let i = 0; i < w; i += 16) {
-      ctx.fillRect(x + i + 4, y + 6, 8, 2);
+    const roadThemes = new Set(['iconova', 'sehitkamil']);
+    if (roadThemes.has(theme)) {
+      ctx.fillStyle = c.detail;
+      for (let i = 0; i < w; i += 16) {
+        const dashX = x + i + 4;
+        const dashW = Math.min(8, x + w - dashX);
+        if (dashW > 0) {
+          ctx.fillRect(dashX, y + 6, dashW, 2);
+        }
+      }
+    } else if (theme === 'petpark' || theme === 'petpark_wood') {
+      ctx.fillStyle = 'rgba(255,255,255,0.12)';
+      for (let i = 0; i < w; i += 12) {
+        ctx.fillRect(x + i + 2, y + 8, 4, 2);
+      }
+    } else if (theme === 'hayvanat' || theme === 'forest') {
+      ctx.fillStyle = 'rgba(0,0,0,0.08)';
+      for (let i = 0; i < w; i += 14) {
+        ctx.fillRect(x + i + 3, y + 7, 3, 3);
+      }
+    } else {
+      ctx.fillStyle = c.detail;
+      for (let i = 0; i < w; i += 16) {
+        const dashX = x + i + 4;
+        const dashW = Math.min(8, x + w - dashX);
+        if (dashW > 0) {
+          ctx.fillRect(dashX, y + 6, dashW, 2);
+        }
+      }
     }
+
+    ctx.restore();
+
+    if (cliffs.left || cliffs.right) {
+      const faceTop = y + 4;
+      const faceH = h - 4;
+      const faceW = 6;
+      ctx.fillStyle = c.body;
+      if (cliffs.right) {
+        ctx.fillRect(x + w - faceW, faceTop, faceW, faceH);
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.18)';
+        ctx.fillRect(x + w - 1, faceTop, 1, faceH);
+      }
+      if (cliffs.left) {
+        ctx.fillStyle = c.body;
+        ctx.fillRect(x, faceTop, faceW, faceH);
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.18)';
+        ctx.fillRect(x, faceTop, 1, faceH);
+      }
+    }
+  }
+
+  drawWater(ctx, x, y, w, h, anim = 0) {
+    const vx = x;
+    const vw = w;
+    const bottom = y + h;
+    const surfaceBase = y + 1;
+
+    const surfaceAt = (px, t = anim) =>
+      surfaceBase
+      + Math.sin(px * 0.22 + t * 2.4) * 2.8
+      + Math.sin(px * 0.09 + t * 1.3) * 1.2;
+
+    ctx.save();
+
+    ctx.beginPath();
+    ctx.moveTo(vx, bottom);
+    ctx.lineTo(vx, surfaceAt(0));
+    for (let px = 0; px <= vw; px += 2) {
+      ctx.lineTo(vx + px, surfaceAt(px));
+    }
+    ctx.lineTo(vx + vw, bottom);
+    ctx.closePath();
+    ctx.clip();
+
+    const grad = ctx.createLinearGradient(0, surfaceBase, 0, bottom);
+    grad.addColorStop(0, '#3a6878');
+    grad.addColorStop(0.35, '#2e5564');
+    grad.addColorStop(1, '#1a3844');
+    ctx.fillStyle = grad;
+    ctx.fillRect(vx, surfaceBase - 6, vw, bottom - surfaceBase + 12);
+
+    ctx.globalAlpha = 0.07;
+    ctx.fillStyle = '#a8dce8';
+    for (let band = 0; band < 3; band++) {
+      const by = surfaceBase + 18 + band * 22 + Math.sin(anim * 0.8 + band) * 4;
+      ctx.beginPath();
+      for (let px = 0; px <= vw; px += 3) {
+        const wy = by + Math.sin(px * 0.15 + anim * (1.2 + band * 0.3)) * 2;
+        if (px === 0) ctx.moveTo(vx + px, wy);
+        else ctx.lineTo(vx + px, wy);
+      }
+      ctx.lineTo(vx + vw, bottom);
+      ctx.lineTo(vx, bottom);
+      ctx.closePath();
+      ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+
+    ctx.beginPath();
+    for (let px = 0; px <= vw; px += 2) {
+      const sy = surfaceAt(px);
+      if (px === 0) ctx.moveTo(vx + px, sy);
+      else ctx.lineTo(vx + px, sy);
+    }
+    ctx.strokeStyle = 'rgba(210, 235, 245, 0.45)';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+
+    ctx.fillStyle = 'rgba(230, 245, 255, 0.35)';
+    for (let px = 6; px < vw - 6; px += 11) {
+      if (Math.sin(anim * 2.8 + px * 0.4) > 0.35) {
+        ctx.fillRect(vx + px, surfaceAt(px) - 1, 2, 1);
+      }
+    }
+
+    const cliffH = bottom - surfaceBase + 4;
+    ctx.fillStyle = 'rgba(50, 42, 36, 0.35)';
+    ctx.fillRect(vx, surfaceBase - 2, 3, cliffH);
+    ctx.fillRect(vx + vw - 3, surfaceBase - 2, 3, cliffH);
+
+    ctx.restore();
   }
 
   drawSpike(ctx, x, y, w, h) {
@@ -441,6 +584,34 @@ export class SpriteRenderer {
       ctx.closePath();
       ctx.fill();
     }
+  }
+
+  drawPit(ctx, x, y, w, h) {
+    const bottom = y + h;
+    ctx.save();
+    ctx.beginPath();
+    ctx.rect(x, y, w, h);
+    ctx.clip();
+
+    const grad = ctx.createLinearGradient(0, y, 0, bottom);
+    grad.addColorStop(0, '#4a3d34');
+    grad.addColorStop(0.25, '#2f2520');
+    grad.addColorStop(1, '#120e0c');
+    ctx.fillStyle = grad;
+    ctx.fillRect(x, y, w, h);
+
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
+    ctx.fillRect(x, y, w, 8);
+
+    ctx.globalAlpha = 0.15;
+    ctx.fillStyle = '#1a1410';
+    for (let row = 0; row < 5; row++) {
+      const ry = y + 24 + row * 28;
+      ctx.fillRect(x + 4 + (row % 2) * 8, ry, w - 8, 3);
+    }
+    ctx.globalAlpha = 1;
+
+    ctx.restore();
   }
 
   drawDoor(ctx, x, y, w, h, open, hasKey) {

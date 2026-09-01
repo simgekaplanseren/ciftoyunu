@@ -48,9 +48,13 @@ export class Enemy {
         this._patrol(dt, this.speed * 1.2);
         this.y = this.baseY + Math.sin(this.animFrame * 10) * (this.flyAmplitude * 0.6);
         break;
+      case 'bird':
+        if (this.speed > 0) this._patrol(dt, this.speed);
+        this.y = this.baseY + Math.sin(this.animFrame * 1.9) * this.flyAmplitude;
+        break;
       case 'ghost':
         this.x += this.speed * this.direction * dt * 0.7;
-        this.y = this.baseY + Math.sin(this.animFrame * 2.5) * 18;
+        this.y = this.baseY + Math.sin(this.animFrame * 2.5) * this.flyAmplitude;
         this._bouncePatrol();
         break;
       case 'crab':
@@ -160,6 +164,14 @@ export class Enemy {
   }
 
   getBounds() {
+    if (this.type === 'bird') {
+      return {
+        x: this.x + 5,
+        y: this.y + 4,
+        width: this.width - 10,
+        height: this.height - 8,
+      };
+    }
     const pad = this.type === 'ghost' ? 4 : 2;
     return {
       x: this.x + pad,

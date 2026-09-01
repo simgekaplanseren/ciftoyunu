@@ -1,4 +1,6 @@
 import { GAME_SECTIONS, getSectionById } from '../config/GameSections.js';
+import { KeyProgress } from '../core/KeyProgress.js';
+import { SECRET_LOCK } from '../config/SecretLock.js';
 
 export class MenuManager {
   constructor(game) {
@@ -12,6 +14,7 @@ export class MenuManager {
     this.activeSectionId = null;
 
     this._bindEvents();
+    this.refreshLockPanel();
   }
 
   _bindEvents() {
@@ -95,10 +98,45 @@ export class MenuManager {
       case 'final-screen':
         this.game.showFinalScreen();
         break;
+      case 'unlock-secret':
+        this._openSecretLock();
+        break;
       case 'resume':
         this.game.resume();
         break;
     }
+  }
+
+  refreshLockPanel() {
+    const countEl = document.getElementById('lock-key-count');
+    const btn = document.getElementById('btn-unlock-secret');
+    const hint = document.getElementById('lock-hint');
+    const icon = document.getElementById('lock-icon');
+    if (!countEl) return;
+
+    const count = KeyProgress.count();
+    const unlocked = KeyProgress.isUnlocked();
+
+    countEl.textContent = `${count} / ${SECRET_LOCK.totalKeys} anahtar`;
+    if (icon) icon.textContent = unlocked ? '🔓' : '🔒';
+    if (hint) {
+      hint.textContent = unlocked
+        ? 'Kilit açıldı!'
+        : count >= SECRET_LOCK.requiredKeys
+          ? 'Yeterli anahtar topladın — kilidi aç!'
+          : `${SECRET_LOCK.requiredKeys} anahtar topla, kilidi aç`;
+    }
+    if (btn) {
+      btn.disabled = !unlocked && count < SECRET_LOCK.requiredKeys;
+      btn.textContent = unlocked ? 'MESAJI GÖR 🔓' : 'KİLİDİ AÇ';
+    }
+  }
+
+  _openSecretLock() {
+    if (!KeyProgress.canUnlock() && !KeyProgress.isUnlocked()) return;
+    if (!KeyProgress.isUnlocked()) KeyProgress.markUnlocked();
+    this.refreshLockPanel();
+    this.game.screens.showSecretLock();
   }
 
   _showSections() {

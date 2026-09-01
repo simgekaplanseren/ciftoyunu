@@ -1,4 +1,5 @@
 import { GAME_CONFIG, COLORS, CHARACTERS } from '../config/assets.js';
+import { KeyProgress } from './KeyProgress.js';
 import { Camera } from './Camera.js';
 import { InputManager } from './InputManager.js';
 import { AudioManager, AssetLoader } from './AudioManager.js';
@@ -15,6 +16,7 @@ import { drawZoneBackground } from '../levels/CyprusAtmosphere.js';
 import { getSectionById } from '../config/GameSections.js';
 import { LEVEL } from '../levels/levelUtils.js';
 import { isMobileDevice } from '../utils/appShell.js';
+import { GameSession } from './GameSession.js';
 
 export class Game {
   constructor(canvas, orientation = null) {
@@ -169,7 +171,7 @@ export class Game {
 
   _createPlayer(x, y, carryStats = null) {
     const p = new Player(x, y, this.sprites, this.selectedCharacter || 'girl');
-    p.hearts = p.maxHearts;
+    p.hearts = carryStats?.hearts ?? p.maxHearts;
     if (carryStats?.score != null) {
       p.score = carryStats.score;
     }
@@ -218,6 +220,7 @@ export class Game {
 
     const savedStats = {
       score: this.player?.score ?? 0,
+      hearts: this.player?.hearts ?? this.config.maxHearts,
     };
 
     this.screens.hideAll();
@@ -300,6 +303,7 @@ export class Game {
     this._hideTouchControls();
     this.screens.hideAll();
     this.screens.show('menu');
+    this.menu?.refreshLockPanel();
     this.audio.playMusic('musicMenu');
     this.resize();
   }
@@ -320,12 +324,17 @@ export class Game {
   }
 
   showFinalScreen() {
+    GameSession.clear();
     this.state = 'final';
+    document.body.classList.remove('is-playing');
+    document.body.classList.add('in-menu');
+    this.orientation?.unlock();
+    this.orientation?.update();
+    this.hud.hide();
+    this._hideTouchControls();
+    this.audio.playMusic('musicMenu');
     this.screens.showFinal();
-  }
-
-  _completeGame() {
-    this.showVictory();
+    this.resize();
   }
 
   _showTouchControls() {
@@ -402,6 +411,7 @@ export class Game {
         this.audio.playSfx('sfxVictory');
       }
       this.camera.follow(this.player, dt);
+      this._clampCameraToGround();
     } else if (this.reunionPhase === 'hugging') {
       this.player.state = 'idle';
       this.player.animFrame += dt;
@@ -413,6 +423,7 @@ export class Game {
         { x: (this.player.x + lover.x) / 2 - 10, y: py, width: 20, height: 28 },
         dt
       );
+      this._clampCameraToGround();
 
       if (this.reunionAnim >= 2.8) {
         this._finishAfterKiss();
@@ -442,7 +453,11 @@ export class Game {
     this.reunionNext = null;
 
     if (next === 'victory') {
-      this.showVictory();
+      if (this.levelDef?.isFinale) {
+        this.showFinalScreen();
+      } else {
+        this.showVictory();
+      }
     } else {
       let completeMsg = null;
       if (this.levelManager.isLastLevelInSection(this.levelDef)) {
@@ -504,7 +519,7 @@ export class Game {
     for (const enemy of enemies) {
       enemy.update(dt);
 
-      if (enemy.collidesWith(this.player.getBounds()) && this.player.invincible <= 0) {
+      if (enemy.collidesWith(this.player.getBounds()) && this.player.invincible <= 0 && enemy.damage > 0) {
         if (this.player.takeDamage(enemy.damage)) {
           this.audio.playSfx('sfxHurt');
           this.input.vibrate(100);
@@ -529,7 +544,13 @@ export class Game {
       if (result) {
         this.audio.playSfx('sfxCollect');
         this.particles.emitHearts(item.x, item.y, 3);
-        if (result === 'key') this.input.vibrate(50);
+        if (result === 'key') {
+          this.input.vibrate(50);
+          if (item.keyId) {
+            KeyProgress.collect(item.keyId);
+            this.menu?.refreshLockPanel();
+          }
+        }
       }
     }
 
@@ -549,8 +570,21 @@ export class Game {
     }
 
     this.camera.follow(this.player, dt);
+    this._clampCameraToGround();
     this.particles.update(dt);
     this.hud.update(this.player, this.getLevelDisplayName());
+  }
+
+  _getLastGroundEnd() {
+    const grounds = this.levelData?.platforms?.filter((p) => p.height >= 40) ?? [];
+    if (!grounds.length) return this.levelDef?.width ?? this.config.width;
+    const last = grounds[grounds.length - 1];
+    return last.x + last.width;
+  }
+
+  _clampCameraToGround() {
+    const maxX = Math.max(0, this._getLastGroundEnd() - this.camera.viewWidth);
+    this.camera.x = Math.min(this.camera.x, maxX);
   }
 
   _completeLevel() {
@@ -653,13 +687,18 @@ export class Game {
 
     this._drawBackground(ctx, this.levelDef.background);
 
+    if (this.reunionPhase === 'none') {
+      for (const trap of this.levelData.traps) {
+        if (trap.type === 'water' || trap.type === 'pit') trap.draw(ctx, this.sprites);
+      }
+    }
+
     drawPlatforms(ctx, this.levelData.platforms, this.sprites);
 
     if (this.reunionPhase === 'none') {
       for (const trap of this.levelData.traps) {
-        trap.draw(ctx, this.sprites);
+        if (trap.type === 'spike') trap.draw(ctx, this.sprites);
       }
-
       for (const item of this.levelData.collectibles) {
         item.draw(ctx, this.sprites);
       }

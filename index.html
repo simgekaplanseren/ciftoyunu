@@ -92,6 +92,14 @@
         <div class="menu-content">
           <h1 class="game-title">SEVGİLİNE KAVUŞ <span class="heart">❤️</span></h1>
           <p class="game-subtitle">Bir aşk macerası</p>
+          <div id="secret-lock-panel" class="secret-lock-panel">
+            <div class="lock-header">
+              <span id="lock-icon" class="lock-icon">🔒</span>
+              <span id="lock-key-count">0 / 8 anahtar</span>
+            </div>
+            <p id="lock-hint" class="lock-hint">7 anahtar topla, kilidi aç</p>
+            <button class="menu-btn lock-btn" id="btn-unlock-secret" data-action="unlock-secret" disabled>KİLİDİ AÇ</button>
+          </div>
           <div class="menu-buttons">
             <button class="menu-btn primary" data-action="start">OYUNA BAŞLA</button>
             <button class="menu-btn" data-action="levels">BÖLÜMLER</button>
@@ -136,6 +144,15 @@
           <h2 id="level-select-title">BÖLÜMLER</h2>
           <div class="level-grid" id="level-grid"></div>
           <button class="menu-btn back" data-action="back-sections">← BÖLÜMLER</button>
+        </div>
+      </div>
+
+      <!-- Secret Lock -->
+      <div id="screen-secret" class="screen">
+        <div class="screen-panel secret-panel">
+          <h2 id="secret-lock-title">🔓 Kilit Açıldı</h2>
+          <p id="secret-lock-message" class="secret-message">...</p>
+          <button class="menu-btn back" data-action="back-menu">← MENÜ</button>
         </div>
       </div>
 

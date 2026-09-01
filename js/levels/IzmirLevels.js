@@ -2,8 +2,6 @@ import { LoverNPC } from '../entities/LoverNPC.js';
 import { spawnPoint, loverPoint } from './levelUtils.js';
 import {
   buildAlsancakLayout,
-  buildGoztepeLayout,
-  buildGaziemirLayout,
   buildKusadasiLayout,
   buildSirinceLayout,
   buildSelcukLayout,
@@ -43,26 +41,6 @@ export const LEVEL_ALSANCAK = createIzmirLevel({
   buildLayout: buildAlsancakLayout,
 });
 
-export const LEVEL_GOZTEPE = createIzmirLevel({
-  id: 10,
-  name: "GÖZTEPE'DEYKEN",
-  emoji: '🏟️',
-  subtitle: 'Şehrin kalbinde birlikte',
-  atmosphere: 'goztepe',
-  width: 960,
-  buildLayout: buildGoztepeLayout,
-});
-
-export const LEVEL_GAZIEMIR = createIzmirLevel({
-  id: 11,
-  name: "GAZİEMİR'DEYKEN",
-  emoji: '🚆',
-  subtitle: 'Banliyö hatlarında aşk yolculuğu',
-  atmosphere: 'gaziemir',
-  width: 960,
-  buildLayout: buildGaziemirLayout,
-});
-
 export const LEVEL_KUSADASI = createIzmirLevel({
   id: 14,
   name: "KUŞADASI'DAYKEN",
@@ -95,8 +73,6 @@ export const LEVEL_SELCUK = createIzmirLevel({
 
 export const IZMIR_LEVELS = [
   LEVEL_ALSANCAK,
-  LEVEL_GOZTEPE,
-  LEVEL_GAZIEMIR,
   LEVEL_KUSADASI,
   LEVEL_SIRINCE,
   LEVEL_SELCUK,

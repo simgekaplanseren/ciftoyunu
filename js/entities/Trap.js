@@ -10,6 +10,7 @@ export class Trap {
     this.damage = 1;
     this.active = true;
     this.cooldown = 0;
+    this.animFrame = 0;
   }
 
   check(player) {
@@ -25,15 +26,26 @@ export class Trap {
 
   update(dt) {
     if (this.cooldown > 0) this.cooldown -= dt;
+    this.animFrame += dt;
   }
 
   draw(ctx, sprites) {
-    if (this.type === 'spike') {
+    if (this.type === 'water') {
+      sprites.drawWater(ctx, this.x, this.y, this.width, this.height, this.animFrame);
+    } else if (this.type === 'spike') {
       sprites.drawSpike(ctx, this.x, this.y, this.width, this.height);
+    } else if (this.type === 'pit') {
+      sprites.drawPit(ctx, this.x, this.y, this.width, this.height);
     }
   }
 
   getBounds() {
+    if (this.type === 'water') {
+      return { x: this.x + 4, y: this.y + 2, width: this.width - 8, height: 18 };
+    }
+    if (this.type === 'pit') {
+      return { x: this.x + 2, y: this.y + 10, width: this.width - 4, height: this.height - 12 };
+    }
     return { x: this.x + 2, y: this.y + 2, width: this.width - 4, height: this.height - 4 };
   }
 }

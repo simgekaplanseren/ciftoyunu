@@ -12,14 +12,14 @@ import {
 } from './GaziantepLevels.js';
 import {
   LEVEL_ALSANCAK,
-  LEVEL_GOZTEPE,
-  LEVEL_GAZIEMIR,
   LEVEL_KUSADASI,
   LEVEL_SIRINCE,
   LEVEL_SELCUK,
 } from './IzmirLevels.js';
 import { LEVEL_DOGUMGUNU } from './IstanbulLevels.js';
-import { getDefaultUnlockedSections } from '../config/GameSections.js';
+import { GAME_SECTIONS, getDefaultUnlockedSections, UNLOCK_ALL_LEVELS } from '../config/GameSections.js';
+import { GameProgress } from '../core/GameProgress.js';
+import { KeyProgress } from '../core/KeyProgress.js';
 
 const SECTION_UNLOCK_CHAIN = {
   cyprus: 'gaziantep',
@@ -28,12 +28,14 @@ const SECTION_UNLOCK_CHAIN = {
 };
 
 function defaultSectionProgress() {
-  return {
-    cyprus: 1,
-    gaziantep: 0,
-    izmir: 0,
-    istanbul: 0,
-  };
+  if (UNLOCK_ALL_LEVELS) {
+    return Object.fromEntries(GAME_SECTIONS.map((s) => [s.id, 99]));
+  }
+  const progress = {};
+  for (const section of GAME_SECTIONS) {
+    progress[section.id] = section.defaultUnlocked ? 1 : 0;
+  }
+  return progress;
 }
 
 export class LevelManager {
@@ -48,8 +50,6 @@ export class LevelManager {
       LEVEL_PETPARK,
       LEVEL_SEHITKAMIL,
       LEVEL_ALSANCAK,
-      LEVEL_GOZTEPE,
-      LEVEL_GAZIEMIR,
       LEVEL_KUSADASI,
       LEVEL_SIRINCE,
       LEVEL_SELCUK,
@@ -59,6 +59,7 @@ export class LevelManager {
     this.completedLevels = new Set();
     this.unlockedSections = getDefaultUnlockedSections();
     this.sectionProgress = defaultSectionProgress();
+    GameProgress.load(this);
   }
 
   getCurrentLevel() {
@@ -73,13 +74,17 @@ export class LevelManager {
     this.currentIndex = index;
     const def = this.levels[index];
     const data = def.build();
+    KeyProgress.removeCollected(data);
     return { def, data };
   }
 
   completeLevel() {
     const level = this.levels[this.currentIndex];
     this.completedLevels.add(level.id);
-    if (!level.sectionId) return;
+    if (!level.sectionId) {
+      GameProgress.save(this);
+      return;
+    }
 
     const sectionLevels = this.getLevelsForSection(level.sectionId);
     const idx = sectionLevels.findIndex((l) => l.id === level.id);
@@ -100,6 +105,8 @@ export class LevelManager {
         );
       }
     }
+
+    GameProgress.save(this);
   }
 
   isLastLevelInSection(level = this.levels[this.currentIndex]) {

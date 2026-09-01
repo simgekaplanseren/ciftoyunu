@@ -7,6 +7,8 @@ export class Platform {
     this.width = width;
     this.height = height;
     this.theme = theme;
+    this.cliffLeft = false;
+    this.cliffRight = false;
     this.active = true;
     this.vx = 0;
     this.vy = 0;
@@ -53,6 +55,9 @@ export class MovingPlatform extends Platform {
 
 export function drawPlatforms(ctx, platforms, sprites) {
   for (const p of platforms) {
-    sprites.drawPlatform(ctx, p.x, p.y, p.width, p.height, p.theme);
+    sprites.drawPlatform(ctx, p.x, p.y, p.width, p.height, p.theme, {
+      left: p.cliffLeft,
+      right: p.cliffRight,
+    });
   }
 }

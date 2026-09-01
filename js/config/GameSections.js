@@ -18,7 +18,7 @@ export const GAME_SECTIONS = [
     id: 'izmir',
     name: "İZMİR'DE BİZ",
     emoji: '🌊',
-    subtitle: 'Alsancak\'tan Selçuk\'a 6 durak',
+    subtitle: 'Alsancak\'tan Selçuk\'a 4 durak',
     defaultUnlocked: false,
   },
   {
@@ -30,7 +30,13 @@ export const GAME_SECTIONS = [
   },
 ];
 
+/** Test için tüm bölümleri aç (false = normal ilerleme) */
+export const UNLOCK_ALL_LEVELS = true;
+
 export function getDefaultUnlockedSections() {
+  if (UNLOCK_ALL_LEVELS) {
+    return new Set(GAME_SECTIONS.map((s) => s.id));
+  }
   return new Set(
     GAME_SECTIONS.filter((s) => s.defaultUnlocked).map((s) => s.id),
   );

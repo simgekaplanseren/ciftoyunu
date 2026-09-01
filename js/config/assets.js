@@ -49,7 +49,31 @@ export const CHARACTERS = {
 
 export const REUNION_MESSAGES = [
   'Sevgiline kavuştun ❤️',
+  'Bir adım daha yaklaştın birbirinize.',
+  'Kalpler aynı ritimde atıyor.',
+  'Bu yolculukta en güzel an.',
+  'Her durakta aşk büyüyor.',
+  'Birlikte her şey daha güzel.',
+  'Seninle her yer ev gibi.',
+  'Aşkın en güzel hali sensin.',
+  'Bir sonraki macera seni bekliyor.',
+  'Ellerin elinde, kalbin kalbinde.',
+  'Bu anı asla unutma.',
+  'Seninle her adım değerli.',
+  'Yol bitmek bilmiyor, aşk da öyle.',
+  'Birlikte daha güçlüsünüz.',
+  'Doğum günün kutlu olsun sevgilim 🎂',
 ];
+
+export const FINAL_SCREEN = {
+  title: 'İyi ki doğdun sevgilim. ❤️',
+  message: 'Bu maceranın en güzel kısmı sensin. Seninle her gün doğum günü gibi.',
+  photos: [
+    { slot: 1, src: 'assets/images/photo1.jpg', label: '📷 Anı 1' },
+    { slot: 2, src: 'assets/images/photo2.jpg', label: '📷 Anı 2' },
+    { slot: 3, src: 'assets/images/photo3.jpg', label: '📷 Anı 3' },
+  ],
+};
 
 export const GAME_CONFIG = {
   width: 480,
