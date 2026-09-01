@@ -215,7 +215,7 @@ export class Game {
   }
 
   async nextLevel() {
-    if (this.state !== 'levelComplete') return;
+    if (this.state !== 'levelComplete' && this.state !== 'victory') return;
 
     const savedStats = {
       score: this.player?.score ?? 0,
@@ -224,7 +224,7 @@ export class Game {
     this.screens.hideAll();
 
     if (!this.levelManager.hasNextLevel()) {
-      this.returnToMainMenu();
+      this.showVictory();
       return;
     }
 
@@ -305,9 +305,28 @@ export class Game {
     this.resize();
   }
 
-  _completeGame() {
+  showVictory() {
+    this.state = 'victory';
+    document.body.classList.remove('is-playing');
+    document.body.classList.add('in-menu');
+    this.orientation?.unlock();
+    this.orientation?.update();
+    this.hud.hide();
+    this._hideTouchControls();
+    this.audio.playMusic('musicMenu');
     this.audio.playSfx('sfxVictory');
-    this.returnToMainMenu();
+    this.victoryAnim = 0;
+    this.screens.showVictory();
+    this.resize();
+  }
+
+  showFinalScreen() {
+    this.state = 'final';
+    this.screens.showFinal();
+  }
+
+  _completeGame() {
+    this.showVictory();
   }
 
   _showTouchControls() {
@@ -346,9 +365,12 @@ export class Game {
     } else if (this.state === 'characterSelect') {
       this.charPreviewAnim += dt;
       this._drawCharacterPreviews();
-    } else if (this.state === 'levelComplete') {
+    } else if (this.state === 'levelComplete' || this.state === 'victory') {
       this.victoryAnim += dt;
       this._drawReunionCanvas('reunion-canvas', 160, 70, 1.4);
+      if (this.state === 'victory') {
+        this._drawReunionCanvas('victory-canvas', 240, 60, 1.6);
+      }
     }
   }
 
@@ -402,7 +424,7 @@ export class Game {
   _startReunionRun() {
     if (this.reunionPhase !== 'none') return;
     if (!this.reunionNext) {
-      this.reunionNext = this.levelManager.hasNextLevel() ? 'levelComplete' : 'gameComplete';
+      this.reunionNext = this.levelManager.hasNextLevel() ? 'levelComplete' : 'victory';
     }
     this.reunionPhase = 'running';
     this.reunionAnim = 0;
@@ -420,8 +442,8 @@ export class Game {
     const next = this.reunionNext;
     this.reunionNext = null;
 
-    if (next === 'gameComplete') {
-      this._completeGame();
+    if (next === 'victory') {
+      this.showVictory();
     } else {
       let completeMsg = null;
       if (this.levelManager.isLastLevelInSection(this.levelDef)) {
@@ -560,14 +582,14 @@ export class Game {
     ctx.imageSmoothingEnabled = false;
     this.camera.reset(ctx);
 
-    if (this.state === 'menu' || this.state === 'characterSelect') {
+    if (this.state === 'menu' || this.state === 'final' || this.state === 'characterSelect') {
       this._drawMenuBackground(ctx);
       return;
     }
 
     if (this.state === 'playing' || this.state === 'paused' || this.state === 'gameover') {
       this._renderLevel(ctx);
-    } else if (this.state === 'levelComplete') {
+    } else if (this.state === 'levelComplete' || this.state === 'victory') {
       this._drawMenuBackground(ctx);
     }
   }

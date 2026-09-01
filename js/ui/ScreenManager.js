@@ -10,6 +10,8 @@ export class ScreenManager {
       settings: document.getElementById('screen-settings'),
       levelComplete: document.getElementById('screen-level-complete'),
       gameOver: document.getElementById('screen-game-over'),
+      victory: document.getElementById('screen-victory'),
+      final: document.getElementById('screen-final'),
       pause: document.getElementById('screen-pause'),
     };
     this.current = 'menu';
@@ -46,6 +48,14 @@ export class ScreenManager {
 
   showGameOver() {
     this.show('gameOver');
+  }
+
+  showVictory() {
+    this.show('victory');
+  }
+
+  showFinal() {
+    this.show('final');
   }
 
   showPause() {

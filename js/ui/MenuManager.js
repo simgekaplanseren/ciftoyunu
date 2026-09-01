@@ -92,6 +92,9 @@ export class MenuManager {
       case 'retry':
         this.game.retryLevel();
         break;
+      case 'final-screen':
+        this.game.showFinalScreen();
+        break;
       case 'resume':
         this.game.resume();
         break;

@@ -18,7 +18,14 @@ export const GAME_SECTIONS = [
     id: 'izmir',
     name: "İZMİR'DE BİZ",
     emoji: '🌊',
-    subtitle: 'Alsancak\'tan Kuşadası\'na, Selçuk\'a 6 durak',
+    subtitle: 'Alsancak\'tan Selçuk\'a 6 durak',
+    defaultUnlocked: false,
+  },
+  {
+    id: 'istanbul',
+    name: "İSTANBUL'DA BİZ",
+    emoji: '🌉',
+    subtitle: 'Doğum gününde — en özel gün',
     defaultUnlocked: false,
   },
 ];
