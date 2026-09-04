@@ -69,18 +69,66 @@ export class LevelBuilder {
     return this;
   }
 
+  _currentGround() {
+    const grounds = this.platforms.filter((p) => p.height >= 40);
+    return grounds[grounds.length - 1] ?? null;
+  }
+
+  /** Mevcut zemin parçası üzerinde güvenli X */
+  _groundX(offset) {
+    const g = this._currentGround();
+    if (!g) return offset;
+    return g.x + Math.min(Math.max(offset, 20), g.width - 36);
+  }
+
+  /** x mevcut zemin parçasında değilse güvenli noktaya al */
+  _clampToCurrentGround(x) {
+    const g = this._currentGround();
+    if (!g) return x;
+    if (x >= g.x + 12 && x < g.x + g.width - 12) return x;
+    return this._groundX(80);
+  }
+
+  /** x bir zemin parçasının üstündeyse olduğu gibi, değilse son parçaya oturt */
+  _clampToGround(x) {
+    const g = this._currentGround();
+    if (g && x >= g.x + 12 && x < g.x + g.width - 12) return x;
+    const grounds = this.platforms.filter((p) => p.height >= 40);
+    for (const ground of grounds) {
+      if (x >= ground.x + 12 && x < ground.x + ground.width - 12) return x;
+    }
+    return g ? this._groundX(80) : x;
+  }
+
+  /** Mevcut zemin üzerinde kalp — offset parça başından */
+  heartHere(offset = 80, elevation = 0, value = 10) {
+    return this.heart(this._groundX(offset), elevation, value);
+  }
+
+  /** Mevcut zemin üzerinde gizli anahtar */
+  secretKeyHere(keyId, offset = 80, elevation = 0) {
+    return this.secretKey(keyId, this._groundX(offset), elevation);
+  }
+
+  /** Mevcut zemin üzerinde devriye düşman */
+  groundEnemyHere(offset, options = {}) {
+    return this.groundEnemy(this._groundX(offset), options);
+  }
+
   heart(x, elevation = 0, value = 10) {
-    this.collectibles.push(new Collectible(x, platformY(elevation) - 16, 'heart', value));
-    this._track(x, 16);
+    const px = elevation === 0 ? this._clampToGround(x) : x;
+    this.collectibles.push(new Collectible(px, platformY(elevation) - 16, 'heart', value));
+    this._track(px, 16);
     return this;
   }
 
   /** Gizli anahtar — bir kez toplanır, kayıtta kalır */
   secretKey(keyId, x, elevation = 0) {
-    const item = new Collectible(x, platformY(elevation) - 16, 'key', 50);
+    const px = elevation === 0 ? this._clampToGround(x) : x;
+    const item = new Collectible(px, platformY(elevation) - 16, 'key', 50);
     item.keyId = keyId;
     this.collectibles.push(item);
-    this._track(x, 16);
+    this._track(px, 16);
     return this;
   }
 
@@ -108,17 +156,36 @@ export class LevelBuilder {
     return this;
   }
 
-  /** Zeminde devriye — devriye uçuruma taşmaz */
+  /** Zeminde devriye — konum ve devriye mevcut zemin parçasına sıkıştırılır */
   groundEnemy(x, options = {}) {
-    const segmentEnd = this._groundEnd;
+    const g = this._currentGround();
+    const px = g && !options.flying ? this._clampToCurrentGround(x) : x;
     const margin = 28;
-    const maxPatrol = Math.max(x + 40, segmentEnd - margin);
-    const patrolMax = Math.min(options.patrolMax ?? maxPatrol, maxPatrol);
-    const patrolMin = Math.max(
-      options.patrolMin ?? x - 48,
-      x - 48,
-    );
-    return this.enemy(x, 0, {
+
+    let patrolMin;
+    let patrolMax;
+
+    if (g && !options.flying) {
+      const segStart = g.x + margin;
+      const segEnd = g.x + g.width - margin;
+      const half = Math.min(90, (segEnd - segStart) * 0.35);
+      patrolMin = Math.max(segStart, px - half);
+      patrolMax = Math.min(segEnd, px + half);
+      if (patrolMax - patrolMin < 40) {
+        patrolMin = segStart;
+        patrolMax = segEnd;
+      }
+    } else {
+      const segmentEnd = this._groundEnd;
+      const maxPatrol = Math.max(px + 40, segmentEnd - margin);
+      patrolMax = Math.min(options.patrolMax ?? maxPatrol, maxPatrol);
+      patrolMin = Math.max(
+        options.patrolMin ?? px - 48,
+        px - 48,
+      );
+    }
+
+    return this.enemy(px, 0, {
       ...options,
       patrolMin: Math.min(patrolMin, patrolMax - 36),
       patrolMax,
@@ -172,18 +239,19 @@ export class LevelBuilder {
     return this;
   }
 
-  /** Son boşluğun üzerinde eğilip kalkan kuş — zamanla zıpla */
+  /** Boşluk üstünde uçan engel — aşağıda beklet, yukarıda zıpla */
   gapBird(options = {}) {
     const gapX = this._lastGapX ?? this._groundEnd;
     const gapW = this._lastGapW ?? 56;
     const cx = gapX + Math.floor(gapW / 2) - 11;
-    return this.flyOver(cx, options.elevation ?? 80, {
-      type: 'bird',
-      speed: options.speed ?? 14,
-      flyAmplitude: options.flyAmplitude ?? 10,
-      flyOffset: options.flyOffset ?? 14,
-      patrolMin: gapX + 4,
-      patrolMax: gapX + gapW - 24,
+    const kind = options.type ?? 'bird';
+    return this.flyOver(cx, options.elevation ?? 50, {
+      type: kind,
+      speed: options.speed ?? 12,
+      flyAmplitude: options.flyAmplitude ?? 33,
+      flyOffset: options.flyOffset ?? 27,
+      patrolMin: gapX + 2,
+      patrolMax: gapX + gapW - 20,
       ...options,
     });
   }
@@ -241,10 +309,12 @@ export class LevelBuilder {
   /** Boşluk — son zemin parçasının hemen ucuna yerleşir (varsayılan: kırmızı diken) */
   gap(width = 56, type = 'spike') {
     const lastGround = this.platforms[this.platforms.length - 1];
-    if (type === 'water' && lastGround?.height >= 40) {
-      lastGround.cliffRight = true;
+    if (lastGround?.height >= 40) {
+      if (type === 'water' || type === 'spike') {
+        lastGround.cliffRight = true;
+      }
     }
-    if (type === 'water') {
+    if (type === 'water' || type === 'spike') {
       this._nextCliffLeft = true;
     }
     const gapW = Math.min(width, 56);

@@ -29,9 +29,9 @@ function createIstanbulLevel({ id, name, emoji, subtitle, atmosphere, width, bui
 
 export const LEVEL_DOGUMGUNU = createIstanbulLevel({
   id: 15,
-  name: 'DOĞUM GÜNÜNDEYKEN',
+  name: 'DOĞUM GÜNÜ',
   emoji: '🎂',
-  subtitle: 'İstanbul\'da en güzel sürpriz — iyi ki doğdun',
+  subtitle: 'Boğaz kıyısında — deniz geçitlerini atla, sürprize ulaş',
   atmosphere: 'dogumgunu',
   width: 1080,
   buildLayout: buildDogumGunuLayout,

@@ -31,36 +31,57 @@ export class InputManager {
       this.keys[e.code] = false;
     });
 
+    window.addEventListener('blur', () => this.reset());
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) this.reset();
+    });
+
     this._setupTouchButtons();
     this._preventScroll();
   }
 
+  /** Takılı kalan tuş/dokunma durumunu sıfırla */
+  reset() {
+    this.keys = {};
+    this.touch.left = false;
+    this.touch.right = false;
+    this.touch.jump = false;
+    this.touch.attack = false;
+    this.touch.jumpPressed = false;
+    this.touch.attackPressed = false;
+    this.pausePressed = false;
+    for (const btn of document.querySelectorAll('.ctrl-btn.pressed')) {
+      btn.classList.remove('pressed');
+    }
+  }
+
   _bindButton(btn, action) {
+    const release = (e) => {
+      if (e) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+      btn.classList.remove('pressed');
+      this.touch[action] = false;
+    };
+
     const press = (e) => {
+      if (e.pointerType === 'mouse' && e.button !== 0) return;
       e.preventDefault();
       e.stopPropagation();
       btn.classList.add('pressed');
       this.touch[action] = true;
       if (action === 'jump') this.touch.jumpPressed = true;
       if (action === 'attack') this.touch.attackPressed = true;
+      try {
+        btn.setPointerCapture(e.pointerId);
+      } catch (_) {}
     };
 
-    const release = (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      btn.classList.remove('pressed');
-      this.touch[action] = false;
-    };
-
-    btn.addEventListener('touchstart', press, { passive: false });
-    btn.addEventListener('touchend', release, { passive: false });
-    btn.addEventListener('touchcancel', release, { passive: false });
     btn.addEventListener('pointerdown', press);
     btn.addEventListener('pointerup', release);
     btn.addEventListener('pointercancel', release);
-    btn.addEventListener('pointerleave', (e) => {
-      if (e.buttons === 0) release(e);
-    });
+    btn.addEventListener('lostpointercapture', release);
   }
 
   _setupTouchButtons() {

@@ -33,9 +33,9 @@ function createGaziantepLevel({ id, name, emoji, subtitle, atmosphere, width, bu
 
 export const LEVEL_HAYVANAT = createGaziantepLevel({
   id: 5,
-  name: 'HAYVANAT BAHÇESİNDEYKEN',
+  name: 'HAYVANAT BAHÇESİ',
   emoji: '🦁',
-  subtitle: 'Geniş patika — kuş yukarıdayken boşluktan zıpla',
+  subtitle: 'Hayvanları gez, çit atla — papağan aviary\'de kuşu bekle',
   atmosphere: 'hayvanat',
   width: 960,
   buildLayout: buildHayvanatLayout,
@@ -43,9 +43,9 @@ export const LEVEL_HAYVANAT = createGaziantepLevel({
 
 export const LEVEL_ICONOVA = createGaziantepLevel({
   id: 6,
-  name: "İCONOVA'DAYKEN",
+  name: 'İCONOVA',
   emoji: '🛍️',
-  subtitle: 'Asansör platformları — yukarı çık, kuşu bekle, geç',
+  subtitle: 'Asansör, skybridge — güvenlik devriyesinden kaç',
   atmosphere: 'iconova',
   width: 960,
   buildLayout: buildIconovaLayout,
@@ -53,9 +53,9 @@ export const LEVEL_ICONOVA = createGaziantepLevel({
 
 export const LEVEL_PETPARK = createGaziantepLevel({
   id: 7,
-  name: "PET PARK'TAYKEN",
+  name: 'PET PARK',
   emoji: '🐾',
-  subtitle: 'Çimen yolda çukurlar — kuş yukarıdayken zıpla',
+  subtitle: 'Düz park yolu — çukur atla, köpeklerden kaç',
   atmosphere: 'petpark',
   width: 960,
   buildLayout: buildPetParkLayout,
@@ -63,9 +63,9 @@ export const LEVEL_PETPARK = createGaziantepLevel({
 
 export const LEVEL_SEHITKAMIL = createGaziantepLevel({
   id: 8,
-  name: "ŞEHİTKAMİL'DEYKEN",
+  name: 'ŞEHİTKAMİL',
   emoji: '🌆',
-  subtitle: 'Gaziantep gecesi — diken, çukur ve hızlı kuşlar',
+  subtitle: 'Gece sokakları — hayaletlerden kaç, yarasa boşluğunu bekle',
   atmosphere: 'sehitkamil',
   width: 1024,
   buildLayout: buildSehitkamilLayout,

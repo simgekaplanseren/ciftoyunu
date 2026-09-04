@@ -88,11 +88,6 @@ export class ScreenManager {
       };
       img.src = photo.src;
     }
-
-    const msgBox = document.getElementById('birthday-message');
-    if (msgBox) {
-      msgBox.innerHTML = `<p>${FINAL_SCREEN.message}</p>`;
-    }
   }
 
   showPause() {

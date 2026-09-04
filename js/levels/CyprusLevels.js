@@ -33,7 +33,7 @@ function createCyprusLevel({ id, name, emoji, subtitle, atmosphere, width, build
 
 export const LEVEL_LEFKOSA = createCyprusLevel({
   id: 1,
-  name: "LEFKOŞA'DAYKEN",
+  name: 'LEFKOŞA',
   emoji: '🏛️',
   subtitle: "Başkentte sevgiline doğru ilk adım",
   atmosphere: 'lefkosa',
@@ -43,7 +43,7 @@ export const LEVEL_LEFKOSA = createCyprusLevel({
 
 export const LEVEL_GIRNE = createCyprusLevel({
   id: 2,
-  name: "GİRNE'DEYKEN",
+  name: 'GİRNE',
   emoji: '⚓',
   subtitle: 'Liman kenarında yoluna devam et',
   atmosphere: 'girne',
@@ -53,7 +53,7 @@ export const LEVEL_GIRNE = createCyprusLevel({
 
 export const LEVEL_MAGUSA = createCyprusLevel({
   id: 3,
-  name: "GAZİMAĞUSA'DAYKEN",
+  name: 'GAZİMAĞUSA',
   emoji: '🏰',
   subtitle: 'Surların ardında sevgilini ara',
   atmosphere: 'magusa',
@@ -63,7 +63,7 @@ export const LEVEL_MAGUSA = createCyprusLevel({
 
 export const LEVEL_DIPKARPAZ = createCyprusLevel({
   id: 4,
-  name: "DİPKARPAZ'DAYKEN",
+  name: 'DİPKARPAZ',
   emoji: '🌅',
   subtitle: 'Doğu ucu — sonunda kavuşacaksınız',
   atmosphere: 'dipkarpaz',

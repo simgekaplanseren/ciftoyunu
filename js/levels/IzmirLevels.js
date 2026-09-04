@@ -33,9 +33,9 @@ function createIzmirLevel({ id, name, emoji, subtitle, atmosphere, width, buildL
 
 export const LEVEL_ALSANCAK = createIzmirLevel({
   id: 9,
-  name: 'ALSANCAKTAYKEN',
+  name: 'ALSANCAK',
   emoji: '🌊',
-  subtitle: 'Kordon boyunca el ele yürüyüş',
+  subtitle: 'Kordon taş yolu — deniz boşluklarını zıpla',
   atmosphere: 'alsancak',
   width: 960,
   buildLayout: buildAlsancakLayout,
@@ -43,9 +43,9 @@ export const LEVEL_ALSANCAK = createIzmirLevel({
 
 export const LEVEL_KUSADASI = createIzmirLevel({
   id: 14,
-  name: "KUŞADASI'DAYKEN",
+  name: 'KUŞADASI',
   emoji: '⛵',
-  subtitle: 'Ege kıyısında güneş ve deniz',
+  subtitle: 'Sahil yolu — iskele geçitleri, martı ve kayalık uçurum',
   atmosphere: 'kusadasi',
   width: 960,
   buildLayout: buildKusadasiLayout,
@@ -53,9 +53,9 @@ export const LEVEL_KUSADASI = createIzmirLevel({
 
 export const LEVEL_SIRINCE = createIzmirLevel({
   id: 12,
-  name: "ŞİRİNCE'DEYKEN",
+  name: 'ŞİRİNCE',
   emoji: '🍷',
-  subtitle: 'Taş evler arasında romantik kaçamak',
+  subtitle: 'Taş sokaklar — köprü, uçurum ve bağ arası dar geçitler',
   atmosphere: 'sirince',
   width: 1024,
   buildLayout: buildSirinceLayout,
@@ -63,9 +63,9 @@ export const LEVEL_SIRINCE = createIzmirLevel({
 
 export const LEVEL_SELCUK = createIzmirLevel({
   id: 13,
-  name: "SELÇUK'TAYKEN",
+  name: 'SELÇUK',
   emoji: '🏛️',
-  subtitle: 'Efes yolunda son durak',
+  subtitle: 'Efes yolu — harabe geçitleri ve devrilmiş sütunlar',
   atmosphere: 'selcuk',
   width: 1024,
   buildLayout: buildSelcukLayout,

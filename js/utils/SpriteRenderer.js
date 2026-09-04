@@ -386,6 +386,20 @@ export class SpriteRenderer {
     ctx.restore();
   }
 
+  drawStar(ctx, x, y, size, animFrame) {
+    ctx.save();
+    const bob = Math.sin(animFrame * 5 + x) * 2;
+    const rot = Math.sin(animFrame * 3 + x) * 0.12;
+    ctx.translate(x + size / 2, y + size / 2 + bob);
+    ctx.rotate(rot);
+    ctx.fillStyle = '#fbbf24';
+    ctx.font = `${size}px sans-serif`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('⭐', 0, 0);
+    ctx.restore();
+  }
+
   drawKey(ctx, x, y, size, animFrame) {
     ctx.save();
     const rot = Math.sin(animFrame * 4) * 0.15;
@@ -427,13 +441,13 @@ export class SpriteRenderer {
       iconova: { top: '#c4b5fd', body: '#5b21b6', detail: '#a78bfa' },
       petpark: { top: '#4ade80', body: '#166534', detail: '#22c55e' },
       petpark_wood: { top: '#d4a574', body: '#78350f', detail: '#92400e' },
-      sehitkamil: { top: '#fb923c', body: '#7c2d12', detail: '#fdba74' },
-      alsancak: { top: '#b8c9d4', body: '#6b7d8a', detail: '#94a8b5' },
+      sehitkamil: { top: '#94a3b8', body: '#334155', detail: '#64748b' },
+      alsancak: { top: '#f5f5f4', body: '#a8a29e', detail: '#d6d3d1' },
       goztepe: { top: '#b0bdd0', body: '#5a6578', detail: '#8899aa' },
       kusadasi: { top: '#c4b896', body: '#7a6b52', detail: '#a89878' },
-      sirince: { top: '#fcd34d', body: '#92400e', detail: '#fbbf24' },
+      sirince: { top: '#f5f0e8', body: '#9a8470', detail: '#c9b896' },
       selcuk: { top: '#e7e5e4', body: '#57534e', detail: '#a8a29e' },
-      dogumgunu: { top: '#fda4af', body: '#9d174d', detail: '#fb7185' },
+      dogumgunu: { top: '#f5f0e8', body: '#9a8470', detail: '#c9b896' },
     };
     const c = colors[theme] || colors.forest;
 
@@ -448,7 +462,7 @@ export class SpriteRenderer {
     ctx.fillStyle = c.top;
     ctx.fillRect(x, y, w, 4);
 
-    const roadThemes = new Set(['iconova', 'sehitkamil']);
+    const roadThemes = new Set(['iconova']);
     if (roadThemes.has(theme)) {
       ctx.fillStyle = c.detail;
       for (let i = 0; i < w; i += 16) {
@@ -457,6 +471,11 @@ export class SpriteRenderer {
         if (dashW > 0) {
           ctx.fillRect(dashX, y + 6, dashW, 2);
         }
+      }
+    } else if (theme === 'sehitkamil') {
+      ctx.fillStyle = 'rgba(0,0,0,0.12)';
+      for (let i = 0; i < w; i += 10) {
+        ctx.fillRect(x + i + 1, y + 7, 4, 3);
       }
     } else if (theme === 'petpark' || theme === 'petpark_wood') {
       ctx.fillStyle = 'rgba(255,255,255,0.12)';
@@ -467,6 +486,21 @@ export class SpriteRenderer {
       ctx.fillStyle = 'rgba(0,0,0,0.08)';
       for (let i = 0; i < w; i += 14) {
         ctx.fillRect(x + i + 3, y + 7, 3, 3);
+      }
+    } else if (theme === 'sirince' || theme === 'selcuk') {
+      ctx.fillStyle = 'rgba(0,0,0,0.1)';
+      for (let i = 0; i < w; i += 12) {
+        ctx.fillRect(x + i + 1, y + 6, 5, 4);
+      }
+    } else if (theme === 'alsancak') {
+      ctx.fillStyle = 'rgba(0,0,0,0.06)';
+      for (let i = 0; i < w; i += 10) {
+        ctx.fillRect(x + i + (i % 20), y + 6, 4, 4);
+      }
+    } else if (theme === 'dogumgunu' || theme === 'kusadasi') {
+      ctx.fillStyle = 'rgba(255,255,255,0.15)';
+      for (let i = 0; i < w; i += 14) {
+        ctx.fillRect(x + i + 2, y + 7, 6, 2);
       }
     } else {
       ctx.fillStyle = c.detail;

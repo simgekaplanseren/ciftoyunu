@@ -67,7 +67,7 @@ export const REUNION_MESSAGES = [
 
 export const FINAL_SCREEN = {
   title: 'İyi ki doğdun sevgilim. ❤️',
-  message: 'Bu maceranın en güzel kısmı sensin. Seninle her gün doğum günü gibi.',
+  message: 'Bu maceranın en güzel kısmı sensin. Seninle her yere adım atmak, sana kavuşmak istiyorum. Seni çok seviyorum.',
   photos: [
     { slot: 1, src: 'assets/images/photo1.jpg', label: '📷 Anı 1' },
     { slot: 2, src: 'assets/images/photo2.jpg', label: '📷 Anı 2' },

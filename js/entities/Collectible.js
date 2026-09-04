@@ -25,8 +25,9 @@ export class Collectible {
 
     switch (this.type) {
       case 'heart':
+      case 'star':
         player.addScore(this.value);
-        return 'heart';
+        return this.type;
       case 'key':
         player.addKey();
         player.addScore(this.value * 2);
@@ -46,6 +47,9 @@ export class Collectible {
     switch (this.type) {
       case 'heart':
         sprites.drawHeart(ctx, this.x, this.y, 14, this.animFrame);
+        break;
+      case 'star':
+        sprites.drawStar(ctx, this.x, this.y, 14, this.animFrame);
         break;
       case 'key':
         sprites.drawKey(ctx, this.x, this.y, 14, this.animFrame);

@@ -171,7 +171,7 @@ export class Game {
 
   _createPlayer(x, y, carryStats = null) {
     const p = new Player(x, y, this.sprites, this.selectedCharacter || 'girl');
-    p.hearts = carryStats?.hearts ?? p.maxHearts;
+    p.hearts = p.maxHearts;
     if (carryStats?.score != null) {
       p.score = carryStats.score;
     }
@@ -218,10 +218,7 @@ export class Game {
   async nextLevel() {
     if (this.state !== 'levelComplete' && this.state !== 'victory') return;
 
-    const savedStats = {
-      score: this.player?.score ?? 0,
-      hearts: this.player?.hearts ?? this.config.maxHearts,
-    };
+    const savedScore = this.player?.score ?? 0;
 
     this.screens.hideAll();
 
@@ -254,7 +251,7 @@ export class Game {
     this.levelData = next.data;
     const levelWidth = next.data.actualWidth ?? next.def.width;
     this.levelDef = { ...next.def, width: levelWidth };
-    this.player = this._createPlayer(next.def.spawn.x, next.def.spawn.y, savedStats);
+    this.player = this._createPlayer(next.def.spawn.x, next.def.spawn.y, { score: savedScore });
     this.camera.setLevelBounds(levelWidth, next.def.height);
     this.camera.x = 0;
     this.reunionPhase = 'none';
@@ -277,6 +274,7 @@ export class Game {
   pause() {
     if (this.state !== 'playing' || this.reunionPhase !== 'none') return;
     this.state = 'paused';
+    this.input.reset();
     this.audio.pauseMusic();
     this.screens.showPause();
     this._hideTouchControls();
@@ -393,15 +391,19 @@ export class Game {
     const stopX = lover.x - 26;
 
     if (this.reunionPhase === 'running') {
-      const dx = stopX - this.player.x;
-      if (Math.abs(dx) > 3) {
-        this.player.x += Math.sign(dx) * 160 * dt;
-        this.player.facing = 1;
-        this.player.state = 'run';
-        this.player.y = py;
-        this.player.vy = 0;
-        this.player.animFrame += dt;
-      } else {
+      let moveX = 0;
+      if (this.input.isLeft()) moveX -= 1;
+      if (this.input.isRight()) moveX += 1;
+
+      this.player.x += moveX * this.player.speed * dt;
+      this.player.x = Math.min(this.player.x, stopX);
+      this.player.facing = moveX !== 0 ? moveX : 1;
+      this.player.state = moveX !== 0 ? 'run' : 'idle';
+      this.player.y = py;
+      this.player.vy = 0;
+      this.player.animFrame += dt;
+
+      if (Math.abs(stopX - this.player.x) <= 3) {
         this.player.x = stopX;
         this.player.y = py;
         this.reunionPhase = 'hugging';
@@ -439,7 +441,7 @@ export class Game {
     this.reunionPhase = 'running';
     this.reunionAnim = 0;
     this.hud.hide();
-    this._hideTouchControls();
+    this._showTouchControls();
     this.player.vx = 0;
     this.player.vy = 0;
   }
@@ -556,7 +558,10 @@ export class Game {
 
     if (lover && lover.active && lover.visible && this.reunionPhase === 'none') {
       lover.update(dt);
-      if (this.player.x >= lover.triggerX) {
+      const playerCenter = this.player.x + this.player.width / 2;
+      const loverCenter = lover.x + lover.width / 2;
+      const nearLover = Math.abs(playerCenter - loverCenter) < 40;
+      if (nearLover && this.player.grounded && !this.player.dead) {
         this._startReunionRun();
       }
     }
@@ -578,8 +583,7 @@ export class Game {
   _getLastGroundEnd() {
     const grounds = this.levelData?.platforms?.filter((p) => p.height >= 40) ?? [];
     if (!grounds.length) return this.levelDef?.width ?? this.config.width;
-    const last = grounds[grounds.length - 1];
-    return last.x + last.width;
+    return grounds.reduce((max, p) => Math.max(max, p.x + p.width), 0);
   }
 
   _clampCameraToGround() {

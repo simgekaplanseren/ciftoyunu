@@ -14,17 +14,22 @@ document.addEventListener('DOMContentLoaded', async () => {
   document.body.classList.toggle('is-native', native);
   document.body.classList.toggle('is-standalone', native || InstallPrompt.isStandalone());
 
-  if (!native) {
-    await InstallPrompt.waitForInstallOrSkip();
+  try {
+    if (!native) {
+      await InstallPrompt.waitForInstallOrSkip();
+    }
+
+    await AccessGate.waitForAccess();
+
+    const orientation = new OrientationManager();
+    const game = new Game(canvas, orientation);
+
+    orientation.init(() => game.resize());
+    await game.init();
+
+    window.game = game;
+  } catch (error) {
+    console.error('Oyun başlatılırken kritik bir hata oluştu:', error);
+    alert('Oyun yüklenirken bir sorun oluştu. Lütfen sayfayı yenile!');
   }
-
-  await AccessGate.waitForAccess();
-
-  const orientation = new OrientationManager();
-  const game = new Game(canvas, orientation);
-
-  orientation.init(() => game.resize());
-  await game.init();
-
-  window.game = game;
 });
