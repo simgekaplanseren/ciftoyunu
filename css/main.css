@@ -152,12 +152,38 @@ body.is-playing #game-container {
   z-index: 1;
   overflow: hidden;
   display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+}
+
+#play-stage {
+  flex: 1 1 auto;
+  min-height: 0;
+  width: 100%;
+  display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
+  touch-action: none;
+  order: 2;
 }
 
 body.is-playing #game-canvas {
   pointer-events: none;
+  flex-shrink: 0;
+}
+
+body.is-playing #hud {
+  position: relative;
+  flex: 0 0 auto;
+  order: 1;
+}
+
+body.is-playing #touch-controls {
+  position: relative;
+  flex: 0 0 auto;
+  order: 3;
 }
 
 #portrait-block {

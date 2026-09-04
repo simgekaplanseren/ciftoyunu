@@ -59,7 +59,11 @@ export class LevelManager {
     this.completedLevels = new Set();
     this.unlockedSections = getDefaultUnlockedSections();
     this.sectionProgress = defaultSectionProgress();
-    GameProgress.load(this);
+    const loaded = GameProgress.load(this);
+    if (!loaded) {
+      KeyProgress.clear();
+      GameProgress.save(this);
+    }
   }
 
   getCurrentLevel() {

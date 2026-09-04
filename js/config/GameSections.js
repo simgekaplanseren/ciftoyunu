@@ -31,7 +31,7 @@ export const GAME_SECTIONS = [
 ];
 
 /** Test için tüm bölümleri aç (false = normal ilerleme) */
-export const UNLOCK_ALL_LEVELS = true;
+export const UNLOCK_ALL_LEVELS = false;
 
 export function getDefaultUnlockedSections() {
   if (UNLOCK_ALL_LEVELS) {

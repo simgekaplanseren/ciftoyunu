@@ -21,7 +21,9 @@
 <body>
   <div id="app">
     <div id="game-container">
-      <canvas id="game-canvas"></canvas>
+      <div id="play-stage">
+        <canvas id="game-canvas"></canvas>
+      </div>
 
       <!-- HUD -->
       <div id="hud" class="hidden">
@@ -40,6 +42,7 @@
       <div id="touch-controls" class="hidden">
         <div class="controls-left">
           <button class="ctrl-btn" id="btn-left" aria-label="Sol">◀</button>
+          <button class="ctrl-btn down" id="btn-down" aria-label="Eğil">▼</button>
           <button class="ctrl-btn" id="btn-right" aria-label="Sağ">▶</button>
         </div>
         <div class="controls-right">
@@ -95,17 +98,19 @@
           <h1 class="game-title">SEVGİLİNE KAVUŞ <span class="heart">❤️</span></h1>
           <p class="game-subtitle">Bir aşk macerası</p>
           <div id="secret-lock-panel" class="secret-lock-panel">
+            <p class="lock-title">Gizli Mesaj</p>
+            <p id="lock-hint" class="lock-hint">Mesajı okumak için bölümlerde gizli anahtarları topla ve kilidi aç.</p>
             <div class="lock-header">
-              <span id="lock-icon" class="lock-icon">🔒</span>
+              <span id="lock-icon" class="lock-icon" aria-hidden="true"></span>
               <span id="lock-key-count">0 / 8 anahtar</span>
             </div>
-            <p id="lock-hint" class="lock-hint">7 anahtar topla, kilidi aç</p>
             <button class="menu-btn lock-btn" id="btn-unlock-secret" data-action="unlock-secret" disabled>KİLİDİ AÇ</button>
           </div>
           <div class="menu-buttons">
             <button class="menu-btn primary" data-action="start">OYUNA BAŞLA</button>
             <button class="menu-btn" data-action="levels">BÖLÜMLER</button>
             <button class="menu-btn" data-action="settings">AYARLAR</button>
+            <button class="menu-btn text-link" data-action="reset-game">OYUNU SIFIRLA</button>
           </div>
         </div>
       </div>
@@ -188,6 +193,7 @@
           <canvas id="reunion-canvas" width="320" height="140"></canvas>
           <p id="level-complete-score">Puan: 0</p>
           <button class="menu-btn primary" data-action="next-level">DEVAM ET →</button>
+          <button class="menu-btn" data-action="retry">TEKRAR OYNA</button>
           <button class="menu-btn" data-action="back-menu">ANA MENÜ</button>
         </div>
       </div>
@@ -218,20 +224,15 @@
           <h2>İyi ki doğdun sevgilim. ❤️</h2>
           <p class="final-message">Bu maceranın en güzel kısmı sensin.</p>
 
-          <div id="photo-gallery" class="photo-gallery">
-            <div class="photo-slot" data-slot="1">
-              <span class="photo-placeholder">📷 Fotoğraf 1</span>
+          <div id="photo-viewer" class="photo-viewer">
+            <div id="photo-frame" class="photo-frame">
+              <img id="final-photo" class="final-photo" alt="Anı">
+              <p id="final-photo-status" class="photo-status">1 / 7</p>
             </div>
-            <div class="photo-slot" data-slot="2">
-              <span class="photo-placeholder">📷 Fotoğraf 2</span>
+            <div class="photo-nav">
+              <button type="button" class="menu-btn" id="btn-photo-prev" disabled>← ÖNCEKİ</button>
+              <button type="button" class="menu-btn primary" id="btn-photo-next">SONRAKİ FOTOĞRAF →</button>
             </div>
-            <div class="photo-slot" data-slot="3">
-              <span class="photo-placeholder">📷 Fotoğraf 3</span>
-            </div>
-          </div>
-
-          <div id="birthday-message" class="birthday-message">
-            <p class="message-placeholder">Buraya özel doğum günü mesajını yazabilirsin...</p>
           </div>
 
           <button class="menu-btn" data-action="back-menu">MENÜYE DÖN</button>
@@ -244,6 +245,7 @@
           <h2>DURAKLATILDI</h2>
           <div class="menu-buttons pause-buttons">
             <button class="menu-btn primary" data-action="resume">DEVAM ET</button>
+            <button class="menu-btn" data-action="retry">TEKRAR OYNA</button>
             <button class="menu-btn" data-action="pause-settings">AYARLAR</button>
             <button class="menu-btn" data-action="pause-menu">ANA MENÜ</button>
           </div>

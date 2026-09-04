@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sevgiline Kavuş — QR Afiş</title>
+  <style>
+    @page { size: A4 portrait; margin: 12mm; }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: #1a0f2e;
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+
+    .poster {
+      width: min(100%, 420px);
+      background: linear-gradient(165deg, #2d1b4e, #1a0f2e);
+      border: 3px solid #c084fc;
+      border-radius: 20px;
+      padding: 1.75rem 1.5rem 1.5rem;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.45);
+    }
+
+    h1 {
+      font-size: 1.65rem;
+      background: linear-gradient(135deg, #ff6b9d, #c084fc);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.25rem;
+    }
+
+    .sub {
+      color: #c4b5fd;
+      font-size: 0.95rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .qr-wrap {
+      background: #fff;
+      border-radius: 16px;
+      padding: 0.85rem;
+      display: inline-block;
+      margin-bottom: 1.25rem;
+    }
+
+    .qr-wrap img {
+      display: block;
+      width: min(72vw, 260px);
+      height: auto;
+    }
+
+    .scan {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #ff6b9d;
+      margin-bottom: 1rem;
+    }
+
+    ol {
+      text-align: left;
+      list-style: none;
+      display: grid;
+      gap: 0.55rem;
+      color: #e9d5ff;
+      font-size: 0.88rem;
+      line-height: 1.4;
+      margin: 0 auto;
+      max-width: 18rem;
+    }
+
+    ol li::before {
+      content: '♥ ';
+      color: #ff6b9d;
+    }
+
+    .foot {
+      margin-top: 1rem;
+      font-size: 0.72rem;
+      color: #7c6faa;
+    }
+
+    @media print {
+      body { background: #fff; padding: 0; }
+      .poster { box-shadow: none; width: 100%; max-width: none; border-width: 2px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="poster">
+    <h1>SEVGİLİNE KAVUŞ ❤️</h1>
+    <p class="sub">Bir aşk macerası — sana özel oyun</p>
+    <img src="assets/images/sevgiline-kavus-afis-qr.png" alt="Sevgiline Kavuş afişi QR kodlu" style="width:100%;max-width:420px;border-radius:16px;margin-bottom:1rem;">
+    <ol>
+      <li>Kameranla veya QR uygulamasıyla kodu okut</li>
+      <li>Açılan sayfadaki adımları izle</li>
+      <li><strong>Oyunu Aç</strong> deyip ana ekrana ekle</li>
+      <li>Telefonu yana çevir ve oyna!</li>
+    </ol>
+    <p class="foot">simgekaplanseren.github.io/ciftoyunu</p>
+  </div>
+</body>
+</html>

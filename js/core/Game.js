@@ -17,6 +17,7 @@ import { getSectionById } from '../config/GameSections.js';
 import { LEVEL } from '../levels/levelUtils.js';
 import { isMobileDevice } from '../utils/appShell.js';
 import { GameSession } from './GameSession.js';
+import { GameProgress } from './GameProgress.js';
 
 export class Game {
   constructor(canvas, orientation = null) {
@@ -64,6 +65,12 @@ export class Game {
 
     document.body.classList.add('in-menu');
 
+    this._persistProgress = () => GameProgress.save(this.levelManager);
+    window.addEventListener('pagehide', this._persistProgress);
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'hidden') this._persistProgress();
+    });
+
     this.input.init();
     this.resize();
     window.addEventListener('resize', this._resizeHandler);
@@ -74,6 +81,7 @@ export class Game {
     }
 
     this._drawCharacterPreviews();
+    await this.audio.unlock();
     this.audio.playMusic('musicMenu');
     this._loop = this._loop.bind(this);
     requestAnimationFrame(this._loop);
@@ -138,12 +146,18 @@ export class Game {
     const container = document.getElementById('game-container');
     if (!container) return;
 
-    let cw = container.clientWidth;
-    let ch = container.clientHeight;
+    const stage = document.getElementById('play-stage') || container;
+    let cw = stage.clientWidth;
+    let ch = stage.clientHeight;
 
     if (cw < 2 || ch < 2) {
       cw = window.visualViewport?.width ?? window.innerWidth;
       ch = window.visualViewport?.height ?? window.innerHeight;
+      if (document.body.classList.contains('is-playing') && this._isTouchDevice()) {
+        const hud = document.getElementById('hud');
+        const controls = document.getElementById('touch-controls');
+        ch -= (hud?.offsetHeight ?? 0) + (controls?.offsetHeight ?? 0);
+      }
     }
 
     const aspect = this.config.width / this.config.height;
@@ -236,16 +250,10 @@ export class Game {
     const next = this.levelManager.nextLevel();
 
     if (crossingSection && nextSection) {
-      await this.screens.playTransition(
-        `${nextSection.emoji} ${nextSection.name}`,
-        2400
-      );
+      await this.screens.playTransition(nextSection.name, 2400);
     }
 
-    await this.screens.playTransition(
-      `${next.def.emoji} ${next.def.name}`,
-      1800
-    );
+    await this.screens.playTransition(next.def.name, 1800);
 
     this.levelDef = next.def;
     this.levelData = next.data;
@@ -269,6 +277,11 @@ export class Game {
     this.hud.show();
     this._showTouchControls();
     this.state = 'playing';
+    document.body.classList.add('is-playing');
+    document.body.classList.remove('in-menu');
+    if (this.levelDef?.music) {
+      this.audio.playMusic(this.levelDef.music);
+    }
   }
 
   pause() {
@@ -304,6 +317,23 @@ export class Game {
     this.menu?.refreshLockPanel();
     this.audio.playMusic('musicMenu');
     this.resize();
+  }
+
+  resetAllProgress() {
+    GameProgress.clear();
+    KeyProgress.clear();
+    GameSession.clear();
+    this.levelManager.resetProgress();
+    GameProgress.save(this.levelManager);
+    this.selectedCharacter = null;
+    this.player = null;
+    this.levelDef = null;
+    this.levelData = null;
+    this.reunionPhase = 'none';
+    this.reunionAnim = 0;
+    this.reunionNext = null;
+    this._updateCharacterSelectionUI();
+    this.returnToMainMenu();
   }
 
   showVictory() {
@@ -466,7 +496,7 @@ export class Game {
         const nextSectionId = this.levelManager.getNextSectionId(this.levelDef.sectionId);
         const nextSection = nextSectionId ? getSectionById(nextSectionId) : null;
         if (nextSection) {
-          completeMsg = `Sırada ${nextSection.name}! Devam Et'e bas. ${nextSection.emoji}`;
+          completeMsg = `Sırada ${nextSection.name}! Devam Et'e bas.`;
         }
       }
 
@@ -482,7 +512,7 @@ export class Game {
 
   getLevelDisplayName() {
     if (!this.levelDef) return '';
-    return `${this.levelDef.emoji} ${this.levelDef.name}`;
+    return this.levelDef.name;
   }
 
   _updateGameplay(dt) {
@@ -744,7 +774,7 @@ export class Game {
       ctx.textAlign = 'center';
       const msg = this.reunionPhase === 'running'
         ? `${loverName}'e koş`
-        : 'Sevgiline kavuştun ❤️';
+        : 'Sevgiline kavuştun';
       ctx.fillText(msg, this.config.width / 2, 22);
     }
   }

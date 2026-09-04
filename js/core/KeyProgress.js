@@ -53,6 +53,12 @@ export class KeyProgress {
     this._write(data);
   }
 
+  static clear() {
+    try {
+      localStorage.removeItem(STORAGE_KEY);
+    } catch (_) {}
+  }
+
   static removeCollected(levelData) {
     if (!levelData?.collectibles) return;
     levelData.collectibles = levelData.collectibles.filter((c) => {

@@ -5,6 +5,8 @@ import {
   MAP_VIEW,
 } from '../config/TurkeyMap.js';
 
+import { resolveBadgeTheme } from './LevelBadge.js';
+
 const SVG_NS = 'http://www.w3.org/2000/svg';
 
 export class TurkeyMapView {
@@ -202,13 +204,30 @@ export class TurkeyMapView {
       dot.setAttribute('fill', unlocked ? '#fff' : '#94a3b8');
       g.appendChild(dot);
 
-      const emoji = document.createElementNS(SVG_NS, 'text');
-      emoji.setAttribute('x', x);
-      emoji.setAttribute('y', y - 14);
-      emoji.setAttribute('text-anchor', 'middle');
-      emoji.setAttribute('font-size', '14');
-      emoji.textContent = unlocked ? region.emoji : '🔒';
-      g.appendChild(emoji);
+      if (unlocked) {
+        const theme = resolveBadgeTheme(region.id, region.id);
+        const badge = document.createElementNS(SVG_NS, 'rect');
+        badge.setAttribute('x', x - 5);
+        badge.setAttribute('y', y - 19);
+        badge.setAttribute('width', 10);
+        badge.setAttribute('height', 10);
+        badge.setAttribute('rx', 2);
+        badge.setAttribute('fill', theme.top);
+        badge.setAttribute('stroke', 'rgba(255,255,255,0.35)');
+        badge.setAttribute('stroke-width', '1');
+        g.appendChild(badge);
+      } else {
+        const lock = document.createElementNS(SVG_NS, 'rect');
+        lock.setAttribute('x', x - 4);
+        lock.setAttribute('y', y - 18);
+        lock.setAttribute('width', 8);
+        lock.setAttribute('height', 8);
+        lock.setAttribute('rx', 1.5);
+        lock.setAttribute('fill', 'rgba(26, 15, 46, 0.85)');
+        lock.setAttribute('stroke', '#94a3b8');
+        lock.setAttribute('stroke-width', '1');
+        g.appendChild(lock);
+      }
 
       const name = document.createElementNS(SVG_NS, 'text');
       name.setAttribute('x', x);

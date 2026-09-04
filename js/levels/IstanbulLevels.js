@@ -31,7 +31,7 @@ export const LEVEL_DOGUMGUNU = createIstanbulLevel({
   id: 15,
   name: 'DOĞUM GÜNÜ',
   emoji: '🎂',
-  subtitle: 'Boğaz kıyısında — deniz geçitlerini atla, sürprize ulaş',
+  subtitle: 'Pembe sokaklar — deniz geçitlerini atla, sürprize ulaş',
   atmosphere: 'dogumgunu',
   width: 1080,
   buildLayout: buildDogumGunuLayout,

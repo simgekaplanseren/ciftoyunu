@@ -4,6 +4,7 @@ export class InputManager {
     this.touch = {
       left: false,
       right: false,
+      down: false,
       jump: false,
       attack: false,
       jumpPressed: false,
@@ -45,6 +46,7 @@ export class InputManager {
     this.keys = {};
     this.touch.left = false;
     this.touch.right = false;
+    this.touch.down = false;
     this.touch.jump = false;
     this.touch.attack = false;
     this.touch.jumpPressed = false;
@@ -88,6 +90,7 @@ export class InputManager {
     const bindings = [
       ['btn-left', 'left'],
       ['btn-right', 'right'],
+      ['btn-down', 'down'],
       ['btn-jump', 'jump'],
     ];
 
@@ -116,6 +119,10 @@ export class InputManager {
 
   isJump() {
     return this.keys['ArrowUp'] || this.keys['KeyW'] || this.keys['Space'] || this.touch.jump;
+  }
+
+  isDown() {
+    return this.keys['ArrowDown'] || this.keys['KeyS'] || this.touch.down;
   }
 
   wasJumpPressed() {

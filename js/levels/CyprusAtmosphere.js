@@ -70,7 +70,7 @@ export const ZONE_THEMES = {
   dogumgunu: {
     id: 'dogumgunu',
     platformTheme: 'dogumgunu',
-    sky: ['#2c3e50', '#6a8fa3', '#f5c4d8'],
+    sky: ['#4a1942', '#9d174d', '#fb7185'],
   },
 };
 
@@ -742,85 +742,84 @@ function drawSelcukDecor(ctx, startX, width) {
 }
 
 function drawDogumGunuDecor(ctx, startX, width) {
-  // Boğaz / deniz — promenad altı
-  ctx.fillStyle = '#1a5f7a';
-  ctx.fillRect(startX, GROUND_Y + 6, width, 24);
-  ctx.fillStyle = 'rgba(103, 232, 249, 0.3)';
-  for (let i = 0; i < width; i += 28) {
-    ctx.beginPath();
-    ctx.moveTo(startX + i, GROUND_Y + 10);
-    ctx.quadraticCurveTo(startX + i + 10, GROUND_Y + 6, startX + i + 20, GROUND_Y + 10);
-    ctx.lineTo(startX + i + 20, GROUND_Y + 16);
-    ctx.lineTo(startX + i, GROUND_Y + 16);
-    ctx.closePath();
-    ctx.fill();
-  }
-
-  // İstanbul silüeti — arka planda
-  for (let x = startX + 40; x < startX + width; x += 150) {
-    const h = 48 + ((x / 150) % 3) * 18;
-    ctx.fillStyle = 'rgba(45, 27, 78, 0.35)';
-    ctx.fillRect(x, GROUND_Y - h - 28, 44 + (x % 2) * 16, h);
-    ctx.fillStyle = 'rgba(253, 224, 171, 0.18)';
+  // Pembe şehir silüeti
+  for (let x = startX + 30; x < startX + width; x += 140) {
+    const h = 46 + ((x / 140) % 3) * 20;
+    ctx.fillStyle = 'rgba(45, 27, 78, 0.42)';
+    ctx.fillRect(x, GROUND_Y - h - 28, 44 + (x % 2) * 18, h);
+    ctx.fillStyle = 'rgba(251, 207, 232, 0.22)';
     for (let row = 0; row < 2; row++) {
       ctx.fillRect(x + 10, GROUND_Y - h - 18 + row * 14, 7, 8);
       ctx.fillRect(x + 26, GROUND_Y - h - 18 + row * 14, 7, 8);
     }
   }
 
-  // Cami kubbesi silüeti
-  const mx = startX + width * 0.62;
-  ctx.fillStyle = 'rgba(45, 27, 78, 0.4)';
-  ctx.fillRect(mx - 14, GROUND_Y - 62, 28, 62);
-  ctx.beginPath();
-  ctx.arc(mx, GROUND_Y - 62, 16, Math.PI, 0);
-  ctx.fill();
-
-  // Deniz tarafı palmiye
-  for (let x = startX + 100; x < startX + width; x += 180) {
-    ctx.fillStyle = '#92400e';
-    ctx.fillRect(x, GROUND_Y + 10, 4, 18);
-    ctx.fillStyle = 'rgba(34, 197, 94, 0.45)';
+  // Parti flamaları — binalar arası
+  const bannerColors = ['#ff6b9d', '#f472b6', '#fbbf24', '#c084fc'];
+  for (let x = startX + 50; x < startX + width; x += 200) {
+    ctx.strokeStyle = 'rgba(255,255,255,0.3)';
+    ctx.lineWidth = 1;
     ctx.beginPath();
-    ctx.arc(x + 2, GROUND_Y + 4, 11, 0, Math.PI * 2);
-    ctx.fill();
+    ctx.moveTo(x, GROUND_Y - 54);
+    ctx.lineTo(x + 72, GROUND_Y - 50);
+    ctx.stroke();
+    for (let i = 0; i < 4; i++) {
+      ctx.fillStyle = bannerColors[i % bannerColors.length];
+      ctx.beginPath();
+      ctx.moveTo(x + i * 18, GROUND_Y - 54);
+      ctx.lineTo(x + i * 18 + 9, GROUND_Y - 46);
+      ctx.lineTo(x + i * 18 + 18, GROUND_Y - 54);
+      ctx.closePath();
+      ctx.fill();
+    }
   }
 
-  // Kordon korkuluk
-  ctx.fillStyle = 'rgba(120, 113, 108, 0.4)';
-  for (let x = startX + 12; x < startX + width; x += 26) {
-    ctx.fillRect(x, GROUND_Y + 2, 2, 7);
+  // Kalpler — gökyüzünde hafif (piksel, emoji değil)
+  for (let x = startX + 60; x < startX + width; x += 160) {
+    ctx.fillStyle = 'rgba(255, 107, 157, 0.35)';
+    const hy = 36 + (x % 3) * 12;
+    ctx.fillRect(x, hy, 3, 3);
+    ctx.fillRect(x + 3, hy, 3, 3);
+    ctx.fillRect(x + 6, hy + 3, 3, 3);
+    ctx.fillRect(x + 3, hy + 6, 3, 3);
+    ctx.fillRect(x, hy + 6, 3, 3);
   }
-  ctx.fillRect(startX, GROUND_Y + 2, width, 2);
 
-  // Sokak lambası + balon (yol kenarı)
-  for (let x = startX + 70; x < startX + width; x += 220) {
+  // Balon + lamba — yol kenarı
+  for (let x = startX + 70; x < startX + width; x += 210) {
     ctx.fillStyle = '#78716c';
     ctx.fillRect(x, GROUND_Y - 44, 3, 44);
-    ctx.fillStyle = 'rgba(253, 224, 171, 0.4)';
+    ctx.fillStyle = 'rgba(253, 224, 171, 0.45)';
     ctx.beginPath();
     ctx.arc(x + 1, GROUND_Y - 46, 5, 0, Math.PI * 2);
     ctx.fill();
     ctx.font = '14px sans-serif';
-    ctx.globalAlpha = 0.5;
+    ctx.globalAlpha = 0.55;
     ctx.fillText('🎈', x - 5, GROUND_Y - 54);
     ctx.globalAlpha = 1;
   }
 
-  // Pasta ve hediye — promenad kenarı
+  // Pasta, hediye — bina önünde (diken/boşluk üstüne değil)
   ctx.font = '16px sans-serif';
-  ctx.globalAlpha = 0.45;
-  for (let x = startX + 180; x < startX + width; x += 340) {
-    ctx.fillText('🎂', x, GROUND_Y - 6);
-    ctx.fillText('🎁', x + 36, GROUND_Y - 4);
+  ctx.globalAlpha = 0.5;
+  for (let x = startX + 140; x < startX + width; x += 300) {
+    ctx.fillText('🎂', x, GROUND_Y - 34);
+    ctx.fillText('🎁', x + 34, GROUND_Y - 30);
+    ctx.fillStyle = 'rgba(255, 107, 157, 0.55)';
+    ctx.fillRect(x + 68, GROUND_Y - 38, 4, 4);
+    ctx.fillRect(x + 72, GROUND_Y - 38, 4, 4);
+    ctx.fillRect(x + 70, GROUND_Y - 34, 4, 4);
   }
   ctx.globalAlpha = 1;
 
-  // Tekne — denizde
-  ctx.font = '14px sans-serif';
-  ctx.globalAlpha = 0.45;
-  ctx.fillText('⛵', startX + width * 0.25, GROUND_Y + 20);
-  ctx.globalAlpha = 1;
+  // Konfeti
+  const confetti = ['#ff6b9d', '#f472b6', '#fbbf24', '#c084fc'];
+  for (let i = 0; i < Math.ceil(width / 55); i++) {
+    ctx.fillStyle = confetti[i % confetti.length];
+    ctx.globalAlpha = 0.35;
+    ctx.fillRect(startX + 20 + i * 55, 22 + (i % 4) * 16, 3, 3);
+    ctx.globalAlpha = 1;
+  }
 }
 
 const DECORATORS = {

@@ -28,3 +28,13 @@ export function isMobileDevice() {
     || window.matchMedia('(pointer: coarse)').matches
     || 'ontouchstart' in window;
 }
+
+/** GitHub Pages alt yolu dahil doğru asset URL’si */
+export function resolveAssetPath(relativePath) {
+  const clean = relativePath.replace(/^\//, '');
+  let base = window.location.pathname;
+  if (!base.endsWith('/')) {
+    base = base.slice(0, base.lastIndexOf('/') + 1);
+  }
+  return `${base}${clean}`;
+}

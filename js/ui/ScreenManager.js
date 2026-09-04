@@ -1,5 +1,6 @@
 import { REUNION_MESSAGES, FINAL_SCREEN } from '../config/assets.js';
 import { SECRET_LOCK } from '../config/SecretLock.js';
+import { resolveAssetPath } from '../utils/appShell.js';
 
 export class ScreenManager {
   constructor() {
@@ -19,6 +20,8 @@ export class ScreenManager {
     this.current = 'menu';
     this.transitionEl = document.getElementById('level-transition');
     this.transitionText = document.getElementById('transition-text');
+    this.finalPhotoIndex = 0;
+    this._bindFinalPhotoNav();
   }
 
   show(name) {
@@ -57,7 +60,9 @@ export class ScreenManager {
   }
 
   showFinal() {
+    this.finalPhotoIndex = 0;
     this._populateFinalScreen();
+    this._showFinalPhoto(0);
     this.show('final');
   }
 
@@ -67,26 +72,77 @@ export class ScreenManager {
     this.show('secret');
   }
 
+  _bindFinalPhotoNav() {
+    document.getElementById('btn-photo-next')?.addEventListener('click', () => {
+      this._nextFinalPhoto();
+    });
+    document.getElementById('btn-photo-prev')?.addEventListener('click', () => {
+      this._prevFinalPhoto();
+    });
+  }
+
   _populateFinalScreen() {
     const title = document.querySelector('#screen-final h2');
     const message = document.querySelector('#screen-final .final-message');
     if (title) title.textContent = FINAL_SCREEN.title;
     if (message) message.textContent = FINAL_SCREEN.message;
+  }
 
-    for (const photo of FINAL_SCREEN.photos) {
-      const slot = document.querySelector(`#photo-gallery .photo-slot[data-slot="${photo.slot}"]`);
-      if (!slot) continue;
+  _showFinalPhoto(index) {
+    const photos = FINAL_SCREEN.photos;
+    if (!photos.length) return;
 
-      const img = new Image();
-      img.alt = photo.label;
-      img.onload = () => {
-        slot.innerHTML = '';
-        slot.appendChild(img);
-      };
-      img.onerror = () => {
-        slot.innerHTML = `<span class="photo-placeholder">${photo.label}</span>`;
-      };
-      img.src = photo.src;
+    this.finalPhotoIndex = Math.max(0, Math.min(index, photos.length - 1));
+    const photo = photos[this.finalPhotoIndex];
+
+    const img = document.getElementById('final-photo');
+    const status = document.getElementById('final-photo-status');
+    const prevBtn = document.getElementById('btn-photo-prev');
+    const nextBtn = document.getElementById('btn-photo-next');
+    const frame = document.getElementById('photo-frame');
+
+    if (status) {
+      status.textContent = `${this.finalPhotoIndex + 1} / ${photos.length}`;
+    }
+    if (prevBtn) prevBtn.disabled = this.finalPhotoIndex <= 0;
+    if (nextBtn) {
+      const isLast = this.finalPhotoIndex >= photos.length - 1;
+      nextBtn.disabled = isLast;
+      nextBtn.textContent = isLast ? 'SON FOTOĞRAF ✓' : 'SONRAKİ FOTOĞRAF →';
+    }
+
+    if (!img) return;
+
+    img.alt = photo.label;
+    img.classList.remove('loaded', 'error');
+    img.classList.add('loading');
+    frame?.classList.remove('has-error');
+
+    const src = resolveAssetPath(photo.src);
+    img.onload = () => {
+      img.classList.remove('loading');
+      img.classList.add('loaded');
+    };
+    img.onerror = () => {
+      img.classList.remove('loading');
+      img.classList.add('error');
+      frame?.classList.add('has-error');
+      if (status) {
+        status.textContent = `${this.finalPhotoIndex + 1} / ${photos.length} — yüklenemedi`;
+      }
+    };
+    img.src = src;
+  }
+
+  _nextFinalPhoto() {
+    if (this.finalPhotoIndex < FINAL_SCREEN.photos.length - 1) {
+      this._showFinalPhoto(this.finalPhotoIndex + 1);
+    }
+  }
+
+  _prevFinalPhoto() {
+    if (this.finalPhotoIndex > 0) {
+      this._showFinalPhoto(this.finalPhotoIndex - 1);
     }
   }
 

@@ -36,9 +36,10 @@ export class LevelBuilder {
     return this;
   }
 
-  /** Boşluktan sonra zemin — otomatik konumlanır */
+  /** Boşluktan sonra zemin — son boşluğun genişliğine göre otomatik konumlanır */
   nextGround(width, theme = this.theme) {
-    return this.ground(this._groundEnd + 56, width, theme);
+    const gapW = this._lastGapW ?? 56;
+    return this.ground(this._groundEnd + gapW, width, theme);
   }
 
   plat(x, elevation, width, theme = this.theme) {
@@ -62,8 +63,8 @@ export class LevelBuilder {
     return this;
   }
 
-  spikes(x, width, type = 'spike') {
-    const t = trapPoint(x, width, type);
+  spikes(x, width, type = 'spike', options = {}) {
+    const t = trapPoint(x, width, type, options);
     this.traps.push(new Trap(t.x, t.y, t.width, t.height, type));
     this._track(x, width);
     return this;
@@ -282,7 +283,7 @@ export class LevelBuilder {
       lastGround.cliffRight = true;
     }
     this._nextCliffLeft = true;
-    const gapW = Math.min(width, 56);
+    const gapW = Math.min(width, 280);
     this._lastGapX = this._groundEnd;
     this._lastGapW = gapW;
     this.pit(this._groundEnd, gapW);
@@ -306,8 +307,33 @@ export class LevelBuilder {
     return this.movingPlat(x, elevation, width, endElevation, speed, theme);
   }
 
+  /** Geniş boşluğun ortasında yukarı-aşağı sallanan beton platform */
+  gapFerry(options = {}) {
+    const gapX = this._lastGapX ?? this._groundEnd;
+    const gapW = this._lastGapW ?? 56;
+    const width = options.width ?? 72;
+    const theme = options.theme ?? 'concrete';
+    const x = gapX + Math.floor((gapW - width) / 2);
+    const yHigh = platformY(options.elevation ?? 10);
+    const mp = new MovingPlatform(x, yHigh, width, 16, x, yHigh, 0, theme);
+    mp.bobSpeed = options.bobSpeed ?? 0.48;
+    mp.bobT = options.bobPhase ?? 0;
+    mp.ferryBaseY = yHigh;
+    mp.bobAmplitude = options.bob ?? options.drop ?? 32;
+    this.platforms.push(mp);
+    this._track(x, width);
+    return this;
+  }
+
+  /** Son boşluğa görsel uçurum (dikenli geçitlerde) */
+  gapPit() {
+    const gapX = this._lastGapX ?? this._groundEnd;
+    const gapW = this._lastGapW ?? 56;
+    return this.pit(gapX, gapW);
+  }
+
   /** Boşluk — son zemin parçasının hemen ucuna yerleşir (varsayılan: kırmızı diken) */
-  gap(width = 56, type = 'spike') {
+  gap(width = 56, type = 'spike', options = {}) {
     const lastGround = this.platforms[this.platforms.length - 1];
     if (lastGround?.height >= 40) {
       if (type === 'water' || type === 'spike') {
@@ -317,10 +343,10 @@ export class LevelBuilder {
     if (type === 'water' || type === 'spike') {
       this._nextCliffLeft = true;
     }
-    const gapW = Math.min(width, 56);
+    const gapW = Math.min(width, 144);
     this._lastGapX = this._groundEnd;
     this._lastGapW = gapW;
-    return this.spikes(this._groundEnd, gapW, type);
+    return this.spikes(this._groundEnd, gapW, type, options);
   }
 
   /** Parkur sonuna zemin + kavuşma noktası */

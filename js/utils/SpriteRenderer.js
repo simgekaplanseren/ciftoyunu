@@ -1,4 +1,5 @@
 import { COLORS } from '../config/assets.js';
+import { drawPixelHeart } from './HeartDraw.js';
 
 /**
  * Placeholder pixel-art çizimleri.
@@ -23,7 +24,7 @@ export class SpriteRenderer {
 
   drawGirl(ctx, x, y, w, h, facing, state, animFrame) {
     const img = this.assets?.get('player');
-    if (img) {
+    if (img && state !== 'crouch') {
       ctx.save();
       if (facing < 0) {
         ctx.translate(x + w, y);
@@ -38,6 +39,21 @@ export class SpriteRenderer {
 
     ctx.save();
     ctx.translate(x, y);
+
+    if (state === 'crouch') {
+      ctx.fillStyle = 'rgba(0,0,0,0.2)';
+      ctx.beginPath();
+      ctx.ellipse(w / 2, h - 1, w / 2.2, 3, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = COLORS.playerBody;
+      ctx.fillRect(2, h - 12, w - 4, 10);
+      ctx.fillStyle = COLORS.playerSkin;
+      ctx.fillRect(3, h - 18, w - 6, 8);
+      ctx.fillStyle = COLORS.playerHair;
+      ctx.fillRect(4, h - 22, w - 8, 5);
+      ctx.restore();
+      return;
+    }
 
     const bob = state === 'idle' ? Math.sin(animFrame * 6) * 1 : 0;
     const legOffset = state === 'run' ? Math.sin(animFrame * 12) * 3 : 0;
@@ -376,13 +392,9 @@ export class SpriteRenderer {
     ctx.save();
     const bob = Math.sin(animFrame * 5 + x) * 2;
     const scale = 1 + Math.sin(animFrame * 8 + x) * 0.1;
-    ctx.translate(x + size / 2, y + size / 2 + bob);
-    ctx.scale(scale, scale);
-    ctx.fillStyle = COLORS.heart;
-    ctx.font = `${size}px sans-serif`;
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillText('❤', 0, 0);
+    const cx = x + size / 2;
+    const cy = y + size / 2 + bob;
+    drawPixelHeart(ctx, cx, cy, size * scale, COLORS.heart);
     ctx.restore();
   }
 
@@ -447,7 +459,8 @@ export class SpriteRenderer {
       kusadasi: { top: '#c4b896', body: '#7a6b52', detail: '#a89878' },
       sirince: { top: '#f5f0e8', body: '#9a8470', detail: '#c9b896' },
       selcuk: { top: '#e7e5e4', body: '#57534e', detail: '#a8a29e' },
-      dogumgunu: { top: '#f5f0e8', body: '#9a8470', detail: '#c9b896' },
+      dogumgunu: { top: '#fda4af', body: '#9d174d', detail: '#fb7185' },
+      concrete: { top: '#d6d3d1', body: '#78716c', detail: '#a8a29e' },
     };
     const c = colors[theme] || colors.forest;
 
@@ -497,7 +510,17 @@ export class SpriteRenderer {
       for (let i = 0; i < w; i += 10) {
         ctx.fillRect(x + i + (i % 20), y + 6, 4, 4);
       }
-    } else if (theme === 'dogumgunu' || theme === 'kusadasi') {
+    } else if (theme === 'dogumgunu') {
+      ctx.fillStyle = 'rgba(255,255,255,0.2)';
+      for (let i = 0; i < w; i += 12) {
+        ctx.fillRect(x + i + 2, y + 7, 4, 3);
+      }
+    } else if (theme === 'concrete') {
+      ctx.fillStyle = 'rgba(0,0,0,0.1)';
+      for (let i = 0; i < w; i += 10) {
+        ctx.fillRect(x + i + 1, y + 5, 7, 5);
+      }
+    } else if (theme === 'kusadasi') {
       ctx.fillStyle = 'rgba(255,255,255,0.15)';
       for (let i = 0; i < w; i += 14) {
         ctx.fillRect(x + i + 2, y + 7, 6, 2);

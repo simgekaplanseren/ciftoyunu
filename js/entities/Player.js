@@ -34,6 +34,7 @@ export class Player {
     this.didAttack = false;
     this.coyoteTimer = 0;
     this.jumpBuffer = 0;
+    this.crouching = false;
   }
 
   reset(x, y) {
@@ -124,14 +125,18 @@ export class Player {
       this.y += this.onPlatform.vy * dt;
     }
 
+    this._updateCrouch(input);
+
     if (this.y > 400) {
       this.takeDamage(3);
     }
 
-    if (Math.abs(this.vx) > 10 && this.grounded) {
+    if (Math.abs(this.vx) > 10 && this.grounded && !this.crouching) {
       this.state = 'run';
     } else if (!this.grounded) {
       this.state = 'jump';
+    } else if (this.crouching) {
+      this.state = 'crouch';
     } else if (this.attackTimer > 0) {
       this.state = 'attack';
     } else {
@@ -140,6 +145,23 @@ export class Player {
 
     this.wasGrounded = this.grounded;
     this.animFrame += dt;
+  }
+
+  _updateCrouch(input) {
+    const onFerry = this.grounded
+      && (this.onPlatform?.bobAmplitude > 0 || this.onPlatform?.ferryRiseDrop > 0);
+    const ferryDipping = onFerry && this.onPlatform.vy > 12;
+    const wantCrouch = ferryDipping || (onFerry && input.isDown());
+
+    if (wantCrouch && !this.crouching) {
+      this.crouching = true;
+      this.height = 18;
+      this.y += 10;
+    } else if (!wantCrouch && this.crouching) {
+      this.crouching = false;
+      this.height = 28;
+      this.y -= 10;
+    }
   }
 
   _updateAttackHitbox() {

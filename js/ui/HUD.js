@@ -1,5 +1,6 @@
 import { KeyProgress } from '../core/KeyProgress.js';
 import { SECRET_LOCK } from '../config/SecretLock.js';
+import { createHudHeart } from '../utils/HeartDraw.js';
 
 export class HUD {
   constructor() {
@@ -23,19 +24,16 @@ export class HUD {
 
     this.heartsEl.innerHTML = '';
     for (let i = 0; i < player.maxHearts; i++) {
-      const span = document.createElement('span');
-      span.className = 'heart-icon' + (i >= player.hearts ? ' lost' : '');
-      span.textContent = i < player.hearts ? '❤️' : '🖤';
-      this.heartsEl.appendChild(span);
+      this.heartsEl.appendChild(createHudHeart(i < player.hearts));
     }
 
-    this.scoreEl.textContent = `💎 ${player.score}`;
+    this.scoreEl.textContent = String(player.score);
     this.levelEl.textContent = levelName;
 
     const totalKeys = KeyProgress.count();
     if (totalKeys > 0) {
       this.keysEl.classList.remove('hidden');
-      this.keysEl.textContent = `🔑 ${totalKeys}/${SECRET_LOCK.totalKeys}`;
+      this.keysEl.textContent = `${totalKeys}/${SECRET_LOCK.totalKeys}`;
     } else {
       this.keysEl.classList.add('hidden');
     }

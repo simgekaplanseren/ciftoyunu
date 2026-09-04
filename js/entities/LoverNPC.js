@@ -1,3 +1,5 @@
+import { drawPixelHeart } from '../utils/HeartDraw.js';
+
 /** Bölüm sonunda bekleyen sevgili */
 export class LoverNPC {
   constructor(x, y, options = {}) {
@@ -26,11 +28,14 @@ export class LoverNPC {
     sprites.drawCharacter(ctx, this.x, this.y, this.width, this.height, char, -1, 'idle', this.animFrame);
 
     if (this.waiting) {
-      ctx.fillStyle = '#ff6b9d';
-      ctx.font = '10px sans-serif';
-      ctx.textAlign = 'center';
       const bob = Math.sin(this.animFrame * 3) * 2;
-      ctx.fillText('❤', this.x + this.width / 2, this.y - 8 + bob);
+      drawPixelHeart(
+        ctx,
+        this.x + this.width / 2,
+        this.y - 4 + bob,
+        10,
+        '#ff6b9d',
+      );
     }
   }
 }

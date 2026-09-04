@@ -4,7 +4,7 @@ import { fileURLToPath } from 'url';
 
 const root = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const www = path.join(root, 'www');
-const items = ['index.html', 'manifest.webmanifest', 'sw.js', '.nojekyll', 'css', 'js', 'assets'];
+const items = ['index.html', 'indir.html', 'qr-afis.html', 'manifest.webmanifest', 'sw.js', '.nojekyll', 'css', 'js', 'assets'];
 
 function copyItem(name) {
   const source = path.join(root, name);

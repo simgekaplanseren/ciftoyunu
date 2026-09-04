@@ -1,8 +1,15 @@
-const CACHE_NAME = 'sevgiline-kavus-v59';
+const CACHE_NAME = 'sevgiline-kavus-v90';
 
 const PRECACHE = [
   './assets/images/icon-192.png',
   './assets/images/icon-512.png',
+  './assets/images/photo1.jpg',
+  './assets/images/photo2.jpg',
+  './assets/images/photo3.jpg',
+  './assets/images/photo4.jpg',
+  './assets/images/photo5.jpg',
+  './assets/images/photo6.jpg',
+  './assets/images/photo7.jpg',
 ];
 
 self.addEventListener('install', (event) => {

@@ -1,6 +1,7 @@
 import { GAME_SECTIONS, getSectionById } from '../config/GameSections.js';
 import { KeyProgress } from '../core/KeyProgress.js';
 import { SECRET_LOCK } from '../config/SecretLock.js';
+import { createLevelBadge } from './LevelBadge.js';
 
 export class MenuManager {
   constructor(game) {
@@ -20,6 +21,7 @@ export class MenuManager {
   _bindEvents() {
     document.querySelectorAll('[data-action]').forEach((btn) => {
       btn.addEventListener('click', () => {
+        this.game.audio.unlock();
         const char = btn.dataset.character;
         this._handleAction(btn.dataset.action, char);
       });
@@ -104,6 +106,11 @@ export class MenuManager {
       case 'resume':
         this.game.resume();
         break;
+      case 'reset-game':
+        if (confirm('Tüm ilerleme, anahtarlar ve skor silinecek. Oyun baştan başlayacak. Emin misin?')) {
+          this.game.resetAllProgress();
+        }
+        break;
     }
   }
 
@@ -118,17 +125,22 @@ export class MenuManager {
     const unlocked = KeyProgress.isUnlocked();
 
     countEl.textContent = `${count} / ${SECRET_LOCK.totalKeys} anahtar`;
-    if (icon) icon.textContent = unlocked ? '🔓' : '🔒';
+    if (icon) {
+      icon.className = 'lock-icon' + (unlocked ? ' is-open' : '');
+    }
     if (hint) {
-      hint.textContent = unlocked
-        ? 'Kilit açıldı!'
-        : count >= SECRET_LOCK.requiredKeys
-          ? 'Yeterli anahtar topladın — kilidi aç!'
-          : `${SECRET_LOCK.requiredKeys} anahtar topla, kilidi aç`;
+      if (unlocked) {
+        hint.textContent = 'Kilit açıldı — mesajı okumak için aşağıya dokun.';
+      } else if (count >= SECRET_LOCK.requiredKeys) {
+        hint.textContent = 'Anahtarları topladın. Kilidi aç ve gizli mesajı oku.';
+      } else {
+        const remaining = SECRET_LOCK.requiredKeys - count;
+        hint.textContent = `Mesajı okumak için bölümlerde gizli anahtarları topla ve kilidi aç. (${remaining} anahtar daha)`;
+      }
     }
     if (btn) {
       btn.disabled = !unlocked && count < SECRET_LOCK.requiredKeys;
-      btn.textContent = unlocked ? 'MESAJI GÖR 🔓' : 'KİLİDİ AÇ';
+      btn.textContent = unlocked ? 'MESAJI OKU' : 'KİLİDİ AÇ';
     }
   }
 
@@ -154,12 +166,20 @@ export class MenuManager {
       const locked = !lm.isSectionUnlocked(section.id);
       const card = document.createElement('div');
       card.className = 'level-card' + (locked ? ' locked' : '');
-      card.innerHTML = `
-        <span class="level-icon">${locked ? '🔒' : section.emoji}</span>
-        <div class="level-info">
-          <h3>${section.name}</h3>
-        </div>
-      `;
+
+      if (locked) {
+        const lock = document.createElement('span');
+        lock.className = 'level-badge level-badge-lock';
+        lock.setAttribute('aria-hidden', 'true');
+        card.appendChild(lock);
+      } else {
+        card.appendChild(createLevelBadge(section.id, section.id));
+      }
+
+      const info = document.createElement('div');
+      info.className = 'level-info';
+      info.innerHTML = `<h3>${section.name}</h3>`;
+      card.appendChild(info);
 
       if (!locked) {
         card.addEventListener('click', () => this._onSectionSelected(section.id));
@@ -187,7 +207,7 @@ export class MenuManager {
     this.navReturn = 'sections';
 
     if (this.levelSelectTitle) {
-      this.levelSelectTitle.textContent = `${section.emoji} ${section.name}`;
+      this.levelSelectTitle.textContent = section.name;
     }
 
     this._renderSectionLevelSelect(sectionId);
@@ -197,12 +217,20 @@ export class MenuManager {
   _appendLevelCard(level, locked) {
     const card = document.createElement('div');
     card.className = 'level-card' + (locked ? ' locked' : '');
-    card.innerHTML = `
-      <span class="level-icon">${level.emoji}</span>
-      <div class="level-info">
-        <h3>${level.name}</h3>
-      </div>
-    `;
+
+    if (locked) {
+      const lock = document.createElement('span');
+      lock.className = 'level-badge level-badge-lock';
+      lock.setAttribute('aria-hidden', 'true');
+      card.appendChild(lock);
+    } else {
+      card.appendChild(createLevelBadge(level.atmosphere, level.sectionId));
+    }
+
+    const info = document.createElement('div');
+    info.className = 'level-info';
+    info.innerHTML = `<h3>${level.name}</h3>`;
+    card.appendChild(info);
 
     if (!locked) {
       card.addEventListener('click', () => {

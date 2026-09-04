@@ -23,6 +23,10 @@ export const ASSETS = {
     photo1: 'assets/images/photo1.jpg',
     photo2: 'assets/images/photo2.jpg',
     photo3: 'assets/images/photo3.jpg',
+    photo4: 'assets/images/photo4.jpg',
+    photo5: 'assets/images/photo5.jpg',
+    photo6: 'assets/images/photo6.jpg',
+    photo7: 'assets/images/photo7.jpg',
   },
 
   audio: {
@@ -69,9 +73,13 @@ export const FINAL_SCREEN = {
   title: 'İyi ki doğdun sevgilim. ❤️',
   message: 'Bu maceranın en güzel kısmı sensin. Seninle her yere adım atmak, sana kavuşmak istiyorum. Seni çok seviyorum.',
   photos: [
-    { slot: 1, src: 'assets/images/photo1.jpg', label: '📷 Anı 1' },
-    { slot: 2, src: 'assets/images/photo2.jpg', label: '📷 Anı 2' },
-    { slot: 3, src: 'assets/images/photo3.jpg', label: '📷 Anı 3' },
+    { slot: 1, src: 'assets/images/photo1.jpg', label: 'Anı 1' },
+    { slot: 2, src: 'assets/images/photo2.jpg', label: 'Anı 2' },
+    { slot: 3, src: 'assets/images/photo3.jpg', label: 'Anı 3' },
+    { slot: 4, src: 'assets/images/photo4.jpg', label: 'Anı 4' },
+    { slot: 5, src: 'assets/images/photo5.jpg', label: 'Anı 5' },
+    { slot: 6, src: 'assets/images/photo6.jpg', label: 'Anı 6' },
+    { slot: 7, src: 'assets/images/photo7.jpg', label: 'Anı 7' },
   ],
 };
 

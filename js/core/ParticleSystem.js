@@ -1,3 +1,5 @@
+import { drawPixelHeart } from '../utils/HeartDraw.js';
+
 export class Particle {
   constructor(x, y, vx, vy, life, color, size, type = 'dot') {
     this.x = x;
@@ -25,9 +27,7 @@ export class Particle {
     ctx.globalAlpha = alpha;
 
     if (this.type === 'heart') {
-      ctx.fillStyle = this.color;
-      ctx.font = `${this.size}px sans-serif`;
-      ctx.fillText('❤', this.x, this.y);
+      drawPixelHeart(ctx, this.x, this.y, this.size * 1.6, this.color);
     } else {
       ctx.fillStyle = this.color;
       ctx.fillRect(this.x, this.y, this.size, this.size);
