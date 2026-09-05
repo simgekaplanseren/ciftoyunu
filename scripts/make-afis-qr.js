@@ -2,11 +2,13 @@ import sharp from 'sharp';
 import { existsSync } from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { ACCESS } from '../js/config/access.js';
 
 const root = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const poster = path.join(root, 'assets/images/sevgiline-kavus-afis-ust.png');
 const qr = path.join(root, 'assets/images/oyun-qr.png');
 const out = path.join(root, 'assets/images/sevgiline-kavus-afis-qr.png');
+const inviteCode = ACCESS.code;
 
 if (!existsSync(poster) || !existsSync(qr)) {
   console.error('Gorsel veya QR bulunamadi');
@@ -14,8 +16,8 @@ if (!existsSync(poster) || !existsSync(qr)) {
 }
 
 const W = 1080;
-const H = 1440;
-const ART_H = 880;
+const H = 1520;
+const ART_H = 820;
 const PANEL_H = H - ART_H;
 
 const art = await sharp(poster)
@@ -51,25 +53,33 @@ const panel = Buffer.from(
     <rect width="${W}" height="${PANEL_H}" fill="url(#bg)"/>
     <rect x="60" y="8" width="${W - 120}" height="2" rx="1" fill="#c084fc" opacity="0.5"/>
 
-    <text x="${W / 2}" y="58" text-anchor="middle" font-family="Arial, sans-serif" font-size="21" fill="#e9d5ff" letter-spacing="2">SANA ÖZEL BİR HEDİYE</text>
+    <text x="${W / 2}" y="48" text-anchor="middle" font-family="Arial, sans-serif" font-size="20" fill="#e9d5ff" letter-spacing="2">SANA ÖZEL BİR HEDİYE</text>
+    <text x="${W / 2}" y="100" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-size="46" font-weight="900" fill="url(#title)">SEVGİLİNE KAVUŞ</text>
+    <text x="${W / 2}" y="134" text-anchor="middle" font-family="Georgia, serif" font-size="22" font-style="italic" fill="#c4b5fd">Senin için yaptığım küçük bir oyun</text>
 
-    <text x="${W / 2}" y="118" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-size="48" font-weight="900" fill="url(#title)">SEVGİLİNE KAVUŞ</text>
+    <rect x="56" y="152" width="${W - 112}" height="118" rx="16" fill="#241538" stroke="#c084fc" stroke-width="1.5" opacity="0.95"/>
+    <text x="${W / 2}" y="182" text-anchor="middle" font-family="Arial, sans-serif" font-size="19" font-weight="700" fill="#f3e8ff">Romantik bir 2D platform macerası</text>
+    <text x="${W / 2}" y="212" text-anchor="middle" font-family="Arial, sans-serif" font-size="17" fill="#ddd6fe">Kıbrıs · Gaziantep · İzmir · İstanbul — bizim hikâyende ilerle</text>
+    <text x="${W / 2}" y="240" text-anchor="middle" font-family="Arial, sans-serif" font-size="17" fill="#ddd6fe">Zıpla, anahtarları topla, sonunda sevgiline kavuş</text>
+    <text x="${W / 2}" y="258" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="#a78bfa">Telefonda oynanır · Yatay mod · Ana ekrana eklenebilir</text>
 
-    <text x="${W / 2}" y="156" text-anchor="middle" font-family="Georgia, serif" font-size="24" font-style="italic" fill="#c4b5fd">Senin için yaptığım küçük bir oyun</text>
+    <text x="548" y="318" font-family="Arial, sans-serif" font-size="24" font-weight="700" fill="#ffffff">Telefonunla tara</text>
+    <text x="548" y="348" font-family="Arial, sans-serif" font-size="18" fill="#ddd6fe">QR ile oyun açılır — kurulum adımları gelir</text>
 
-    <text x="548" y="248" font-family="Arial, sans-serif" font-size="26" font-weight="700" fill="#ffffff">Telefonunla tara</text>
-    <text x="548" y="282" font-family="Arial, sans-serif" font-size="20" fill="#ddd6fe">Oyun açılır · Ana ekrana ekle · Oyna</text>
-    <text x="548" y="318" font-family="Arial, sans-serif" font-size="18" fill="#a78bfa">Bizim anılarımızdan bir macera seni bekliyor</text>
+    <rect x="548" y="368" width="248" height="78" rx="14" fill="#ff6b9d" fill-opacity="0.12" stroke="#ff6b9d" stroke-width="2"/>
+    <text x="672" y="396" text-anchor="middle" font-family="Arial, sans-serif" font-size="15" font-weight="700" fill="#ff6b9d" letter-spacing="1">DAVET KODU</text>
+    <text x="672" y="432" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-size="34" font-weight="900" fill="#ffffff" letter-spacing="8">${inviteCode}</text>
+    <text x="548" y="472" font-family="Arial, sans-serif" font-size="15" fill="#a78bfa">QR çalışmazsa oyunda bu kodu gir</text>
 
-    <text x="${W / 2}" y="${PANEL_H - 28}" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" fill="#7c6faa">Kıbrıs  ·  Gaziantep  ·  İzmir  ·  İstanbul</text>
+    <text x="${W / 2}" y="${PANEL_H - 24}" text-anchor="middle" font-family="Arial, sans-serif" font-size="17" fill="#7c6faa">simgekaplanseren.github.io/ciftoyunu</text>
   </svg>`,
 );
 
-const QR_SIZE = 190;
+const QR_SIZE = 200;
 const QR_PAD = 12;
 const QR_BOX = QR_SIZE + QR_PAD * 2;
-const qrX = 108;
-const qrY = ART_H + 168;
+const qrX = 96;
+const qrY = ART_H + 288;
 
 const qrFrame = Buffer.from(
   `<svg width="${QR_BOX}" height="${QR_BOX}" xmlns="http://www.w3.org/2000/svg">
@@ -95,3 +105,4 @@ await sharp({
   .toFile(out);
 
 console.log('Kaydedildi:', out);
+console.log('Davet kodu:', inviteCode);
