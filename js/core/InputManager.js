@@ -90,7 +90,6 @@ export class InputManager {
     const bindings = [
       ['btn-left', 'left'],
       ['btn-right', 'right'],
-      ['btn-down', 'down'],
       ['btn-jump', 'jump'],
     ];
 

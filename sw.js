@@ -1,4 +1,4 @@
-const CACHE_NAME = 'sevgiline-kavus-v90';
+const CACHE_NAME = 'sevgiline-kavus-v91';
 
 const PRECACHE = [
   './assets/images/icon-192.png',

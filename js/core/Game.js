@@ -146,23 +146,29 @@ export class Game {
     const container = document.getElementById('game-container');
     if (!container) return;
 
-    const stage = document.getElementById('play-stage') || container;
-    let cw = stage.clientWidth;
-    let ch = stage.clientHeight;
+    const vv = window.visualViewport;
+    const playing = document.body.classList.contains('is-playing');
+    const touchPlay = playing && this._isTouchDevice();
+    let cw;
+    let ch;
 
-    if (cw < 2 || ch < 2) {
-      cw = window.visualViewport?.width ?? window.innerWidth;
-      ch = window.visualViewport?.height ?? window.innerHeight;
-      if (document.body.classList.contains('is-playing') && this._isTouchDevice()) {
-        const hud = document.getElementById('hud');
-        const controls = document.getElementById('touch-controls');
-        ch -= (hud?.offsetHeight ?? 0) + (controls?.offsetHeight ?? 0);
+    if (touchPlay) {
+      cw = vv?.width ?? window.innerWidth;
+      ch = vv?.height ?? window.innerHeight;
+    } else {
+      const stage = document.getElementById('play-stage') || container;
+      cw = stage.clientWidth;
+      ch = stage.clientHeight;
+      if (cw < 2 || ch < 2) {
+        cw = vv?.width ?? window.innerWidth;
+        ch = vv?.height ?? window.innerHeight;
       }
     }
 
     const aspect = this.config.width / this.config.height;
 
-    let w, h;
+    let w;
+    let h;
     if (cw / ch > aspect) {
       h = ch;
       w = h * aspect;

@@ -151,7 +151,7 @@ export class Player {
     const onFerry = this.grounded
       && (this.onPlatform?.bobAmplitude > 0 || this.onPlatform?.ferryRiseDrop > 0);
     const ferryDipping = onFerry && this.onPlatform.vy > 12;
-    const wantCrouch = ferryDipping || (onFerry && input.isDown());
+    const wantCrouch = ferryDipping;
 
     if (wantCrouch && !this.crouching) {
       this.crouching = true;
