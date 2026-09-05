@@ -57,11 +57,10 @@ const panel = Buffer.from(
     <text x="${W / 2}" y="100" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-size="46" font-weight="900" fill="url(#title)">SEVGİLİNE KAVUŞ</text>
     <text x="${W / 2}" y="134" text-anchor="middle" font-family="Georgia, serif" font-size="22" font-style="italic" fill="#c4b5fd">Senin için yaptığım küçük bir oyun</text>
 
-    <rect x="56" y="152" width="${W - 112}" height="118" rx="16" fill="#241538" stroke="#c084fc" stroke-width="1.5" opacity="0.95"/>
-    <text x="${W / 2}" y="182" text-anchor="middle" font-family="Arial, sans-serif" font-size="19" font-weight="700" fill="#f3e8ff">Romantik bir 2D platform macerası</text>
-    <text x="${W / 2}" y="212" text-anchor="middle" font-family="Arial, sans-serif" font-size="17" fill="#ddd6fe">Kıbrıs · Gaziantep · İzmir · İstanbul — bizim hikâyende ilerle</text>
-    <text x="${W / 2}" y="240" text-anchor="middle" font-family="Arial, sans-serif" font-size="17" fill="#ddd6fe">Zıpla, anahtarları topla, sonunda sevgiline kavuş</text>
-    <text x="${W / 2}" y="258" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="#a78bfa">Telefonda oynanır · Yatay mod · Ana ekrana eklenebilir</text>
+    <rect x="56" y="152" width="${W - 112}" height="112" rx="16" fill="#241538" stroke="#c084fc" stroke-width="1.5" opacity="0.95"/>
+    <text x="${W / 2}" y="188" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" fill="#ddd6fe">Kıbrıs'tan İstanbul'a birlikte geçirdiğiniz anıların olduğu bir oyun.</text>
+    <text x="${W / 2}" y="220" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" fill="#ddd6fe">Bölümleri geç, gizli anahtarları topla ve sürpriz mesajı aç.</text>
+    <text x="${W / 2}" y="252" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" fill="#ddd6fe">Telefonu yatay tutarak oyna.</text>
 
     <text x="548" y="318" font-family="Arial, sans-serif" font-size="24" font-weight="700" fill="#ffffff">Telefonunla tara</text>
     <text x="548" y="348" font-family="Arial, sans-serif" font-size="18" fill="#ddd6fe">QR ile oyun açılır — kurulum adımları gelir</text>
@@ -69,7 +68,6 @@ const panel = Buffer.from(
     <rect x="548" y="368" width="248" height="78" rx="14" fill="#ff6b9d" fill-opacity="0.12" stroke="#ff6b9d" stroke-width="2"/>
     <text x="672" y="396" text-anchor="middle" font-family="Arial, sans-serif" font-size="15" font-weight="700" fill="#ff6b9d" letter-spacing="1">DAVET KODU</text>
     <text x="672" y="432" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-size="34" font-weight="900" fill="#ffffff" letter-spacing="8">${inviteCode}</text>
-    <text x="548" y="472" font-family="Arial, sans-serif" font-size="15" fill="#a78bfa">QR çalışmazsa oyunda bu kodu gir</text>
 
     <text x="${W / 2}" y="${PANEL_H - 24}" text-anchor="middle" font-family="Arial, sans-serif" font-size="17" fill="#7c6faa">simgekaplanseren.github.io/ciftoyunu</text>
   </svg>`,
