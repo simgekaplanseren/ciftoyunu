@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#2d1b4e">
+  <meta name="apple-mobile-web-app-title" content="Sevgiline Kavuş">
+  <title>SEVGİLİNE KAVUŞ ❤️</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="assets/images/icon-192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/images/icon-192.png">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/menu.css">
+  <link rel="stylesheet" href="css/controls.css">
+</head>
+<body>
+  <div id="app">
+    <div id="game-container">
+      <div id="play-stage">
+        <canvas id="game-canvas"></canvas>
+      </div>
+
+      <!-- HUD -->
+      <div id="hud" class="hidden">
+        <div class="hud-left">
+          <div id="hearts-display"></div>
+          <div id="score-display">💎 0</div>
+        </div>
+        <div class="hud-right">
+          <button id="btn-pause" class="hud-pause-btn" aria-label="Duraklat">⏸</button>
+          <div id="level-display">Bölüm 1</div>
+          <div id="keys-display" class="hidden">🔑 0</div>
+        </div>
+      </div>
+
+      <!-- Touch Controls -->
+      <div id="touch-controls" class="hidden">
+        <div class="controls-left">
+          <button class="ctrl-btn" id="btn-left" aria-label="Sol">◀</button>
+          <button class="ctrl-btn" id="btn-right" aria-label="Sağ">▶</button>
+        </div>
+        <div class="controls-right">
+          <button class="ctrl-btn jump" id="btn-jump" aria-label="Zıpla">▲</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Screens -->
+    <div id="screen-overlay">
+      <!-- iPhone kurulum -->
+      <div id="screen-install" class="screen">
+        <div class="screen-panel install-panel">
+          <h2>📲 iPhone'a Kur</h2>
+          <p class="install-lead">Safari'de küçük görünür. Bir kez ana ekrana ekle — sonra uygulama gibi açılır.</p>
+
+          <div id="install-ios" class="install-steps">
+            <p class="install-step"><span>1</span> Alttaki <strong>Paylaş</strong> ⬆️ butonuna dokun</p>
+            <p class="install-step"><span>2</span> <strong>Ana Ekrana Ekle</strong> seç</p>
+            <p class="install-step"><span>3</span> Sağ üstten <strong>Ekle</strong> de</p>
+            <p class="install-step"><span>4</span> Ana ekrandaki <strong>Sevgiline Kavuş</strong> ikonundan aç</p>
+          </div>
+
+          <button class="menu-btn primary" id="btn-install-done">Ana ekrana ekledim ❤️</button>
+        </div>
+      </div>
+
+      <!-- Davetiye -->
+      <div id="screen-access" class="screen">
+        <div class="screen-panel access-panel">
+          <h2>💌 Davetiye Gerekli</h2>
+          <p class="access-subtitle">Bu oyun sadece davet edilen kişiler içindir.</p>
+          <input
+            id="access-code-input"
+            class="access-input"
+            type="password"
+            inputmode="text"
+            autocomplete="off"
+            autocapitalize="none"
+            autocorrect="off"
+            placeholder="Davetiye kodu"
+            maxlength="32"
+          >
+          <p id="access-error" class="access-error" aria-live="polite"></p>
+          <button class="menu-btn primary" id="btn-access-enter">GİR ❤️</button>
+        </div>
+      </div>
+
+      <!-- Main Menu -->
+      <div id="screen-menu" class="screen">
+        <div class="menu-bg-hearts"></div>
+        <div class="menu-content">
+          <h1 class="game-title">SEVGİLİNE KAVUŞ <span class="heart">❤️</span></h1>
+          <p class="game-subtitle">Bir aşk macerası</p>
+          <div id="secret-lock-panel" class="secret-lock-panel">
+            <p class="lock-title">Gizli Mesaj</p>
+            <p id="lock-hint" class="lock-hint">Mesajı okumak için bölümlerde gizli anahtarları topla ve kilidi aç.</p>
+            <div class="lock-header">
+              <span id="lock-icon" class="lock-icon" aria-hidden="true"></span>
+              <span id="lock-key-count">0 / 8 anahtar</span>
+            </div>
+            <button class="menu-btn lock-btn" id="btn-unlock-secret" data-action="unlock-secret" disabled>KİLİDİ AÇ</button>
+          </div>
+          <div class="menu-buttons">
+            <button class="menu-btn primary" data-action="start">OYUNA BAŞLA</button>
+            <button class="menu-btn" data-action="levels">BÖLÜMLER</button>
+            <button class="menu-btn" data-action="settings">AYARLAR</button>
+            <button class="menu-btn text-link" data-action="reset-game">OYUNU SIFIRLA</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sections (üst bölümler) -->
+      <div id="screen-sections" class="screen">
+        <div class="screen-panel">
+          <h2>BÖLÜMLER</h2>
+          <p class="sections-subtitle">Nerede biz?</p>
+          <div class="level-grid" id="section-grid"></div>
+          <button class="menu-btn back" data-action="back-menu">← MENÜ</button>
+        </div>
+      </div>
+
+      <!-- Character Select -->
+      <div id="screen-character" class="screen">
+        <div class="screen-panel character-select">
+          <h2>KARAKTER SEÇ</h2>
+          <p class="char-subtitle">Maceraya kim olarak devam etmek istersin?</p>
+          <div class="character-grid">
+            <button class="char-card" data-action="pick-character" data-character="girl">
+              <canvas class="char-preview" id="preview-girl" width="80" height="100"></canvas>
+              <span class="char-name">SİMGE</span>
+            </button>
+            <button class="char-card" data-action="pick-character" data-character="fadil">
+              <canvas class="char-preview" id="preview-fadil" width="80" height="100"></canvas>
+              <span class="char-name">FADİL</span>
+            </button>
+          </div>
+          <button class="menu-btn primary" data-action="confirm-start" id="btn-confirm-start" disabled>MACERAYA BAŞLA ❤️</button>
+          <button class="menu-btn back" data-action="back-nav">← GERİ</button>
+        </div>
+      </div>
+
+      <!-- Level Select (region) -->
+      <div id="screen-levels" class="screen">
+        <div class="screen-panel">
+          <h2 id="level-select-title">BÖLÜMLER</h2>
+          <div class="level-grid" id="level-grid"></div>
+          <button class="menu-btn back" data-action="back-sections">← BÖLÜMLER</button>
+        </div>
+      </div>
+
+      <!-- Secret Lock -->
+      <div id="screen-secret" class="screen">
+        <div class="screen-panel secret-panel">
+          <h2 id="secret-lock-title">🔓 Kilit Açıldı</h2>
+          <p id="secret-lock-message" class="secret-message">...</p>
+          <button class="menu-btn back" data-action="back-menu">← MENÜ</button>
+        </div>
+      </div>
+
+      <!-- Settings -->
+      <div id="screen-settings" class="screen">
+        <div class="screen-panel">
+          <h2>AYARLAR</h2>
+          <div class="settings-list">
+            <label class="setting-row">
+              <span>Müzik</span>
+              <input type="range" id="music-volume" min="0" max="100" value="70">
+            </label>
+            <label class="setting-row">
+              <span>Ses Efektleri</span>
+              <input type="range" id="sfx-volume" min="0" max="100" value="80">
+            </label>
+            <label class="setting-row toggle">
+              <span>Titreşim</span>
+              <input type="checkbox" id="vibration-toggle" checked>
+            </label>
+          </div>
+          <button class="menu-btn back" data-action="settings-back">← GERİ</button>
+        </div>
+      </div>
+
+      <!-- Level Complete -->
+      <div id="screen-level-complete" class="screen">
+        <div class="screen-panel celebration">
+          <h2 id="level-complete-title">Bölüm Tamamlandı!</h2>
+          <p id="level-complete-msg" class="reunion-msg">Sevgiline kavuştun ❤️</p>
+          <canvas id="reunion-canvas" width="320" height="140"></canvas>
+          <p id="level-complete-score">Puan: 0</p>
+          <button class="menu-btn primary" data-action="next-level">DEVAM ET →</button>
+          <button class="menu-btn" data-action="retry">TEKRAR OYNA</button>
+          <button class="menu-btn" data-action="back-menu">ANA MENÜ</button>
+        </div>
+      </div>
+
+      <!-- Game Over -->
+      <div id="screen-game-over" class="screen">
+        <div class="screen-panel">
+          <h2>Oyun Bitti 💔</h2>
+          <p>Tekrar dene, sevgilin seni bekliyor!</p>
+          <button class="menu-btn primary" data-action="retry">TEKRAR DENE</button>
+          <button class="menu-btn" data-action="back-menu">MENÜ</button>
+        </div>
+      </div>
+
+      <!-- Victory -->
+      <div id="screen-victory" class="screen">
+        <div class="screen-panel victory">
+          <h2 class="victory-title">SEVGİLİNE KAVUŞTUN! ❤️</h2>
+          <canvas id="victory-canvas" width="480" height="120"></canvas>
+          <button class="menu-btn primary" data-action="final-screen">DEVAM ET →</button>
+        </div>
+      </div>
+
+      <!-- Final Birthday Screen -->
+      <div id="screen-final" class="screen">
+        <div class="screen-panel final">
+          <div class="final-hearts-bg"></div>
+          <h2>İyi ki doğdun sevgilim. ❤️</h2>
+          <p class="final-message">Bu maceranın en güzel kısmı sensin.</p>
+
+          <div id="photo-viewer" class="photo-viewer">
+            <div id="photo-frame" class="photo-frame">
+              <img id="final-photo" class="final-photo" alt="Anı">
+              <p id="final-photo-status" class="photo-status">1 / 7</p>
+            </div>
+            <div class="photo-nav">
+              <button type="button" class="menu-btn" id="btn-photo-prev" disabled>← ÖNCEKİ</button>
+              <button type="button" class="menu-btn primary" id="btn-photo-next">SONRAKİ FOTOĞRAF →</button>
+            </div>
+          </div>
+
+          <button class="menu-btn" data-action="back-menu">MENÜYE DÖN</button>
+        </div>
+      </div>
+
+      <!-- Pause -->
+      <div id="screen-pause" class="screen">
+        <div class="screen-panel">
+          <h2>DURAKLATILDI</h2>
+          <div class="menu-buttons pause-buttons">
+            <button class="menu-btn primary" data-action="resume">DEVAM ET</button>
+            <button class="menu-btn" data-action="retry">TEKRAR OYNA</button>
+            <button class="menu-btn" data-action="pause-settings">AYARLAR</button>
+            <button class="menu-btn" data-action="pause-menu">ANA MENÜ</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Level transition -->
+    <div id="level-transition" class="hidden">
+      <span id="transition-text"></span>
+    </div>
+
+    <div id="portrait-block" class="hidden">
+      <div class="portrait-block-inner">
+        <p class="portrait-icon">📱↻</p>
+        <p class="portrait-title">Telefonu yana çevir</p>
+        <p class="portrait-text">Oyun yatay modda oynanır</p>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="js/main.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', async () => {
+        try {
+          const regs = await navigator.serviceWorker.getRegistrations();
+          for (const reg of regs) {
+            await reg.update();
+          }
+          await navigator.serviceWorker.register('./sw.js');
+        } catch (_) {}
+      });
+    }
+  </script>
+></body>
+</html>
