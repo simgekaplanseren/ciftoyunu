@@ -2,13 +2,10 @@ import sharp from 'sharp';
 import { existsSync } from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { ACCESS } from '../js/config/access.js';
-
 const root = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const poster = path.join(root, 'assets/images/sevgiline-kavus-afis-ust.png');
 const qr = path.join(root, 'assets/images/oyun-qr.png');
 const out = path.join(root, 'assets/images/sevgiline-kavus-afis-qr.png');
-const inviteCode = ACCESS.code;
 
 if (!existsSync(poster) || !existsSync(qr)) {
   console.error('Gorsel veya QR bulunamadi');
@@ -62,12 +59,8 @@ const panel = Buffer.from(
     <text x="${W / 2}" y="220" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" fill="#ddd6fe">Bölümleri geç, gizli anahtarları topla ve anlamı oku.</text>
     <text x="${W / 2}" y="252" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" fill="#ddd6fe">Telefonu yatay tutarak oyna.</text>
 
-    <text x="548" y="318" font-family="Arial, sans-serif" font-size="24" font-weight="700" fill="#ffffff">Telefonunla tara</text>
-    <text x="548" y="348" font-family="Arial, sans-serif" font-size="18" fill="#ddd6fe">QR ile oyun açılır — kurulum adımları gelir</text>
-
-    <rect x="548" y="368" width="248" height="78" rx="14" fill="#ff6b9d" fill-opacity="0.12" stroke="#ff6b9d" stroke-width="2"/>
-    <text x="672" y="396" text-anchor="middle" font-family="Arial, sans-serif" font-size="15" font-weight="700" fill="#ff6b9d" letter-spacing="1">DAVET KODU</text>
-    <text x="672" y="432" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-size="34" font-weight="900" fill="#ffffff" letter-spacing="8">${inviteCode}</text>
+    <text x="548" y="338" font-family="Arial, sans-serif" font-size="24" font-weight="700" fill="#ffffff">Telefonunla tara</text>
+    <text x="548" y="372" font-family="Arial, sans-serif" font-size="18" fill="#ddd6fe">QR ile oyun açılır — kurulum adımları gelir</text>
 
     <text x="${W / 2}" y="${PANEL_H - 24}" text-anchor="middle" font-family="Arial, sans-serif" font-size="17" fill="#7c6faa">simgekaplanseren.github.io/ciftoyunu</text>
   </svg>`,
@@ -103,4 +96,3 @@ await sharp({
   .toFile(out);
 
 console.log('Kaydedildi:', out);
-console.log('Davet kodu:', inviteCode);

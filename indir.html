@@ -194,15 +194,13 @@
       </p>
     </div>
 
-    <a class="play-btn" id="play-link" href="./index.html?k=260226">OYUNU AÇ ❤️</a>
-    <p class="tip">Davetiye kodun otomatik girilir. İlk açılışta birkaç saniye yüklenebilir.</p>
+    <a class="play-btn" id="play-link" href="./index.html">OYUNU AÇ ❤️</a>
+    <p class="tip">İlk açılışta birkaç saniye yüklenebilir.</p>
   </div>
 
   <script>
-    const params = new URLSearchParams(window.location.search);
-    const code = params.get('k') || '260226';
     const play = document.getElementById('play-link');
-    play.href = './index.html?k=' + encodeURIComponent(code);
+    play.href = './index.html';
 
     const ios = /iPhone|iPad|iPod/i.test(navigator.userAgent);
     const android = /Android/i.test(navigator.userAgent);

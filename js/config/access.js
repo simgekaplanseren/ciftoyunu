@@ -3,7 +3,7 @@
  * Link: https://SENIN-LINKIN/?k=BU_KOD
  */
 export const ACCESS = {
-  enabled: true,
+  enabled: false,
   code: '260226',
   storageKey: 'ciftoyunu_access_v1',
 };

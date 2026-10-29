@@ -1,4 +1,4 @@
-const CACHE_NAME = 'kalbin-yolculugu-v7';
+const CACHE_NAME = 'kalbin-yolculugu-v8';
 
 const PRECACHE = [
   './assets/images/icon-192.png',

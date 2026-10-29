@@ -19,9 +19,9 @@ export class AccessGate {
   }
 
   static waitForAccess() {
-    if (AccessGate.hasAccess()) {
-      AccessGate.stripCodeFromUrl();
+    if (!ACCESS.enabled || AccessGate.hasAccess()) {
       document.getElementById('screen-menu')?.classList.add('active');
+      document.getElementById('screen-access')?.classList.remove('active');
       return Promise.resolve();
     }
 
