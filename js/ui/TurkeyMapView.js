@@ -49,7 +49,7 @@ export class TurkeyMapView {
     this.svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
     this.svg.setAttribute('class', 'turkey-map-svg');
     this.svg.setAttribute('role', 'img');
-    this.svg.setAttribute('aria-label', 'Türkiye ve Kıbrıs haritası');
+    this.svg.setAttribute('aria-label', 'Yolculuk haritası');
 
     const defs = document.createElementNS(SVG_NS, 'defs');
     defs.innerHTML = `

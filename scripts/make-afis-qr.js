@@ -53,13 +53,13 @@ const panel = Buffer.from(
     <rect width="${W}" height="${PANEL_H}" fill="url(#bg)"/>
     <rect x="60" y="8" width="${W - 120}" height="2" rx="1" fill="#c084fc" opacity="0.5"/>
 
-    <text x="${W / 2}" y="48" text-anchor="middle" font-family="Arial, sans-serif" font-size="20" fill="#e9d5ff" letter-spacing="2">SANA ÖZEL BİR HEDİYE</text>
-    <text x="${W / 2}" y="100" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-size="46" font-weight="900" fill="url(#title)">SEVGİLİNE KAVUŞ</text>
-    <text x="${W / 2}" y="134" text-anchor="middle" font-family="Georgia, serif" font-size="22" font-style="italic" fill="#c4b5fd">Senin için yaptığım küçük bir oyun</text>
+    <text x="${W / 2}" y="48" text-anchor="middle" font-family="Arial, sans-serif" font-size="20" fill="#e9d5ff" letter-spacing="2">ROMANTİK BİR MACERA</text>
+    <text x="${W / 2}" y="100" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-size="46" font-weight="900" fill="url(#title)">KALBİN YOLCULUĞU</text>
+    <text x="${W / 2}" y="134" text-anchor="middle" font-family="Georgia, serif" font-size="22" font-style="italic" fill="#c4b5fd">Aşkın ne olduğunu anlatır</text>
 
     <rect x="56" y="152" width="${W - 112}" height="112" rx="16" fill="#241538" stroke="#c084fc" stroke-width="1.5" opacity="0.95"/>
-    <text x="${W / 2}" y="188" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" fill="#ddd6fe">Kıbrıs'tan İstanbul'a birlikte geçirdiğiniz anıların olduğu bir oyun.</text>
-    <text x="${W / 2}" y="220" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" fill="#ddd6fe">Bölümleri geç, gizli anahtarları topla ve sürpriz mesajı aç.</text>
+    <text x="${W / 2}" y="188" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" fill="#ddd6fe">Aşk, güven, sadakat, saygı, emek ve dürüstlük.</text>
+    <text x="${W / 2}" y="220" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" fill="#ddd6fe">Bölümleri geç, gizli anahtarları topla ve anlamı oku.</text>
     <text x="${W / 2}" y="252" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" fill="#ddd6fe">Telefonu yatay tutarak oyna.</text>
 
     <text x="548" y="318" font-family="Arial, sans-serif" font-size="24" font-weight="700" fill="#ffffff">Telefonunla tara</text>

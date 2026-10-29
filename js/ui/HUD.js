@@ -31,11 +31,9 @@ export class HUD {
     this.levelEl.textContent = levelName;
 
     const totalKeys = KeyProgress.count();
-    if (totalKeys > 0) {
-      this.keysEl.classList.remove('hidden');
+    this.keysEl?.classList.remove('hidden');
+    if (this.keysEl) {
       this.keysEl.textContent = `${totalKeys}/${SECRET_LOCK.totalKeys}`;
-    } else {
-      this.keysEl.classList.add('hidden');
     }
   }
 }

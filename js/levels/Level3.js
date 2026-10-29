@@ -9,7 +9,7 @@ export const LEVEL3 = {
   id: 6,
   name: 'KALBİN KALESİ',
   emoji: '🏰❤️',
-  subtitle: 'Sevgilinin seni beklediği son durak',
+  subtitle: 'Kalbin seni beklediği son durak'
   width: 2600,
   height: 270,
   theme: 'castle',

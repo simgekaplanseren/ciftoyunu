@@ -7,12 +7,14 @@ import {
   buildDipkarpazLayout,
 } from './levelBlueprints.js';
 
-function createCyprusLevel({ id, name, emoji, subtitle, atmosphere, width, buildLayout }) {
+function createCyprusLevel({ id, name, emoji, subtitle, themeLabel, completeMessage, atmosphere, width, buildLayout }) {
   return {
     id,
     name,
     emoji,
     subtitle,
+    themeLabel,
+    completeMessage,
     width,
     height: 270,
     theme: atmosphere,
@@ -33,9 +35,11 @@ function createCyprusLevel({ id, name, emoji, subtitle, atmosphere, width, build
 
 export const LEVEL_LEFKOSA = createCyprusLevel({
   id: 1,
-  name: 'LEFKOŞA',
-  emoji: '🏛️',
-  subtitle: "Başkentte sevgiline doğru ilk adım",
+  name: 'İLK BAKIŞ',
+  emoji: '💗',
+  themeLabel: 'Kıvılcım',
+  subtitle: 'Kalbin ilk kez başka biri için hızlanır.',
+  completeMessage: 'Aşk, içini ısıtan bir kıpırtıyla başlar. Asıl mesele o kıpırtıyı bir hak gibi görmemek; önce karşındaki insanın kim olduğunu merak etmektir.',
   atmosphere: 'lefkosa',
   width: 960,
   buildLayout: buildLefkosaLayout,
@@ -43,9 +47,11 @@ export const LEVEL_LEFKOSA = createCyprusLevel({
 
 export const LEVEL_GIRNE = createCyprusLevel({
   id: 2,
-  name: 'GİRNE',
-  emoji: '⚓',
-  subtitle: 'Liman kenarında yoluna devam et',
+  name: 'KALP ÇARPINMASI',
+  emoji: '💓',
+  themeLabel: 'Kıvılcım',
+  subtitle: 'Yaklaşmak, sahip olmak değil; dinlemeye razı olmaktır.',
+  completeMessage: 'Birini sevmek, onu kendi hikâyene çekmek değildir. Acele etmeden yaklaş: ne taşıdığını öğrenerek.',
   atmosphere: 'girne',
   width: 960,
   buildLayout: buildGirneLayout,
@@ -53,9 +59,11 @@ export const LEVEL_GIRNE = createCyprusLevel({
 
 export const LEVEL_MAGUSA = createCyprusLevel({
   id: 3,
-  name: 'GAZİMAĞUSA',
-  emoji: '🏰',
-  subtitle: 'Surların ardında sevgilini ara',
+  name: 'TANIŞMA',
+  emoji: '🌸',
+  themeLabel: 'Kıvılcım',
+  subtitle: 'Sevgi, gördüğün sureti değil, insanın kendisini arar.',
+  completeMessage: 'Herkesin bir dışı vardır. Aşk, o dışın hoşuna gitmesiyle yetinmez; insanın yorgunluğunu, korkusunu ve değerini de görmeye cesaret eder.',
   atmosphere: 'magusa',
   width: 960,
   buildLayout: buildMagusaLayout,
@@ -63,9 +71,11 @@ export const LEVEL_MAGUSA = createCyprusLevel({
 
 export const LEVEL_DIPKARPAZ = createCyprusLevel({
   id: 4,
-  name: 'DİPKARPAZ',
-  emoji: '🌅',
-  subtitle: 'Doğu ucu — sonunda kavuşacaksınız',
+  name: 'KIVILCIM',
+  emoji: '✨',
+  themeLabel: 'Kıvılcım',
+  subtitle: 'Bir kalbe dokunmadan önce onun kıymetini bil.',
+  completeMessage: 'Aşk, bir kalbe dokunmaktan önce o kalbin kıymetini bilmektir. Sevmek, birini ele geçirmek değil; ona zarar vermeden yanında durmayı öğrenmektir.',
   atmosphere: 'dipkarpaz',
   width: 1024,
   buildLayout: buildDipkarpazLayout,

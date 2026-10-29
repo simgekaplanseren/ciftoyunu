@@ -349,7 +349,7 @@ export class LevelBuilder {
     return this.spikes(this._groundEnd, gapW, type, options);
   }
 
-  /** Parkur sonuna zemin + kavuşma noktası */
+  /** Parkur sonuna zemin + bitiş noktası */
   finish(extraGround = 160) {
     const start = this._groundEnd;
     this.ground(start, extraGround);

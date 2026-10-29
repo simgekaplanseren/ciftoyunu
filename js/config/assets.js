@@ -20,13 +20,6 @@ export const ASSETS = {
     backgroundForest: 'assets/images/bg_forest.png',
     backgroundCave: 'assets/images/bg_cave.png',
     backgroundCastle: 'assets/images/bg_castle.png',
-    photo1: 'assets/images/photo1.jpg',
-    photo2: 'assets/images/photo2.jpg',
-    photo3: 'assets/images/photo3.jpg',
-    photo4: 'assets/images/photo4.jpg',
-    photo5: 'assets/images/photo5.jpg',
-    photo6: 'assets/images/photo6.jpg',
-    photo7: 'assets/images/photo7.jpg',
   },
 
   audio: {
@@ -47,40 +40,29 @@ export const ASSETS = {
 };
 
 export const CHARACTERS = {
-  girl: { id: 'girl', name: 'Simge', loverName: 'Fadil', emoji: '' },
-  fadil: { id: 'fadil', name: 'Fadil', loverName: 'Simge', emoji: '' },
+  girl: { id: 'girl', name: 'Mira', companionName: 'Deniz', loverName: 'Deniz', emoji: '' },
+  fadil: { id: 'fadil', name: 'Deniz', companionName: 'Mira', loverName: 'Mira', emoji: '' },
 };
 
 export const REUNION_MESSAGES = [
-  'Sevgiline kavuştun ❤️',
-  'Bir adım daha yaklaştın birbirinize.',
-  'Kalpler aynı ritimde atıyor.',
-  'Bu yolculukta en güzel an.',
-  'Her durakta aşk büyüyor.',
-  'Birlikte her şey daha güzel.',
-  'Seninle her yer ev gibi.',
-  'Aşkın en güzel hali sensin.',
-  'Bir sonraki macera seni bekliyor.',
-  'Ellerin elinde, kalbin kalbinde.',
-  'Bu anı asla unutma.',
-  'Seninle her adım değerli.',
-  'Yol bitmek bilmiyor, aşk da öyle.',
-  'Birlikte daha güçlüsünüz.',
-  'Doğum günün kutlu olsun sevgilim 🎂',
+  'Aşk, bir kalbe dokunmadan önce o kalbin nasıl atığını dinlemektir.',
+  'Gerçek yakınlık, birini süslemek değil; onu gerçekten tanımaya razı olmaktır.',
+  'Sevgi, karşındaki insanda kendi hayalini değil, onun halini görmektir.',
+  'Bir kalbin kıymetini bilmeden ona sahip olmaya çalışma.',
+  'Güven, yüksek sesle söylenmez; yanında durulunca anlaşılır.',
+  'Verilen söz, ancak adımın onu doğruladığı yerde anlam kazanır.',
+  'Sadakat, göz önündeyken değil, kimse görmezken de seçtiğin insana ait kalmaktır.',
+  'Bir kalbin sana inanmasını hafife alma; o inanç, sessizce emanet edilir.',
+  'Saygı, sevdiğin insanın duygusunu kendi rahatından üstün tutabilmektir.',
+  'Sınır, soğukluk değildir; bir kalbin nasıl özen istediğini söylemesidir.',
+  'Aşk, özel günde parlamak değil; sıradan bir günde de hatırlamaktır.',
+  'Güzel söz bir kapı açabilir; dürüstlük o kapının ardından durur.',
+  'Aşk, “seni seviyorum” demek değil; o sözün arkasında durmaktır.',
 ];
 
 export const FINAL_SCREEN = {
-  title: 'İyi ki doğdun sevgilim. ❤️',
-  message: 'Bu maceranın en güzel kısmı sensin. Seninle her yere adım atmak, sana kavuşmak istiyorum. Seni çok seviyorum.',
-  photos: [
-    { slot: 1, src: 'assets/images/photo1.jpg', label: 'Anı 1' },
-    { slot: 2, src: 'assets/images/photo2.jpg', label: 'Anı 2' },
-    { slot: 3, src: 'assets/images/photo3.jpg', label: 'Anı 3' },
-    { slot: 4, src: 'assets/images/photo4.jpg', label: 'Anı 4' },
-    { slot: 5, src: 'assets/images/photo5.jpg', label: 'Anı 5' },
-    { slot: 6, src: 'assets/images/photo6.jpg', label: 'Anı 6' },
-    { slot: 7, src: 'assets/images/photo7.jpg', label: 'Anı 7' },
-  ],
+  title: 'Aşk burada başlar. ❤️',
+  message: 'Aşk yalnızca “seni seviyorum” demek değildir. O sözün arkasında durmak, güveni korumak, dürüst olmak, sınırlara saygı göstermek ve sevdiğin insanın kalbine her gün emek vermektir. Aşkın güzelliği ne kadar parlak başladığında değil; ne kadar sorumlu ve ne kadar sadakatle yaşandığında saklıdır.',
 };
 
 export const GAME_CONFIG = {

@@ -2,12 +2,14 @@ import { LoverNPC } from '../entities/LoverNPC.js';
 import { spawnPoint, loverPoint } from './levelUtils.js';
 import { buildDogumGunuLayout } from './levelBlueprints.js';
 
-function createIstanbulLevel({ id, name, emoji, subtitle, atmosphere, width, buildLayout }) {
+function createIstanbulLevel({ id, name, emoji, subtitle, themeLabel, completeMessage, atmosphere, width, buildLayout }) {
   return {
     id,
     name,
     emoji,
     subtitle,
+    themeLabel,
+    completeMessage,
     width,
     height: 270,
     theme: atmosphere,
@@ -29,9 +31,11 @@ function createIstanbulLevel({ id, name, emoji, subtitle, atmosphere, width, bui
 
 export const LEVEL_DOGUMGUNU = createIstanbulLevel({
   id: 15,
-  name: 'DOĞUM GÜNÜ',
-  emoji: '🎂',
-  subtitle: 'Pembe sokaklar — deniz geçitlerini atla, sürprize ulaş',
+  name: 'SÖZÜN ARDINDA',
+  emoji: '✨',
+  themeLabel: 'Gerçek',
+  subtitle: 'Aşk, sözlerde değil davranışlarda yaşar.',
+  completeMessage: 'Aşk, bütün bu yolların toplamıdır. Yalnızca kavuşmak değil; güveni korumak, sadık kalmak, saygı göstermek, emek vermek ve dürüst durmaktır. Sözün arkasında durulan yer, aşkın gerçeğidir.',
   atmosphere: 'dogumgunu',
   width: 1080,
   buildLayout: buildDogumGunuLayout,

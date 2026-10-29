@@ -24,6 +24,7 @@ export function buildLefkosaLayout() {
     .nextGround(360)
     .groundEnemy(1600, { type: 'walker', patrolMin: 1550, patrolMax: 1780, speed: 32 })
     .heart(1700, 0)
+    .secretKey('k1', 1660, 0)
     .finish()
     .build();
 }
@@ -41,7 +42,6 @@ export function buildGirneLayout() {
     .gap(56, 'water')
     .nextGround(300)
     .groundEnemy(820, { type: 'crab', patrolMin: 780, patrolMax: 1020, speed: 42 })
-    .secretKey('k1', 760, 0)
     .plat(880, 28, 72).heart(905, 28)
     .gap(56, 'water')
     .nextGround(320)
@@ -348,7 +348,7 @@ export function buildSelcukLayout() {
     .build();
 }
 
-/* ─── İSTANBUL ─── */
+/* ─── FİNAL ─── */
 
 export function buildDogumGunuLayout() {
   const b = new LevelBuilder('dogumgunu');

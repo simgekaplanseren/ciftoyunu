@@ -135,7 +135,7 @@ export class MenuManager {
         hint.textContent = 'Anahtarları topladın. Kilidi aç ve gizli mesajı oku.';
       } else {
         const remaining = SECRET_LOCK.requiredKeys - count;
-        hint.textContent = `Mesajı okumak için bölümlerde gizli anahtarları topla ve kilidi aç. (${remaining} anahtar daha)`;
+        hint.textContent = `Aşkın anlamını okumak için bölümlerde gizli anahtarları topla. (${remaining} anahtar daha)`;
       }
     }
     if (btn) {
@@ -165,20 +165,25 @@ export class MenuManager {
     for (const section of GAME_SECTIONS) {
       const locked = !lm.isSectionUnlocked(section.id);
       const card = document.createElement('div');
-      card.className = 'level-card' + (locked ? ' locked' : '');
+      card.className = 'section-card'
+        + (locked ? ' locked' : '')
+        + (section.finale ? ' is-finale' : '');
+      card.dataset.section = section.id;
 
-      if (locked) {
-        const lock = document.createElement('span');
-        lock.className = 'level-badge level-badge-lock';
-        lock.setAttribute('aria-hidden', 'true');
-        card.appendChild(lock);
-      } else {
-        card.appendChild(createLevelBadge(section.id, section.id));
-      }
+      const icon = document.createElement('span');
+      icon.className = `section-icon section-icon-${section.icon || 'spark'}`;
+      icon.setAttribute('aria-hidden', 'true');
+      icon.textContent = locked ? '' : (section.emoji || '💗');
+      if (locked) icon.classList.add('is-locked');
+      card.appendChild(icon);
 
       const info = document.createElement('div');
-      info.className = 'level-info';
-      info.innerHTML = `<h3>${section.name}</h3>`;
+      info.className = 'section-info';
+      const title = document.createElement('h3');
+      title.textContent = section.name;
+      const desc = document.createElement('p');
+      desc.textContent = section.subtitle;
+      info.append(title, desc);
       card.appendChild(info);
 
       if (!locked) {
@@ -229,7 +234,8 @@ export class MenuManager {
 
     const info = document.createElement('div');
     info.className = 'level-info';
-    info.innerHTML = `<h3>${level.name}</h3>`;
+    const theme = level.themeLabel ? `${level.themeLabel} · ` : '';
+    info.innerHTML = `<h3>${level.name}</h3><p>${theme}${level.subtitle || ''}</p>`;
     card.appendChild(info);
 
     if (!locked) {

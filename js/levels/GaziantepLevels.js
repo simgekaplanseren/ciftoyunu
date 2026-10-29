@@ -7,12 +7,14 @@ import {
   buildSehitkamilLayout,
 } from './levelBlueprints.js';
 
-function createGaziantepLevel({ id, name, emoji, subtitle, atmosphere, width, buildLayout }) {
+function createGaziantepLevel({ id, name, emoji, subtitle, themeLabel, completeMessage, atmosphere, width, buildLayout }) {
   return {
     id,
     name,
     emoji,
     subtitle,
+    themeLabel,
+    completeMessage,
     width,
     height: 270,
     theme: atmosphere,
@@ -33,9 +35,11 @@ function createGaziantepLevel({ id, name, emoji, subtitle, atmosphere, width, bu
 
 export const LEVEL_HAYVANAT = createGaziantepLevel({
   id: 5,
-  name: 'HAYVANAT BAHÇESİ',
-  emoji: '🦁',
-  subtitle: 'Hayvanları gez, çit atla — papağan aviary\'de kuşu bekle',
+  name: 'EŞİK',
+  emoji: '🏡',
+  themeLabel: 'Yuva',
+  subtitle: 'Yanında nefesin rahatlıyorsa, orada bir ev filizlenmiştir.',
+  completeMessage: 'Güven, sevginin sessizce üzerine kurulduğu yerdir. Bir insan yanında kendini güvende hissediyorsa, bu onun kalbini sana emanet etmesidir.',
   atmosphere: 'hayvanat',
   width: 960,
   buildLayout: buildHayvanatLayout,
@@ -43,9 +47,11 @@ export const LEVEL_HAYVANAT = createGaziantepLevel({
 
 export const LEVEL_ICONOVA = createGaziantepLevel({
   id: 6,
-  name: 'İCONOVA',
-  emoji: '🛍️',
-  subtitle: 'Asansör, skybridge — güvenlik devriyesinden kaç',
+  name: 'SICAK ODALAR',
+  emoji: '🕯️',
+  themeLabel: 'Yuva',
+  subtitle: 'Söz, ancak evin içinde de aynı duruşla tutulunca gerçek olur.',
+  completeMessage: '“Yanındayım” demek yetmez. Güven, verilen sözün ertesi gün de aynı yönde yürümesiyle kurulur. Kalp, güzel cümlelere değil, tutulan sözlere yaslanır.',
   atmosphere: 'iconova',
   width: 960,
   buildLayout: buildIconovaLayout,
@@ -53,9 +59,11 @@ export const LEVEL_ICONOVA = createGaziantepLevel({
 
 export const LEVEL_PETPARK = createGaziantepLevel({
   id: 7,
-  name: 'PET PARK',
-  emoji: '🐾',
-  subtitle: 'Düz park yolu — çukur atla, köpeklerden kaç',
+  name: 'GÜVEN',
+  emoji: '🤍',
+  themeLabel: 'Yuva',
+  subtitle: 'Huzur, gösterişte değil; sıradan bir günde de yanında kalmaktır.',
+  completeMessage: 'Sadakat, yalnızca yanında görünmek değildir. Kimsenin bakmadığı bir yolda da ilişkinin ağırlığını taşımak ve kalbine başka kapı aralamamaktır.',
   atmosphere: 'petpark',
   width: 960,
   buildLayout: buildPetParkLayout,
@@ -63,9 +71,11 @@ export const LEVEL_PETPARK = createGaziantepLevel({
 
 export const LEVEL_SEHITKAMIL = createGaziantepLevel({
   id: 8,
-  name: 'ŞEHİTKAMİL',
-  emoji: '🌆',
-  subtitle: 'Gece sokakları — hayaletlerden kaç, yarasa boşluğunu bekle',
+  name: 'SADAKAT',
+  emoji: '🌙',
+  themeLabel: 'Yuva',
+  subtitle: 'Yokluğunda da verdiğin söze sahip çık.',
+  completeMessage: 'Sadakat, yokluğunda da sevgine ve verdiğin söze sahip çıkmaktır. Bir kalbin sana inanmasını hafife alma; o inanç, gecenin sessizliğinde de korunmak ister.',
   atmosphere: 'sehitkamil',
   width: 1024,
   buildLayout: buildSehitkamilLayout,

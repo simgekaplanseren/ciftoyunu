@@ -9,7 +9,7 @@ import {
 export const MAP_REGIONS = [
   {
     id: 'istanbul',
-    name: 'İSTANBUL',
+    name: 'AŞK',
     emoji: '🌉',
     x: MAP_CITY_COORDS.istanbul.x,
     y: MAP_CITY_COORDS.istanbul.y,
@@ -17,7 +17,7 @@ export const MAP_REGIONS = [
   },
   {
     id: 'izmir',
-    name: 'İZMİR',
+    name: 'SAYGI VE EMEK',
     emoji: '🌊',
     x: MAP_CITY_COORDS.izmir.x,
     y: MAP_CITY_COORDS.izmir.y,
@@ -25,7 +25,7 @@ export const MAP_REGIONS = [
   },
   {
     id: 'kusadasi',
-    name: 'KUŞADASI',
+    name: 'SAHİL',
     emoji: '⛵',
     x: MAP_CITY_COORDS.kusadasi.x,
     y: MAP_CITY_COORDS.kusadasi.y,
@@ -33,7 +33,7 @@ export const MAP_REGIONS = [
   },
   {
     id: 'gaziantep',
-    name: 'GAZİANTEP',
+    name: 'GÜVEN VE SADAKAT',
     emoji: '🌶️',
     x: MAP_CITY_COORDS.gaziantep.x,
     y: MAP_CITY_COORDS.gaziantep.y,
@@ -41,12 +41,12 @@ export const MAP_REGIONS = [
   },
   {
     id: 'cyprus',
-    name: 'KIBRIS',
+    name: 'AŞK',
     emoji: '🏝️',
     x: MAP_CITY_COORDS.cyprus.x,
     y: MAP_CITY_COORDS.cyprus.y,
     defaultUnlocked: true,
-    levelsTitle: "KIBRIS'TAKİ SEVGİLİM",
+    levelsTitle: 'AŞK',
     levelsEmoji: '🏝️❤️',
     levelFilter: 'cyprus',
   },

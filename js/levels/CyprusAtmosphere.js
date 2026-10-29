@@ -5,67 +5,67 @@ export const ZONE_THEMES = {
   lefkosa: {
     id: 'lefkosa',
     platformTheme: 'lefkosa',
-    sky: ['#1a1528', '#3d2f4a', '#5c4a3a'],
+    sky: ['#2a1533', '#5c2a4e', '#ff8fb3'],
   },
   girne: {
     id: 'girne',
     platformTheme: 'girne',
-    sky: ['#1a2430', '#2e4050', '#4a6070'],
+    sky: ['#1f1733', '#4a2c55', '#f9a8d4'],
   },
   magusa: {
     id: 'magusa',
     platformTheme: 'magusa',
-    sky: ['#1f2430', '#4a5568', '#c9a882'],
+    sky: ['#241428', '#7a3a5c', '#fda4af'],
   },
   dipkarpaz: {
     id: 'dipkarpaz',
     platformTheme: 'dipkarpaz',
-    sky: ['#1e2836', '#3d5060', '#c4a882'],
+    sky: ['#2d1b3e', '#9d174d', '#fb7185'],
   },
   hayvanat: {
     id: 'hayvanat',
     platformTheme: 'hayvanat',
-    sky: ['#0c3320', '#14532d', '#6ee7a0'],
+    sky: ['#2a1c24', '#5c3d3a', '#fdba74'],
   },
   iconova: {
     id: 'iconova',
     platformTheme: 'iconova',
-    sky: ['#312e81', '#4c1d95', '#a78bfa'],
+    sky: ['#3b2a40', '#6b4c6e', '#fbcfe8'],
   },
   petpark: {
     id: 'petpark',
     platformTheme: 'petpark',
-    sky: ['#0369a1', '#7dd3fc', '#bbf7d0'],
+    sky: ['#2a2438', '#4a3f55', '#e9d5ff'],
   },
   sehitkamil: {
     id: 'sehitkamil',
     platformTheme: 'sehitkamil',
-    sky: ['#050810', '#0f172a', '#1e3a5f'],
+    sky: ['#1a1228', '#2d1b4e', '#4c1d3d'],
   },
   alsancak: {
     id: 'alsancak',
     platformTheme: 'alsancak',
-    sky: ['#2c3e50', '#6a8fa3', '#e8b896'],
+    sky: ['#2d2438', '#6d4a6e', '#f9a8d4'],
   },
   goztepe: {
     id: 'goztepe',
     platformTheme: 'goztepe',
-    sky: ['#1e3a5f', '#2563eb', '#60a5fa'],
+    sky: ['#2a2438', '#5b4a6e', '#e8b4c8'],
   },
   kusadasi: {
     id: 'kusadasi',
     platformTheme: 'kusadasi',
-    sky: ['#0e7490', '#06b6d4', '#67e8f9'],
+    sky: ['#243044', '#5b4d6a', '#fbcfe8'],
   },
   sirince: {
     id: 'sirince',
     platformTheme: 'sirince',
-    sky: ['#3d4f5f', '#8fa89a', '#f2dcc4'],
+    sky: ['#3a2a38', '#8a6a7a', '#fde68a'],
   },
   selcuk: {
     id: 'selcuk',
     platformTheme: 'selcuk',
-    sky: ['#3d4a52', '#8a9a8e', '#e8dcc8'],
+    sky: ['#322436', '#6b4c6e', '#ddd6fe'],
   },
   dogumgunu: {
     id: 'dogumgunu',
@@ -799,12 +799,12 @@ function drawDogumGunuDecor(ctx, startX, width) {
     ctx.globalAlpha = 1;
   }
 
-  // Pasta, hediye — bina önünde (diken/boşluk üstüne değil)
+  // Kutlama süslemeleri — bina önünde (diken/boşluk üstüne değil)
   ctx.font = '16px sans-serif';
   ctx.globalAlpha = 0.5;
   for (let x = startX + 140; x < startX + width; x += 300) {
-    ctx.fillText('🎂', x, GROUND_Y - 34);
-    ctx.fillText('🎁', x + 34, GROUND_Y - 30);
+    ctx.fillText('♥', x, GROUND_Y - 34);
+    ctx.fillText('✨', x + 34, GROUND_Y - 30);
     ctx.fillStyle = 'rgba(255, 107, 157, 0.55)';
     ctx.fillRect(x + 68, GROUND_Y - 38, 4, 4);
     ctx.fillRect(x + 72, GROUND_Y - 38, 4, 4);
@@ -839,6 +839,52 @@ const DECORATORS = {
   dogumgunu: drawDogumGunuDecor,
 };
 
+function drawSectionMotifs(ctx, atmosphere, startX, width) {
+  const spark = new Set(['lefkosa', 'girne', 'magusa', 'dipkarpaz']);
+  const home = new Set(['hayvanat', 'iconova', 'petpark', 'sehitkamil']);
+  const bloom = new Set(['alsancak', 'goztepe', 'kusadasi', 'sirince', 'selcuk']);
+  const truth = atmosphere === 'dogumgunu';
+
+  ctx.save();
+  if (spark.has(atmosphere)) {
+    ctx.font = '12px sans-serif';
+    for (let x = startX + 36; x < startX + width; x += 88) {
+      ctx.globalAlpha = 0.42;
+      ctx.fillStyle = '#ff6b9d';
+      ctx.fillText('♥', x, 36 + ((x / 40) % 3) * 18);
+      ctx.globalAlpha = 0.28;
+      ctx.fillStyle = '#fde68a';
+      ctx.fillRect(x + 18, 28 + ((x / 30) % 4) * 14, 2, 2);
+    }
+  } else if (home.has(atmosphere)) {
+    ctx.font = '14px sans-serif';
+    ctx.fillStyle = '#fff';
+    for (let x = startX + 70; x < startX + width; x += 160) {
+      ctx.globalAlpha = 0.45;
+      ctx.fillText('🏡', x, GROUND_Y - 58);
+      ctx.globalAlpha = 0.4;
+      ctx.fillStyle = '#fbbf24';
+      ctx.fillRect(x + 22, GROUND_Y - 42, 5, 5);
+      ctx.fillStyle = '#fff';
+    }
+  } else if (bloom.has(atmosphere)) {
+    ctx.font = '13px sans-serif';
+    for (let x = startX + 48; x < startX + width; x += 70) {
+      ctx.globalAlpha = 0.5;
+      ctx.fillText((x / 70) % 2 ? '🌷' : '🌸', x, GROUND_Y - 28);
+    }
+  } else if (truth) {
+    ctx.font = '14px sans-serif';
+    for (let x = startX + 80; x < startX + width; x += 140) {
+      ctx.globalAlpha = 0.5;
+      ctx.fillText('💕', x, 40);
+      ctx.globalAlpha = 0.4;
+      ctx.fillText('✨', x + 42, 58);
+    }
+  }
+  ctx.restore();
+}
+
 export function drawZoneBackground(ctx, atmosphere, levelWidth, levelHeight) {
   const theme = ZONE_THEMES[atmosphere] || ZONE_THEMES.lefkosa;
   drawSkySegment(ctx, 0, levelWidth, levelHeight, theme.sky);
@@ -847,6 +893,7 @@ export function drawZoneBackground(ctx, atmosphere, levelWidth, levelHeight) {
   if (drawDecor) {
     drawDecor(ctx, 0, levelWidth);
   }
+  drawSectionMotifs(ctx, atmosphere, 0, levelWidth);
 }
 
 /** @deprecated use drawZoneBackground */

@@ -1,6 +1,6 @@
 import { SECRET_LOCK } from '../config/SecretLock.js';
 
-const STORAGE_KEY = 'ciftoyunu_secret_keys';
+const STORAGE_KEY = 'ciftoyunu_secret_keys_v2';
 
 export class KeyProgress {
   static _read() {
@@ -44,7 +44,8 @@ export class KeyProgress {
   }
 
   static isUnlocked() {
-    return this._read().unlocked;
+    const data = this._read();
+    return data.unlocked && this.count() >= SECRET_LOCK.requiredKeys;
   }
 
   static markUnlocked() {
@@ -56,6 +57,7 @@ export class KeyProgress {
   static clear() {
     try {
       localStorage.removeItem(STORAGE_KEY);
+      localStorage.removeItem('ciftoyunu_secret_keys');
     } catch (_) {}
   }
 

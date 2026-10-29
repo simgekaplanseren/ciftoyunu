@@ -9,7 +9,7 @@ export const LEVEL2 = {
   id: 5,
   name: 'KARANLIK MAĞARA',
   emoji: '🌑',
-  subtitle: 'Mağarada sevgilini bul',
+  subtitle: 'Mağarada yolunu bul'
   width: 2400,
   height: 270,
   theme: 'cave',

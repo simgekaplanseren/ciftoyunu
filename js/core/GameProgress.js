@@ -1,6 +1,8 @@
+import { KeyProgress } from './KeyProgress.js';
+
 const PROGRESS_KEY = 'ciftoyunu_progress';
 /** Kayıt formatı değişince artır — eski test kayıtları sıfırlanır */
-export const PROGRESS_VERSION = 2;
+export const PROGRESS_VERSION = 3;
 
 export class GameProgress {
   static save(levelManager) {
@@ -22,6 +24,7 @@ export class GameProgress {
       const data = JSON.parse(raw);
       if (data.version !== PROGRESS_VERSION) {
         localStorage.removeItem(PROGRESS_KEY);
+        KeyProgress.clear();
         return false;
       }
 

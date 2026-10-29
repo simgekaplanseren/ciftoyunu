@@ -1,6 +1,6 @@
 import { drawPixelHeart } from '../utils/HeartDraw.js';
 
-/** Bölüm sonunda bekleyen sevgili */
+/** Bölüm sonunda bekleyen yol arkadaşı */
 export class LoverNPC {
   constructor(x, y, options = {}) {
     this.x = x;

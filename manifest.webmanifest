@@ -1,7 +1,7 @@
 {
-  "name": "Sevgiline Kavuş",
-  "short_name": "Sevgiline Kavuş",
-  "description": "Romantik platform macerası",
+  "name": "Kalbin Yolculuğu",
+  "short_name": "Kalbin Yolculuğu",
+  "description": "Aşkın ne olduğunu anlatan romantik platform macerası",
   "id": "/",
   "start_url": "./",
   "scope": "./",

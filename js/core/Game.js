@@ -1,4 +1,4 @@
-import { GAME_CONFIG, COLORS, CHARACTERS } from '../config/assets.js';
+import { GAME_CONFIG, COLORS } from '../config/assets.js';
 import { KeyProgress } from './KeyProgress.js';
 import { Camera } from './Camera.js';
 import { InputManager } from './InputManager.js';
@@ -51,6 +51,7 @@ export class Game {
     this.reunionNext = null;
     this.charPreviewAnim = 0;
     this.victoryAnim = 0;
+    this.finalAnim = 0;
 
     this._resizeHandler = () => this.resize();
   }
@@ -367,6 +368,7 @@ export class Game {
     this.hud.hide();
     this._hideTouchControls();
     this.audio.playMusic('musicMenu');
+    this.finalAnim = 0;
     this.screens.showFinal();
     this.resize();
   }
@@ -413,6 +415,9 @@ export class Game {
       if (this.state === 'victory') {
         this._drawReunionCanvas('victory-canvas', 240, 60, 1.6);
       }
+    } else if (this.state === 'final') {
+      this.finalAnim += dt;
+      this._drawFinalReunionCanvas();
     }
   }
 
@@ -497,21 +502,12 @@ export class Game {
         this.showVictory();
       }
     } else {
-      let completeMsg = null;
-      if (this.levelManager.isLastLevelInSection(this.levelDef)) {
-        const nextSectionId = this.levelManager.getNextSectionId(this.levelDef.sectionId);
-        const nextSection = nextSectionId ? getSectionById(nextSectionId) : null;
-        if (nextSection) {
-          completeMsg = `Sırada ${nextSection.name}! Devam Et'e bas.`;
-        }
-      }
-
       this.state = 'levelComplete';
       this.screens.showLevelComplete(
         this.player.score,
         this.levelDef.name,
         this.levelManager.currentIndex,
-        completeMsg
+        this.levelDef.completeMessage
       );
     }
   }
@@ -650,6 +646,67 @@ export class Game {
     );
   }
 
+  _drawFinalChar(ctx, x, y, character, facing, state, animFrame, scale) {
+    const w = LEVEL.PLAYER_W;
+    const h = LEVEL.PLAYER_H;
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.scale(scale, scale);
+    if (facing < 0) {
+      ctx.translate(w, 0);
+      ctx.scale(-1, 1);
+    }
+    this.sprites.drawCharacter(ctx, 0, 0, w, h, character, 1, state, animFrame);
+    ctx.restore();
+  }
+
+  _drawFinalReunionCanvas() {
+    const c = document.getElementById('final-reunion-canvas');
+    if (!c || !this.sprites) return;
+    const ctx = c.getContext('2d');
+    ctx.clearRect(0, 0, c.width, c.height);
+    ctx.imageSmoothingEnabled = false;
+
+    const grad = ctx.createLinearGradient(0, 0, 0, c.height);
+    grad.addColorStop(0, '#3b1d4a');
+    grad.addColorStop(0.55, '#2d1b4e');
+    grad.addColorStop(1, '#1a0f2e');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, c.width, c.height);
+
+    ctx.fillStyle = 'rgba(255, 182, 193, 0.22)';
+    ctx.fillRect(0, c.height - 28, c.width, 28);
+
+    const runDur = 2.4;
+    const hugDur = 3.2;
+    const t = this.finalAnim % (runDur + hugDur);
+    const playerType = this.selectedCharacter || 'girl';
+    const loverType = playerType === 'girl' ? 'fadil' : 'girl';
+    const scale = 3.2;
+    const cw = LEVEL.PLAYER_W * scale;
+    const ch = LEVEL.PLAYER_H * scale;
+    const groundY = c.height - 20;
+    const meetLeft = c.width / 2 - cw - 4;
+    const meetRight = c.width / 2 + 4;
+    const leftStart = 24;
+    const rightStart = c.width - cw - 24;
+
+    if (t < runDur) {
+      const p = 1 - (1 - t / runDur) ** 2;
+      const px = leftStart + (meetLeft - leftStart) * p;
+      const lx = rightStart + (meetRight - rightStart) * p;
+      this._drawFinalChar(ctx, px, groundY - ch, playerType, 1, 'run', t, scale);
+      this._drawFinalChar(ctx, lx, groundY - ch, loverType, -1, 'run', t, scale);
+    } else {
+      const hugT = t - runDur;
+      ctx.save();
+      ctx.translate(c.width / 2, groundY);
+      ctx.scale(scale, scale);
+      this.sprites.drawHuggingCouple(ctx, 0, -LEVEL.PLAYER_H / 2, 1, hugT, playerType);
+      ctx.restore();
+    }
+  }
+
   render() {
     const ctx = this.ctx;
     ctx.imageSmoothingEnabled = false;
@@ -772,15 +829,15 @@ export class Game {
     ctx.restore();
 
     if (this.reunionPhase !== 'none') {
-      const loverName = CHARACTERS[char]?.loverName || 'Sevgili';
       ctx.fillStyle = 'rgba(26, 15, 46, 0.6)';
       ctx.fillRect(0, 0, this.config.width, 36);
       ctx.fillStyle = '#ff6b9d';
       ctx.font = 'bold 12px sans-serif';
       ctx.textAlign = 'center';
+      const theme = this.levelDef?.themeLabel || 'Aşk';
       const msg = this.reunionPhase === 'running'
-        ? `${loverName}'e koş`
-        : 'Sevgiline kavuştun';
+        ? `${theme} — kalbe doğru`
+        : theme;
       ctx.fillText(msg, this.config.width / 2, 22);
     }
   }

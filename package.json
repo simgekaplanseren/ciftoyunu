@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "Sevgiline Kavuş - romantik platform oyunu",
+  "description": "Kalbin Yolculuğu - romantik platform oyunu",
   "scripts": {
     "build:web": "node scripts/sync-www.js",
     "cap:sync": "npm run build:web && npx cap sync android",
